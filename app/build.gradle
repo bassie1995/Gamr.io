@@ -36,4 +36,8 @@ dependencies {
     compile 'com.android.support:cardview-v7:24.2.1'
     compile 'com.wada811:android-material-design-colors:3.0.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha8'
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'com.android.support:gridlayout-v7:24.2.1'
+    compile 'com.thebluealliance:spectrum:0.6.0'
+    compile 'com.wada811:android-material-design-colors:3.0.0'
 }
