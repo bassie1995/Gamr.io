@@ -2,4 +2,6 @@
     <string name="app_name">Gamr.io</string>
     <string name="title_game_detail">Game Detail</string>
     <string name="game_description">Image of the game</string>
+    <string name="search_hint">Search games</string>
+    <string name="search_title">Search games</string>
 </resources>
