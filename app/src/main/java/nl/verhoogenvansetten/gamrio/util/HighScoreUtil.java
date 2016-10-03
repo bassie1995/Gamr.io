@@ -30,8 +30,13 @@ public class HighScoreUtil {
 
     //Adds a Score
     public static boolean addScore(Score score){
-        //todo implement
-        return true;
+        if (score.getPoints() > -1 && score.getPoints() < Integer.MAX_VALUE &&
+             score.getPlayerName().length() > 0){
+            //todo implement
+            return true;
+        } else{
+            return false;
+        }
     }
 
     //Sort the scores and get the X amount of  topScores
