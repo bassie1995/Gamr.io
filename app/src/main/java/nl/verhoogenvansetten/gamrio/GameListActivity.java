@@ -23,6 +23,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import nl.verhoogenvansetten.gamrio.model.Game;
+import nl.verhoogenvansetten.gamrio.util.InternalStorageUtil;
 
 /**
  * An activity representing a list of Games. This activity
@@ -46,6 +47,9 @@ public class GameListActivity extends AppCompatActivity implements SearchView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_list);
+
+        //Init the InternalStorage witht the context
+        InternalStorageUtil.initInternalStorage(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -110,7 +114,7 @@ public class GameListActivity extends AppCompatActivity implements SearchView.On
     public boolean onQueryTextChange(String text) {
         List<Game> res;
         // get list here
-        adapter.setFilter(Game.DummyItem.ITEMS); // Set filter to Game list
+        //adapter.setFilter(Game.DummyItem.ITEMS); // Set filter to Game list
         return true;
     }
 
