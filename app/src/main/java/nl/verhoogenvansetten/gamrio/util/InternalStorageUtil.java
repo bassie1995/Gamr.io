@@ -33,7 +33,7 @@ public class InternalStorageUtil {
     }
 
     //Method for writing objects to the internal storage
-    public static void writeObject(Context context, String fileName, Object object) throws IOException {
+    public static void writeObject(String fileName, Object object) throws IOException {
         FileOutputStream fos = context.openFileOutput(fileName, Context.MODE_PRIVATE);
         ObjectOutputStream oos = new ObjectOutputStream(fos);
         oos.writeObject(object);
@@ -42,7 +42,7 @@ public class InternalStorageUtil {
     }
 
     //Method for reading objects from the internal storage
-    public static Object readObject(Context context, String fileName) throws IOException, ClassNotFoundException {
+    public static Object readObject(String fileName) throws IOException, ClassNotFoundException {
         FileInputStream fis = context.openFileInput(fileName);
         ObjectInputStream ois = new ObjectInputStream(fis);
         Object object = ois.readObject();
