@@ -10,25 +10,21 @@ import nl.verhoogenvansetten.gamrio.model.Game;
 public class GameList {
 
     // An array of sample items.
-    public static final List<Game> ITEMS = new ArrayList<>();
+    private static final List<Game> ITEMS = new ArrayList<>();
 
     // A map of GameItems, by ID.
-    public static final Map<String, Game> ITEM_MAP = new HashMap<>();
+    private static final Map<String, Game> ITEM_MAP = new HashMap<>();
 
     static {
         // Add some sample items.
         for (int i = 1; i <= 5; i++) {
-            addItem(createGameItem(i));
+            addItem(new Game(String.valueOf(i), "Item " + i, makeDetails(i)));
         }
     }
 
     private static void addItem(Game item) {
         ITEMS.add(item);
         ITEM_MAP.put(item.id, item);
-    }
-
-    private static Game createGameItem(int position) {
-        return new Game(String.valueOf(position), "Item " + position, makeDetails(position));
     }
 
     private static String makeDetails(int position) {
@@ -38,5 +34,13 @@ public class GameList {
             builder.append("\nMore details information here.");
         }
         return builder.toString();
+    }
+
+    public static List<Game> getList(){
+        return ITEMS;
+    }
+
+    public static Game getGame(String id) {
+        return ITEM_MAP.get(id);
     }
 }

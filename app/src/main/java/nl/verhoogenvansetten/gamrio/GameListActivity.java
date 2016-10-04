@@ -108,9 +108,12 @@ public class GameListActivity extends AppCompatActivity implements SearchView.On
 
     @Override
     public boolean onQueryTextChange(String text) {
-        List<GameList> res;
+        List<Game> res;
+
         // get list here
-        //adapter.setFilter(GameList.ITEMS); // Set filter to GameList list
+        res = GameList.getList();
+
+        adapter.setFilter(res); // Set filter to game list
         return true;
     }
 
@@ -120,7 +123,7 @@ public class GameListActivity extends AppCompatActivity implements SearchView.On
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        adapter = new SimpleItemRecyclerViewAdapter(GameList.ITEMS);
+        adapter = new SimpleItemRecyclerViewAdapter(GameList.getList());
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
     }
@@ -174,9 +177,9 @@ public class GameListActivity extends AppCompatActivity implements SearchView.On
             return mValues.size();
         }
 
-        void setFilter (List<GameList> gameList) {
+        void setFilter (List<Game> gameList) {
             mValues.clear();
-            mValues.addAll(GameList.ITEMS); // Use actual gameList here
+            mValues.addAll(gameList); // Use actual gameList here
             notifyDataSetChanged();
         }
 
