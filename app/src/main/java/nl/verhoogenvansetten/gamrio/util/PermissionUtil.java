@@ -8,6 +8,7 @@ import android.support.v4.content.ContextCompat;
 
 /**
  * Created by Bas on 29-9-2016.
+ * Used as a central hub for permission requests and actions on Android 6.0 and up.
  */
 
 public class PermissionUtil {

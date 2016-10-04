@@ -4,4 +4,106 @@
     <string name="game_description">Image of the game</string>
     <string name="search_hint">Search games</string>
     <string name="search_title">Search games</string>
+    <string name="title_activity_settings">Settings</string>
+
+    <!-- Strings related to Settings -->
+
+    <!-- Example General settings -->
+    <string name="pref_header_general">General</string>
+
+    <string name="pref_title_social_recommendations">Enable social recommendations</string>
+    <string name="pref_description_social_recommendations">Recommendations for people to contact
+        based on your message history
+    </string>
+
+    <string name="pref_title_display_name">Display name</string>
+    <string name="pref_default_display_name">John Smith</string>
+
+    <string-array name="pref_themes">
+        <item>Light</item>
+        <item>Dark</item>
+    </string-array>
+    <string-array name="pref_themes_values">
+        <item>light</item>
+        <item>dark</item>
+    </string-array>
+
+    <!-- Settings for text color -->
+    <string name="pref_title_text_color">Text color</string>
+    <string-array name="pref_text_colors">
+        <item>Black</item>
+        <item>Red</item>
+        <item>Yellow</item>
+    </string-array>
+    <string-array name="pref_text_colors_values">
+        <item>black</item>
+        <item>red</item>
+        <item>yellow</item>
+    </string-array>
+
+    <!-- Settings for text size -->
+    <string name="pref_title_text_size">Text size</string>
+
+    <string-array name="pref_text_size">
+        <item>Small</item>
+        <item>Medium</item>
+        <item>Large</item>
+    </string-array>
+
+    <string-array name="pref_text_size_values">
+        <item>small</item>
+        <item>medium</item>
+        <item>large</item>
+    </string-array>
+
+
+
+
+
+
+
+
+
+
+    <string-array name="pref_sync_frequency_titles">
+        <item>Small</item>
+        <item>Medium</item>
+        <item>Large</item>
+    </string-array>
+
+    <string-array name="pref_sync_frequency_values">
+        <item>small</item>
+        <item>medium</item>
+        <item>large</item>
+    </string-array>
+
+
+
+
+
+
+
+
+
+    <string-array name="multi_select_list_preference_default_value" />
+
+    <string name="pref_title_system_sync_settings">System sync settings</string>
+
+    <!-- Example settings for Notifications -->
+    <string name="pref_header_notifications">Notifications</string>
+
+    <string name="pref_title_new_message_notifications">New message notifications</string>
+
+    <string name="pref_title_ringtone">Ringtone</string>
+    <string name="pref_ringtone_silent">Silent</string>
+
+    <string name="pref_title_vibrate">Vibrate</string>
+    <string name="pref_header_tic_tac_toe">Tic Tac Toe</string>
+    <string name="pref_header_battleship">Battleship</string>
+    <string name="pref_header_sudoku" translatable="false">Sudoku</string>
+    <string name="pref_header_four_in_row">Four in a row</string>
+    <string name="pref_header_dots_and_boxes">Dots and boxes</string>
+    <string name="pref_header_bingo" translatable="false">Bingo</string>
+    <string name="pref_title_theme">Theme</string>
+    <string name="pref_title_sync_frequency">sync freq</string>
 </resources>
