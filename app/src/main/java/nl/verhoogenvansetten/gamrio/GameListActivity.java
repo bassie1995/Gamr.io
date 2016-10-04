@@ -16,6 +16,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -119,10 +120,28 @@ public class GameListActivity extends AppCompatActivity implements SearchView.On
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_settings:
+                startActivity(new Intent(this, SettingsActivity.class));
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
     public boolean onQueryTextChange(String text) {
         List<Game> res;
+
         // get list here
+<<<<<<< HEAD
         //adapter.setFilter(Game.DummyItem.ITEMS); // Set filter to Game list
+=======
+        res = GameList.getList();
+
+        adapter.setFilter(res); // Set filter to game list
+>>>>>>> 16cf1a37a50786aa955c9ea15e54a6e3e411d2d6
         return true;
     }
 
@@ -132,7 +151,7 @@ public class GameListActivity extends AppCompatActivity implements SearchView.On
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        adapter = new SimpleItemRecyclerViewAdapter(Game.ITEMS);
+        adapter = new SimpleItemRecyclerViewAdapter(GameList.getList());
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
     }
@@ -140,9 +159,9 @@ public class GameListActivity extends AppCompatActivity implements SearchView.On
     public class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
-        private final List<Game.DummyItem> mValues;
+        private final List<Game> mValues;
 
-        SimpleItemRecyclerViewAdapter(List<Game.DummyItem> items) {
+        SimpleItemRecyclerViewAdapter(List<Game> items) {
             mValues = items;
         }
 
@@ -186,9 +205,9 @@ public class GameListActivity extends AppCompatActivity implements SearchView.On
             return mValues.size();
         }
 
-        void setFilter (List<Game> games) {
+        void setFilter (List<Game> gameList) {
             mValues.clear();
-            mValues.addAll(Game.ITEMS); // Use actual games here
+            mValues.addAll(gameList); // Use actual gameList here
             notifyDataSetChanged();
         }
 
@@ -196,7 +215,7 @@ public class GameListActivity extends AppCompatActivity implements SearchView.On
             final View mView;
             final TextView mIdView;
             final TextView mContentView;
-            Game.DummyItem mItem;
+            Game mItem;
 
             ViewHolder(View view) {
                 super(view);
