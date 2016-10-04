@@ -23,6 +23,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import nl.verhoogenvansetten.gamrio.model.Game;
+import nl.verhoogenvansetten.gamrio.util.HighScoreTest;
 import nl.verhoogenvansetten.gamrio.util.InternalStorageUtil;
 
 /**
@@ -42,14 +43,21 @@ public class GameListActivity extends AppCompatActivity implements SearchView.On
     private boolean mTwoPane;
 
     public static SimpleItemRecyclerViewAdapter adapter;
+    //Temporary debug
+    //todo Remove
+    public static Boolean debug = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_list);
 
-        //Init the InternalStorage witht the context
+        //Init the InternalStorage with the context
         InternalStorageUtil.initInternalStorage(this);
+        //Todo remove
+        if(debug){
+            HighScoreTest.test();
+        }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

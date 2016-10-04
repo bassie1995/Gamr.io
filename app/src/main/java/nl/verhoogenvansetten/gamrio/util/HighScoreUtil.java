@@ -1,6 +1,12 @@
 package nl.verhoogenvansetten.gamrio.util;
 
+import android.util.Log;
+
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.NotSerializableException;
+import java.io.WriteAbortedException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -13,7 +19,7 @@ import nl.verhoogenvansetten.gamrio.model.Score;
 
 public class HighScoreUtil {
 
-    public static final String FILENAME_PREFIX = "HS_";
+    public static final String FILENAME_PREFIX = "HS";
 
     //Public method for getting the highscores for the game specified with the gameID
     // using the default of 10 scores.
@@ -33,14 +39,17 @@ public class HighScoreUtil {
 
     //Adds a Score
     public static boolean addScore(int gamedId, Score score){
-        //Get all the current scores for the relevant gameId
-        List<Score> allScores = getAllScoresForGame(gamedId);
+        //Get all the current scores for the relevant gameId. Skips on fresh install.
+        List<Score> allScores = new ArrayList<Score>();
+        if(InternalStorageUtil.fileExists(FILENAME_PREFIX + gamedId)){
+            allScores = getAllScoresForGame(gamedId);
+        }
         if(allScores != null){
             //If the list is not null (something would've went wrong)
             allScores.add(score);
             //Save the scores
             try {
-                InternalStorageUtil.writeObject((FILENAME_PREFIX + gamedId), allScores);
+                InternalStorageUtil.writeObject(FILENAME_PREFIX + gamedId, allScores);
                 return true;
             } catch (IOException e) {
                 e.printStackTrace();
@@ -49,17 +58,21 @@ public class HighScoreUtil {
         }else{
             return false;
         }
+
     }
+
 
     //Sort the scores and get the X amount of  topScores
     private static List<Score> getTopScores(int gameID, int amountOfScores){
-        List<Score> highScores = null;
+        List<Score> highScores = new ArrayList<Score>();
         List<Score> allScores = getAllScoresForGame(gameID);
         //Sort the Scores, Scores with higher points first.
         Collections.sort(allScores, new Comparator<Score>() {
+            //TODO fix sorting
             @Override
             public int compare(Score score1, Score score2) {
-                return score1.getPoints() - score2.getPoints();
+                Integer temp = Integer.valueOf(score2.getPoints()).compareTo(score1.getPoints());
+                return temp;
             }
         });
         //Add the scores ascending from the highest to the lowest points to the highscores list.
@@ -75,10 +88,17 @@ public class HighScoreUtil {
         List<Score> allScores = null;
         try {
              allScores = (List<Score>) InternalStorageUtil.readObject((FILENAME_PREFIX + gameID));
-
         } catch (ClassNotFoundException e) {
+            //TODO implement
+            Log.d("","Exception! Wrong object type?");
             e.printStackTrace();
-        } catch (IOException e) {
+        } catch (FileNotFoundException e) {
+            //TODO implement
+            e.printStackTrace();
+        } catch (WriteAbortedException e) {
+            //TODO improve
+        }catch (IOException e) {
+            //TODO implement
             e.printStackTrace();
         }
         return allScores;
