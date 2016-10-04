@@ -108,9 +108,9 @@ public class GameListActivity extends AppCompatActivity implements SearchView.On
 
     @Override
     public boolean onQueryTextChange(String text) {
-        List<Game> res;
+        List<GameList> res;
         // get list here
-        adapter.setFilter(Game.DummyItem.ITEMS); // Set filter to Game list
+        //adapter.setFilter(GameList.ITEMS); // Set filter to GameList list
         return true;
     }
 
@@ -120,7 +120,7 @@ public class GameListActivity extends AppCompatActivity implements SearchView.On
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        adapter = new SimpleItemRecyclerViewAdapter(Game.ITEMS);
+        adapter = new SimpleItemRecyclerViewAdapter(GameList.ITEMS);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
     }
@@ -128,9 +128,9 @@ public class GameListActivity extends AppCompatActivity implements SearchView.On
     public class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
-        private final List<Game.DummyItem> mValues;
+        private final List<Game> mValues;
 
-        SimpleItemRecyclerViewAdapter(List<Game.DummyItem> items) {
+        SimpleItemRecyclerViewAdapter(List<Game> items) {
             mValues = items;
         }
 
@@ -174,9 +174,9 @@ public class GameListActivity extends AppCompatActivity implements SearchView.On
             return mValues.size();
         }
 
-        void setFilter (List<Game> games) {
+        void setFilter (List<GameList> gameList) {
             mValues.clear();
-            mValues.addAll(Game.ITEMS); // Use actual games here
+            mValues.addAll(GameList.ITEMS); // Use actual gameList here
             notifyDataSetChanged();
         }
 
@@ -184,7 +184,7 @@ public class GameListActivity extends AppCompatActivity implements SearchView.On
             final View mView;
             final TextView mIdView;
             final TextView mContentView;
-            Game.DummyItem mItem;
+            Game mItem;
 
             ViewHolder(View view) {
                 super(view);
