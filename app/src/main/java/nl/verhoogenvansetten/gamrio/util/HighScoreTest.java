@@ -17,7 +17,7 @@ public class HighScoreTest {
     public static void test(){
         Random random = new Random();
         List<Score> scores = new ArrayList<Score>();
-        for(int i = 0 ; i<300 ; i++){
+        for(int i = 0 ; i<30 ; i++){
             Score score = new Score();
             score.setPlayerName("Player" + (random.nextInt(31) + 1));
             //score.setPoints(random.nextInt(Integer.MAX_VALUE));

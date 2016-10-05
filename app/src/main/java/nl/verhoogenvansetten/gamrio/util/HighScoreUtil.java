@@ -66,19 +66,23 @@ public class HighScoreUtil {
     private static List<Score> getTopScores(int gameID, int amountOfScores){
         List<Score> highScores = new ArrayList<Score>();
         List<Score> allScores = getAllScoresForGame(gameID);
-        //Sort the Scores, Scores with higher points first.
-        Collections.sort(allScores, new Comparator<Score>() {
-            //TODO fix sorting
-            @Override
-            public int compare(Score score1, Score score2) {
-                Integer temp = Integer.valueOf(score2.getPoints()).compareTo(score1.getPoints());
-                return temp;
+        //Only sort when there are scores
+        if(allScores != null){
+            //Sort the Scores, Scores with higher points first.
+            Collections.sort(allScores, new Comparator<Score>() {
+                @Override
+                public int compare(Score score1, Score score2) {
+                    Integer temp = Integer.valueOf(score2.getPoints()).compareTo(score1.getPoints());
+                    return temp;
+                }
+            });
+            //Add the scores ascending from the highest to the lowest points to the highscores list.
+            //Don't add more than the amountOfScores preferred.
+            int i = 0;
+            while(i < amountOfScores && i < allScores.size()){
+                highScores.add(allScores.get(i));
+                i++;
             }
-        });
-        //Add the scores ascending from the highest to the lowest points to the highscores list.
-        //Don't add more than the amountOfScores preferred.
-        for (int i = 0 ; i < amountOfScores; i++){
-            highScores.add(allScores.get(i));
         }
         return highScores;
     }
