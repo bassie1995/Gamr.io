@@ -60,31 +60,6 @@
 
 
 
-
-
-
-
-
-    <string-array name="pref_sync_frequency_titles">
-        <item>Small</item>
-        <item>Medium</item>
-        <item>Large</item>
-    </string-array>
-
-    <string-array name="pref_sync_frequency_values">
-        <item>small</item>
-        <item>medium</item>
-        <item>large</item>
-    </string-array>
-
-
-
-
-
-
-
-
-
     <string-array name="multi_select_list_preference_default_value" />
 
     <string name="pref_title_system_sync_settings">System sync settings</string>
@@ -106,4 +81,5 @@
     <string name="pref_header_bingo" translatable="false">Bingo</string>
     <string name="pref_title_theme">Theme</string>
     <string name="pref_title_sync_frequency">sync freq</string>
+    <string name="pref_game_enable">Enable game-specific settings</string>
 </resources>

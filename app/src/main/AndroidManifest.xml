@@ -28,12 +28,16 @@
         </activity>
         <activity
             android:name=".GameDetailActivity"
+            android:exported="true"
             android:label="@string/title_game_detail"
             android:parentActivityName=".GameListActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="nl.verhoogenvansetten.gamrio.GameListActivity" />
+            <meta-data
+                android:name="android.app.shortcuts"
+                android:resource="@xml/shortcuts"/>
         </activity>
         <activity
             android:name=".SettingsActivity"

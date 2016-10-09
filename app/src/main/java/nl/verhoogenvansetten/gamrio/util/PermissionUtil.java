@@ -1,6 +1,5 @@
 package nl.verhoogenvansetten.gamrio.util;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
@@ -12,7 +11,7 @@ import android.support.v4.content.ContextCompat;
  */
 
 public class PermissionUtil {
-    private final int PERMISSION_CONSTANT = 1;
+    private final int PERMISSION_CONSTANT = 1; // Make one per permission
 
     public void checkPermission(Activity activity, String permission, int permissionConstant) {
         int permissionCheck = ContextCompat.checkSelfPermission(activity, permission);

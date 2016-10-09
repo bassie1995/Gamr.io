@@ -222,11 +222,12 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             addPreferencesFromResource(R.xml.pref_tic_tac_toe);
             setHasOptionsMenu(true);
 
-            // TODO: Bind the summaries of EditText/List/Dialog/Ringtone preferences
             // to their values. When their values change, their summaries are
             // updated to reflect the new value, per the Android Design
             // guidelines.
-            //bindPreferenceSummaryToValue(findPreference("sync_frequency"));
+            bindPreferenceSummaryToValue(findPreference("pref_tic_tac_toe_theme_list"));
+            bindPreferenceSummaryToValue(findPreference("pref_tic_tac_toe_text_color_list"));
+            bindPreferenceSummaryToValue(findPreference("pref_tic_tac_toe_text_size_list"));
         }
 
         @Override
@@ -252,11 +253,12 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             addPreferencesFromResource(R.xml.pref_battleship);
             setHasOptionsMenu(true);
 
-            // TODO: Bind the summaries of EditText/List/Dialog/Ringtone preferences
             // to their values. When their values change, their summaries are
             // updated to reflect the new value, per the Android Design
             // guidelines.
-            //bindPreferenceSummaryToValue(findPreference("notifications_new_message_ringtone"));
+            bindPreferenceSummaryToValue(findPreference("pref_battleship_theme_list"));
+            bindPreferenceSummaryToValue(findPreference("pref_battleship_text_color_list"));
+            bindPreferenceSummaryToValue(findPreference("pref_battleship_text_size_list"));
         }
 
         @Override
@@ -282,11 +284,12 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             addPreferencesFromResource(R.xml.pref_sudoku);
             setHasOptionsMenu(true);
 
-            // TODO: Bind the summaries of EditText/List/Dialog/Ringtone preferences
             // to their values. When their values change, their summaries are
             // updated to reflect the new value, per the Android Design
             // guidelines.
-            //bindPreferenceSummaryToValue(findPreference("sync_frequency"));
+            bindPreferenceSummaryToValue(findPreference("pref_sudoku_theme_list"));
+            bindPreferenceSummaryToValue(findPreference("pref_sudoku_text_color_list"));
+            bindPreferenceSummaryToValue(findPreference("pref_sudoku_text_size_list"));
         }
 
         @Override
@@ -312,11 +315,12 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             addPreferencesFromResource(R.xml.pref_four_in_row);
             setHasOptionsMenu(true);
 
-            // TODO: Bind the summaries of EditText/List/Dialog/Ringtone preferences
             // to their values. When their values change, their summaries are
             // updated to reflect the new value, per the Android Design
             // guidelines.
-            // bindPreferenceSummaryToValue(findPreference("sync_frequency"));
+            bindPreferenceSummaryToValue(findPreference("pref_four_in_row_theme_list"));
+            bindPreferenceSummaryToValue(findPreference("pref_four_in_row_text_color_list"));
+            bindPreferenceSummaryToValue(findPreference("pref_four_in_row_text_size_list"));
         }
 
         @Override
@@ -342,11 +346,12 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             addPreferencesFromResource(R.xml.pref_dots_and_boxes);
             setHasOptionsMenu(true);
 
-            // TODO: Bind the summaries of EditText/List/Dialog/Ringtone preferences
             // to their values. When their values change, their summaries are
             // updated to reflect the new value, per the Android Design
             // guidelines.
-            //bindPreferenceSummaryToValue(findPreference("sync_frequency"));
+            bindPreferenceSummaryToValue(findPreference("pref_dots_and_boxes_theme_list"));
+            bindPreferenceSummaryToValue(findPreference("pref_dots_and_boxes_text_color_list"));
+            bindPreferenceSummaryToValue(findPreference("pref_dots_and_boxes_text_size_list"));
         }
 
         @Override
@@ -372,11 +377,12 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             addPreferencesFromResource(R.xml.pref_bingo);
             setHasOptionsMenu(true);
 
-            // TODO: Bind the summaries of EditText/List/Dialog/Ringtone preferences
             // to their values. When their values change, their summaries are
             // updated to reflect the new value, per the Android Design
             // guidelines.
-            //bindPreferenceSummaryToValue(findPreference("sync_frequency"));
+            bindPreferenceSummaryToValue(findPreference("pref_bingo_theme_list"));
+            bindPreferenceSummaryToValue(findPreference("pref_bingo_text_color_list"));
+            bindPreferenceSummaryToValue(findPreference("pref_bingo_text_size_list"));
         }
 
         @Override
