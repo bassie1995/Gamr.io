@@ -7,7 +7,7 @@ import java.util.Map;
 
 import nl.verhoogenvansetten.gamrio.model.Game;
 
-public class GameList {
+class GameList {
 
     // An array of sample items.
     private static final List<Game> ITEMS = new ArrayList<>();
@@ -36,11 +36,11 @@ public class GameList {
         return builder.toString();
     }
 
-    public static List<Game> getList(){
+    static List<Game> getList(){
         return ITEMS;
     }
 
-    public static Game getGame(String id) {
+    static Game getGame(String id) {
         return ITEM_MAP.get(id);
     }
 }

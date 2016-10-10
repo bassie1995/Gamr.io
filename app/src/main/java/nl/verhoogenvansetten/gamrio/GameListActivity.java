@@ -3,10 +3,14 @@ package nl.verhoogenvansetten.gamrio;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -19,6 +23,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -102,6 +107,12 @@ public class GameListActivity extends AppCompatActivity implements SearchView.On
         }
     }
 
+    private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
+        adapter = new SimpleItemRecyclerViewAdapter(GameList.getList());
+        recyclerView.setAdapter(adapter);
+        //recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -141,12 +152,6 @@ public class GameListActivity extends AppCompatActivity implements SearchView.On
         return false;
     }
 
-    private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        adapter = new SimpleItemRecyclerViewAdapter(GameList.getList());
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
-    }
-
     public class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
@@ -166,7 +171,6 @@ public class GameListActivity extends AppCompatActivity implements SearchView.On
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
             holder.mItem = mValues.get(position);
-            holder.mIdView.setText(mValues.get(position).id);
             holder.mContentView.setText(mValues.get(position).content);
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
@@ -204,15 +208,15 @@ public class GameListActivity extends AppCompatActivity implements SearchView.On
 
         class ViewHolder extends RecyclerView.ViewHolder {
             final View mView;
-            final TextView mIdView;
             final TextView mContentView;
+            final ImageView mImageView;
             Game mItem;
 
             ViewHolder(View view) {
                 super(view);
                 mView = view;
-                mIdView = (TextView) view.findViewById(R.id.txtv_subtitle);
                 mContentView = (TextView) view.findViewById(R.id.txtv_title);
+                mImageView = (ImageView) view.findViewById(R.id.game_image);
             }
 
             @Override
