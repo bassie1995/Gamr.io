@@ -1,10 +1,10 @@
 package nl.verhoogenvansetten.gamrio.util;
 
+import android.content.Context;
 import android.util.Log;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.NotSerializableException;
 import java.io.WriteAbortedException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -17,39 +17,35 @@ import nl.verhoogenvansetten.gamrio.model.Score;
  * Created by Jori on 3-10-2016.
  */
 
-public class HighScoreUtil {
+class HighScoreUtil {
 
-    public static final String FILENAME_PREFIX = "HS";
+    private static final String FILENAME_PREFIX = "HS";
 
     //Public method for getting the highscores for the game specified with the gameID
     // using the default of 10 scores.
-    public static List<Score> getHighScoresForGame(int gameId){
-        List<Score> highScores = null;
-        highScores = getTopScores(gameId, 10);
-        return highScores;
+    static List<Score> getHighScoresForGame(int gameId, Context context){
+        return getTopScores(gameId, 10, context);
     }
 
     //Public method for getting the highscores for the game specified with the gameID
     // using the given amount of scores to return.
-    public static List<Score> getHighScoresForGame(int gameId, int amountOfScores){
-        List<Score> highScores = null;
-        highScores = getTopScores(gameId, amountOfScores);
-        return highScores;
+    static List<Score> getHighScoresForGame(int gameId, int amountOfScores, Context context){
+        return getTopScores(gameId, amountOfScores, context);
     }
 
     //Adds a Score
-    public static boolean addScore(int gamedId, Score score){
+    static boolean addScore(int gamedId, Score score, Context context){
         //Get all the current scores for the relevant gameId. Skips on fresh install.
-        List<Score> allScores = new ArrayList<Score>();
-        if(InternalStorageUtil.fileExists(FILENAME_PREFIX + gamedId)){
-            allScores = getAllScoresForGame(gamedId);
+        List<Score> allScores = new ArrayList<>();
+        if(InternalStorageUtil.fileExists(FILENAME_PREFIX + gamedId, context)){
+            allScores = getAllScoresForGame(gamedId, context);
         }
         if(allScores != null){
             //If the list is not null (something would've went wrong)
             allScores.add(score);
             //Save the scores
             try {
-                InternalStorageUtil.writeObject(FILENAME_PREFIX + gamedId, allScores);
+                InternalStorageUtil.writeObject(FILENAME_PREFIX + gamedId, allScores, context);
                 return true;
             } catch (IOException e) {
                 e.printStackTrace();
@@ -63,17 +59,16 @@ public class HighScoreUtil {
 
 
     //Sort the scores and get the X amount of  topScores
-    private static List<Score> getTopScores(int gameID, int amountOfScores){
-        List<Score> highScores = new ArrayList<Score>();
-        List<Score> allScores = getAllScoresForGame(gameID);
+    private static List<Score> getTopScores(int gameID, int amountOfScores, Context context){
+        List<Score> highScores = new ArrayList<>();
+        List<Score> allScores = getAllScoresForGame(gameID, context);
         //Only sort when there are scores
         if(allScores != null){
             //Sort the Scores, Scores with higher points first.
             Collections.sort(allScores, new Comparator<Score>() {
                 @Override
                 public int compare(Score score1, Score score2) {
-                    Integer temp = Integer.valueOf(score2.getPoints()).compareTo(score1.getPoints());
-                    return temp;
+                    return Integer.valueOf(score2.getPoints()).compareTo(score1.getPoints());
                 }
             });
             //Add the scores ascending from the highest to the lowest points to the highscores list.
@@ -88,13 +83,13 @@ public class HighScoreUtil {
     }
 
     //Get all the scores, returns null on exception.
-    private static List<Score> getAllScoresForGame(int gameID){
+    private static List<Score> getAllScoresForGame(int gameID, Context context){
         List<Score> allScores = null;
         try {
-             allScores = (List<Score>) InternalStorageUtil.readObject((FILENAME_PREFIX + gameID));
+             allScores = (List<Score>) InternalStorageUtil.readObject((FILENAME_PREFIX + gameID), context);
         } catch (ClassNotFoundException e) {
             //TODO implement
-            Log.d("","Exception! Wrong object type?");
+            Log.e("","Exception! Wrong object type?");
             e.printStackTrace();
         } catch (FileNotFoundException e) {
             //TODO implement

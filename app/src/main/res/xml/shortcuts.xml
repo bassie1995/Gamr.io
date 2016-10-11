@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shortcuts
     xmlns:android="http://schemas.android.com/apk/res/android">
-    <shortcut icon="@drawable/ic_info_black_24dp"
-        enabled="true"
+    <shortcut enabled="true"
         shortcutId="Battleship"
         shortcutShortLabel="@string/pref_header_battleship"
         shortcutLongLabel="@string/pref_header_battleship"> <!-- Make long? "Start Battleship" -->

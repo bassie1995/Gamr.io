@@ -2,6 +2,7 @@ package nl.verhoogenvansetten.gamrio.model;
 
 /**
  * Created by Daniel on 4-10-2016.
+ * Game object model.
  */
 
 public class Game {

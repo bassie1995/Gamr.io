@@ -3,20 +3,18 @@ package nl.verhoogenvansetten.gamrio;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.content.ContextCompat;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.support.v4.util.Pair;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -53,23 +51,25 @@ public class GameListActivity extends AppCompatActivity implements SearchView.On
     //todo Remove
     public static Boolean debug = true;
 
+    FloatingActionButton fab;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_list);
 
-        //Init the InternalStorage with the context
-        InternalStorageUtil.initInternalStorage(this);
+        //Init the InternalStorage
+        InternalStorageUtil.getInstance();
         //Todo remove
         if(debug){
-            HighScoreTest.test();
+            HighScoreTest.test(getApplicationContext());
         }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle(getTitle());
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -189,7 +189,17 @@ public class GameListActivity extends AppCompatActivity implements SearchView.On
                         Intent intent = new Intent(context, GameDetailActivity.class);
                         intent.putExtra(GameDetailFragment.ARG_ITEM_ID, holder.mItem.id);
 
-                        context.startActivity(intent);
+                        String headerTransition = getString(R.string.transition_header);
+                        String fabTransition = getString(R.string.transition_fab);
+                        String nameTransition = getString(R.string.transition_name);
+
+                        Pair<View, String> headerPair = Pair.create((View) holder.mImageView, headerTransition);
+                        Pair<View, String> fabPair = Pair.create((View) fab, fabTransition);
+                        Pair<View, String> namePair = Pair.create((View) holder.mContentView, nameTransition);
+
+                        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(GameListActivity.this, headerPair, namePair, fabPair);
+
+                        ActivityCompat.startActivity(GameListActivity.this, intent, options.toBundle());
                     }
                 }
             });

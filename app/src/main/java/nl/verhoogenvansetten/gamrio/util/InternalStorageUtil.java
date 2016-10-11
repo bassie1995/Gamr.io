@@ -11,52 +11,48 @@ import java.io.ObjectOutputStream;
 
 /**
  * Created by Jori on 3-10-2016.
+ * Util class for saving/storing data to device storage.
  */
 
 public class InternalStorageUtil {
 
-    //Singleton instance
-    private static InternalStorageUtil firstInstance = null;
+    // Singleton instance
+    private static InternalStorageUtil instance = null;
 
-    //Context property
-    private static Context context = null;
+    // Context property
+    // private Context context = null;
 
-    //Constructor
-    private InternalStorageUtil(Context context){
+    // Constructor because we need Context
+    /*private InternalStorageUtil (Context context) {
         this.context = context;
-    }
+    }*/
 
-    //Init method for the singleton class InternalStorageUtil
-    public static void initInternalStorage(Context context){
-        if(firstInstance == null){
-           firstInstance = new InternalStorageUtil(context);
-        }
+    public static InternalStorageUtil getInstance() {// Context context){
+        if (instance == null)
+            return new InternalStorageUtil();// context);
+        else
+            return instance;
     }
 
     //Method for writing objects to the internal storage
-    public static void writeObject(String fileName, Object object) throws IOException {
+    static void writeObject(String fileName, Object object, Context context) throws IOException {
         FileOutputStream fos = context.openFileOutput(fileName, Context.MODE_PRIVATE);
         ObjectOutputStream oos = new ObjectOutputStream(fos);
         oos.writeObject(object);
         oos.close();
         fos.close();
-
     }
 
     //Method for reading objects from the internal storage
-    public static Object readObject(String fileName) throws IOException, ClassNotFoundException {
-        String dir = context.getFilesDir().getAbsolutePath();
+    static Object readObject(String fileName, Context context) throws IOException, ClassNotFoundException {
+        // String dir = context.getFilesDir().getAbsolutePath();
         FileInputStream fis = context.openFileInput(fileName);
         ObjectInputStream ois = new ObjectInputStream(fis);
-        Object object = ois.readObject();
-        return object;
+        return ois.readObject();
     }
 
-    public static boolean fileExists(String fileName){
+    static boolean fileExists(String fileName, Context context){
         File file = context.getFileStreamPath(fileName);
-        if(file == null || !file.exists()) {
-            return false;
-        }
-        return true;
+        return file != null && file.exists();
     }
 }

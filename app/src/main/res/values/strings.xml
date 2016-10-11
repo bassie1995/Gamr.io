@@ -58,4 +58,8 @@
     <string name="share">Share</string>
     <string name="pref_header_general">General</string>
     <string name="highscores">High scores</string>
+    <string name="connect">Connect to host or game</string>
+    <string name="transition_header">header_transition</string>
+    <string name="transition_fab">fab_transition</string>
+    <string name="transition_name">name_transition</string>
 </resources>

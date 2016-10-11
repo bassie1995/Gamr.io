@@ -1,8 +1,9 @@
 package nl.verhoogenvansetten.gamrio;
 
 import android.app.Activity;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import nl.verhoogenvansetten.gamrio.model.Game;
+import nl.verhoogenvansetten.gamrio.util.AppBarStateChangeListener;
 
 /**
  * A fragment representing a single Game detail screen.
@@ -44,10 +46,20 @@ public class GameDetailFragment extends Fragment {
             // Load the game specified by the fragment arguments.
             mItem = GameList.getGame(getArguments().getInt(ARG_ITEM_ID));
 
-            Activity activity = this.getActivity();
-            CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
-            if (appBarLayout != null) {
-                appBarLayout.setTitle(mItem.name);
+            final Activity activity = this.getActivity();
+            CollapsingToolbarLayout toolBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
+            AppBarLayout appBarLayout = (AppBarLayout) activity.findViewById(R.id.app_bar);
+            final TextView mTxtvTitle = (TextView) activity.findViewById(R.id.txtvTitle);
+            if (toolBarLayout != null) {
+                mTxtvTitle.setText(mItem.name);
+                toolBarLayout.setTitle(mItem.name);
+                appBarLayout.addOnOffsetChangedListener(new AppBarStateChangeListener() {
+                    @Override
+                    public void onStateChanged(AppBarLayout appBarLayout1, State state) {
+                        if (state.name().equals("IDLE"))
+                            mTxtvTitle.setVisibility(View.INVISIBLE);
+                    }
+                });
             }
         }
     }

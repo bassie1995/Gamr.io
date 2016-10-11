@@ -1,13 +1,10 @@
 package nl.verhoogenvansetten.gamrio.model;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-import android.util.Log;
-
 import java.io.Serializable;
 
 /**
  * Created by Jori on 3-10-2016.
+ * Score object model.
  */
 
 public class Score implements Serializable{
@@ -40,10 +37,10 @@ public class Score implements Serializable{
 
     public boolean setPlayerName(String playerName) {
         //Only set if the playername is longer then 0
-        if (playerName.length() > 0){
+        if (playerName.length() > 0) {
             this.playerName = playerName;
             return true;
-        }else{
+        } else {
             //set default value
             this.playerName = "ERROR";
             return false;

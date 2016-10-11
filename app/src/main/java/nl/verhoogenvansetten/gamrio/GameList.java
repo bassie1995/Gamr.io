@@ -1,9 +1,9 @@
 package nl.verhoogenvansetten.gamrio;
 
+import android.util.SparseArray;
+
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import nl.verhoogenvansetten.gamrio.model.Game;
 
@@ -13,7 +13,7 @@ class GameList {
     private static final List<Game> ITEMS = new ArrayList<>();
 
     // A map of GameItems, by ID.
-    private static final Map<Integer, Game> ITEM_MAP = new HashMap<>();
+    private static final SparseArray<Game> ITEM_MAP = new SparseArray<>();
 
     static {
         // Add some sample items.
