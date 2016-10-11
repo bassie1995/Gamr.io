@@ -13,12 +13,12 @@ class GameList {
     private static final List<Game> ITEMS = new ArrayList<>();
 
     // A map of GameItems, by ID.
-    private static final Map<String, Game> ITEM_MAP = new HashMap<>();
+    private static final Map<Integer, Game> ITEM_MAP = new HashMap<>();
 
     static {
         // Add some sample items.
         for (int i = 1; i <= 5; i++) {
-            addItem(new Game(String.valueOf(i), "Item " + i, makeDetails(i)));
+            addItem(new Game(i, "Item " + i, makeDetails(i)));
         }
     }
 
@@ -40,7 +40,7 @@ class GameList {
         return ITEMS;
     }
 
-    static Game getGame(String id) {
+    static Game getGame(int id) {
         return ITEM_MAP.get(id);
     }
 }

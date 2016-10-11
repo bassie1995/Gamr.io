@@ -171,14 +171,14 @@ public class GameListActivity extends AppCompatActivity implements SearchView.On
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
             holder.mItem = mValues.get(position);
-            holder.mContentView.setText(mValues.get(position).content);
+            holder.mContentView.setText(mValues.get(position).name);
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (mTwoPane) {
                         Bundle arguments = new Bundle();
-                        arguments.putString(GameDetailFragment.ARG_ITEM_ID, holder.mItem.id);
+                        arguments.putInt(GameDetailFragment.ARG_ITEM_ID, holder.mItem.id);
                         GameDetailFragment fragment = new GameDetailFragment();
                         fragment.setArguments(arguments);
                         getSupportFragmentManager().beginTransaction()

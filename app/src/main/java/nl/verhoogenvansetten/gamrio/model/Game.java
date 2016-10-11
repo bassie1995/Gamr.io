@@ -5,18 +5,18 @@ package nl.verhoogenvansetten.gamrio.model;
  */
 
 public class Game {
-    public final String id;
-    public final String content;
+    public final int id;
+    public final String name;
     public final String details;
 
-    public Game(String id, String content, String details) {
+    public Game(int id, String name, String details) {
         this.id = id;
-        this.content = content;
+        this.name = name;
         this.details = details;
     }
 
     @Override
     public String toString() {
-        return content;
+        return name;
     }
 }
