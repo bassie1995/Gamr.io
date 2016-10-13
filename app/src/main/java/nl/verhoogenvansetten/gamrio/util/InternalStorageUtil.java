@@ -32,6 +32,10 @@ public class InternalStorageUtil {
         return ois.readObject();
     }
 
+    public static boolean deleteFile(String fileName, Context context){
+        return context.deleteFile(fileName);
+    }
+
     public static boolean fileExists(String fileName, Context context){
         File file = context.getFileStreamPath(fileName);
         return file != null && file.exists();
