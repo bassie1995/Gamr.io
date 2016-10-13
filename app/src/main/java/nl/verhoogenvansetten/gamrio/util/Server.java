@@ -12,30 +12,30 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.util.Enumeration;
 
-import nl.verhoogenvansetten.gamrio.GameDetailActivity;
+import android.app.Activity;
 
 /**
  * Created by bloodyfool on 11-10-16.
  */
 
-public class Server {
-    GameDetailActivity activity;
-    ServerSocket serverSocket;
-    String message = "";
+class Server {
+    private Activity activity;
+    private ServerSocket serverSocket;
+    private String message = "";
     //String reply = "";
-    static final int socketServerPORT = 12345;
+    private static final int socketServerPORT = 12345;
 
-    public Server(GameDetailActivity activity) {
+    Server(Activity activity) {
         this.activity = activity;
         Thread sockerServerThread = new Thread(new SocketServerThread());
         sockerServerThread.start();
     }
 
-    public int getPort() {
+    private int getPort() {
         return socketServerPORT;
     }
 
-    public void onDestroy() {
+    void onDestroy() {
         if (serverSocket != null) {
             try {
                 serverSocket.close();

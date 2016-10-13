@@ -14,19 +14,19 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import nl.verhoogenvansetten.gamrio.GameDetailActivity;
+import android.app.Activity;
 
 public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
 
     Network network;
     private WifiP2pManager mManager;
     private WifiP2pManager.Channel mChannel;
-    private GameDetailActivity mActivity;
+    private Activity mActivity;
     private List peers = new ArrayList();
     Server server;
 
     public WiFiDirectBroadcastReceiver(Network network, WifiP2pManager manager, WifiP2pManager.Channel channel,
-                                       GameDetailActivity activity) {
+                                       Activity activity) {
         super();
         this.network= network;
         this.mManager = manager;
@@ -37,9 +37,9 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
     private WifiP2pManager.PeerListListener peerListListener = new WifiP2pManager.PeerListListener() {
         @Override
         public void onPeersAvailable(WifiP2pDeviceList peerList) {
-            peers.clear();
-            peers.addAll(peerList.getDeviceList());
-            network.setDeviceList(peers);
+        peers.clear();
+        peers.addAll(peerList.getDeviceList());
+        network.setDeviceList(peers);
         }
 
     };
@@ -108,7 +108,7 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
             String line;
             while ((line = br.readLine()) != null) {
                 String[] splitted = line.split(" +");
-                if (splitted != null && splitted.length >= 4 && iface.equals(splitted[5])) {
+                if (splitted.length >= 4 && iface.equals(splitted[5])) {
                     // Basic sanity check
                     String ip = splitted[0];
                     if (ip.matches("\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}")) {
@@ -124,7 +124,7 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
         } finally {
             try {
                 br.close();
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }

@@ -1,12 +1,17 @@
 package nl.verhoogenvansetten.gamrio.util;
 
+import nl.verhoogenvansetten.gamrio.SignInDialogFragment;
 import nl.verhoogenvansetten.gamrio.model.Game;
+import nl.verhoogenvansetten.gamrio.ui.DeviceDialogFragment;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.IntentFilter;
 import android.net.wifi.WifiManager;
 import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pManager;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
 import android.widget.TextView;
 
 import java.io.BufferedReader;
@@ -14,7 +19,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.List;
 
-import nl.verhoogenvansetten.gamrio.GameDetailActivity;
+import android.app.Activity;
+import android.widget.Toast;
 
 /**
  * Created by bloodyfool on 12-10-16.
@@ -22,33 +28,41 @@ import nl.verhoogenvansetten.gamrio.GameDetailActivity;
 
 public class Network {
 
-    private WifiP2pManager mManager;
-    private WifiP2pManager.Channel mChannel;
+    private static WifiP2pManager mManager;
+    private static WifiP2pManager.Channel mChannel;
     private BroadcastReceiver mReceiver;
     private int ID;
     private Game game;
-    private GameDetailActivity main;
+    private Activity main;
     private String ip;
     private String iface;
     private int port = 12345;
     private boolean isConnected;
+    IntentFilter mIntentFilter;
 
-
-    public Network(GameDetailActivity main) {
+    public Network(Activity main) {
         //TODO
         mManager = (WifiP2pManager) main.getSystemService(Context.WIFI_P2P_SERVICE);
         mChannel = mManager.initialize(main, main.getMainLooper(), null);
         mReceiver = new WiFiDirectBroadcastReceiver(this, mManager, mChannel, main);
         this.main = main;
 
+        mIntentFilter = new IntentFilter();
+        mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
+        mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
+        mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
+        mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
+
         //get broadcast receiver
     }
 
-    public void discoverPeers() {
+    public void discoverPeers(final FragmentManager manager) {
         mManager.discoverPeers(mChannel, new WifiP2pManager.ActionListener() {
             @Override
-             public void onSuccess() {
-            //TODO    main.chipper("OnSuccess");
+            public void onSuccess() {
+                Toast.makeText(main, "scanning", Toast.LENGTH_SHORT).show();
+                DeviceDialogFragment fragment = DeviceDialogFragment.newInstance();
+                fragment.show(manager, "device_list_fragment_dialog");
             }
 
             @Override
@@ -59,8 +73,8 @@ public class Network {
 
     }
 
-    public void setDeviceList(List l) {
-        // TODO main.setDeviceList(l);
+    void setDeviceList(List l) {
+        DeviceDialogFragment.filterAdapter(l);
     }
 
     public void registerGame(int id, Game game) {
@@ -80,16 +94,17 @@ public class Network {
         return "";
     }
 
-    public void connect(WifiP2pConfig config) {
+    public static void connect(WifiP2pConfig config, final Activity activity) {
         mManager.connect(mChannel, config, new WifiP2pManager.ActionListener() {
 
             @Override
             public void onSuccess() {
+                Toast.makeText(activity, "Successfully connected", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onFailure(int reason) {
-                // TODO main.chipper("Connect failed. Retry.");
+                Toast.makeText(activity, "Could not connect. Restart your wifi and try again.", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -106,7 +121,7 @@ public class Network {
         }
     }
 
-    public void afterSend(boolean status) {
+    void afterSend(boolean status) {
         if(!status) {
             // TODO game.setText("Send failed");
         }
@@ -123,19 +138,19 @@ public class Network {
         return mReceiver;
     }
 
-    public void setConnected(boolean state) {
+    void setConnected(boolean state) {
         isConnected = state;
     }
 
-    public void setIp(String ip) {
+    void setIp(String ip) {
         this.ip = ip;
     }
 
-    public void setIface(String iface) {
+    void setIface(String iface) {
         this.iface = iface;
     }
 
-    public String getIpFromArpCache(String iface) {
+    private String getIpFromArpCache(String iface) {
         if (iface == null)
             return null;
         BufferedReader br = null;
@@ -144,7 +159,7 @@ public class Network {
             String line;
             while ((line = br.readLine()) != null) {
                 String[] splitted = line.split(" +");
-                if (splitted != null && splitted.length >= 4 && iface.equals(splitted[5])) {
+                if (splitted.length >= 4 && iface.equals(splitted[5])) {
                     // Basic sanity check
                     String ip = splitted[0];
                     if (ip.matches("\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}")) {

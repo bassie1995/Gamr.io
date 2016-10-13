@@ -1,9 +1,11 @@
 package nl.verhoogenvansetten.gamrio;
 
+
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,6 +13,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
 import android.support.v4.view.MenuItemCompat;
@@ -33,7 +36,9 @@ import java.lang.ref.WeakReference;
 import java.util.List;
 
 import nl.verhoogenvansetten.gamrio.model.Game;
+import nl.verhoogenvansetten.gamrio.ui.DeviceDialogFragment;
 import nl.verhoogenvansetten.gamrio.util.HighScoreTest;
+import nl.verhoogenvansetten.gamrio.util.Network;
 
 /**
  * An activity representing a list of Games. This activity
@@ -43,7 +48,7 @@ import nl.verhoogenvansetten.gamrio.util.HighScoreTest;
  * item details. On tablets, the activity presents the list of items and
  * item details side-by-side using two vertical panes.
  */
-public class GameListActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
+public class GameListActivity extends AppCompatActivity implements SearchView.OnQueryTextListener, DeviceDialogFragment.OnFragmentInteractionListener {
 
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
@@ -75,12 +80,15 @@ public class GameListActivity extends AppCompatActivity implements SearchView.On
         setSupportActionBar(toolbar);
         toolbar.setTitle(getTitle());
 
+        final Network network = new Network(this);
+
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                FragmentManager manager = getSupportFragmentManager();
+                network.enableWifi();
+                network.discoverPeers(manager);
             }
         });
 
@@ -159,6 +167,8 @@ public class GameListActivity extends AppCompatActivity implements SearchView.On
     }
 
     public static Context getContext(){ return mContext.get(); }
+
+    public void onFragmentInteraction(Uri uri) {}
 
     public class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
