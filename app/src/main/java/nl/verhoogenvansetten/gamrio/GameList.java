@@ -18,7 +18,7 @@ class GameList {
 
     static{
         for (int i = 0; i < StaticGameData.gameIds.length; i++) {
-            addGame(new Game(StaticGameData.gameIds[i], StaticGameData.gameNames[i], StaticGameData.gameDetails[i]));
+            addGame(new Game(StaticGameData.gameIds[i], StaticGameData.gameImages[i], StaticGameData.gameNames[i], StaticGameData.gameDetails[i]));
         }
     }
 

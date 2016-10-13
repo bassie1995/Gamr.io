@@ -10,6 +10,14 @@ import nl.verhoogenvansetten.gamrio.R;
 
 public final class StaticGameData {
     public final static int[] gameIds = {1,2,3,4,5,6};
+    public final static int[] gameImages = {
+            R.drawable.battleship_header,
+            R.drawable.bingo_header,
+            R.drawable.battleship_header,
+            R.drawable.battleship_header,
+            R.drawable.battleship_header,
+            R.drawable.battleship_header
+    };
     public final static String[] gameNames = {GameListActivity.getContext().getString(R.string.name_battleship),
             GameListActivity.getContext().getString(R.string.name_bingo),
             GameListActivity.getContext().getString(R.string.name_dots_and_boxes),

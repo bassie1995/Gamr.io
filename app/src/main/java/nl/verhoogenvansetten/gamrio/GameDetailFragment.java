@@ -2,7 +2,6 @@ package nl.verhoogenvansetten.gamrio;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -11,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import nl.verhoogenvansetten.gamrio.model.Game;
-import nl.verhoogenvansetten.gamrio.util.AppBarStateChangeListener;
 
 /**
  * A fragment representing a single Game detail screen.
@@ -60,9 +58,9 @@ public class GameDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.game_detail, container, false);
 
-        // Show the game's details
+        // Show the game's description
         if (mItem != null) {
-            ((TextView) rootView.findViewById(R.id.game_detail)).setText(mItem.details);
+            ((TextView) rootView.findViewById(R.id.game_detail)).setText(mItem.description);
         }
 
         return rootView;

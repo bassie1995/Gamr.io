@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 
 /**
  * An activity representing a single Game detail screen. This
@@ -25,6 +26,8 @@ public class GameDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_game_detail);
         Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
         setSupportActionBar(toolbar);
+
+        ((ImageView) findViewById(R.id.iv_toolbar_image)).setImageResource(GameList.getGame(getIntent().getIntExtra(GameDetailFragment.ARG_ITEM_ID, -1)).image);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {

@@ -180,6 +180,7 @@ public class GameListActivity extends AppCompatActivity implements SearchView.On
         public void onBindViewHolder(final ViewHolder holder, int position) {
             holder.mItem = mValues.get(position);
             holder.mContentView.setText(mValues.get(position).name);
+            holder.mImageView.setImageResource(holder.mItem.image);
 
             BitmapDrawable drawable = (BitmapDrawable) holder.mImageView.getDrawable();
             Palette.from(drawable.getBitmap()).generate(new Palette.PaletteAsyncListener() {
