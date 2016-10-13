@@ -33,7 +33,11 @@ public class InternalStorageUtil {
     }
 
     public static boolean deleteFile(String fileName, Context context){
-        return context.deleteFile(fileName);
+        if (fileExists(fileName, context)){
+            return context.deleteFile(fileName);
+        } else {
+            return false;
+        }
     }
 
     public static boolean fileExists(String fileName, Context context){

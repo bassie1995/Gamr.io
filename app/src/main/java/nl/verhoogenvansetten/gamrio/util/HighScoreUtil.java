@@ -23,18 +23,18 @@ class HighScoreUtil {
 
     //Public method for getting the highscores for the game specified with the gameID
     // using the default of 10 scores.
-    static List<Score> getHighScoresForGame(int gameId, Context context){
+    public static List<Score> getHighScoresForGame(int gameId, Context context){
         return getTopScores(gameId, 10, context);
     }
 
     //Public method for getting the highscores for the game specified with the gameID
     // using the given amount of scores to return.
-    static List<Score> getHighScoresForGame(int gameId, int amountOfScores, Context context){
+    public static List<Score> getHighScoresForGame(int gameId, int amountOfScores, Context context){
         return getTopScores(gameId, amountOfScores, context);
     }
 
     //Adds a Score
-    static boolean addScore(int gamedId, Score score, Context context){
+    public static boolean addScore(int gamedId, Score score, Context context){
         //Get all the current scores for the relevant gameId. Skips on fresh install.
         List<Score> allScores = new ArrayList<>();
         if(InternalStorageUtil.fileExists(FILENAME_PREFIX + gamedId, context)){
@@ -54,9 +54,11 @@ class HighScoreUtil {
         }else{
             return false;
         }
-
     }
 
+    public static boolean deleteScoresForGame(int gameID, Context context){
+        return InternalStorageUtil.deleteFile((FILENAME_PREFIX + gameID), context);
+    }
 
     //Sort the scores and get the X amount of  topScores
     private static List<Score> getTopScores(int gameID, int amountOfScores, Context context){
