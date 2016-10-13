@@ -62,4 +62,16 @@
     <string name="transition_header">header_transition</string>
     <string name="transition_fab">fab_transition</string>
     <string name="transition_name">name_transition</string>
+    <string name="name_battleship">Battleship</string>
+    <string name="name_bingo" translatable="false">Bingo</string>
+    <string name="name_dots_and_boxes">Dots and Boxes</string>
+    <string name="name_sudoku" translatable="false">Sudoku</string>
+    <string name="name_tic_tac_toe">Tic-Tac-Toe</string>
+    <string name="name_four_in_row">Four in a Row</string>
+    <string name="desc_battleship">Place your ships smartly on a grid, then take shots at your enemies until they\'ve lost all their ships.</string>
+    <string name="desc_bingo">Are you the first to cross off all numbers from your card? Then you should shout Bingo!</string>
+    <string name="desc_dots_and_boxes">Players take turns completing boxes by setting the fourth side of the square. May the best boxer win!</string>
+    <string name="desc_sudoku">Sudoku is an easy to learn logic-based number placement puzzle, which you can now play with friends!</string>
+    <string name="desc_tic_tac_toe">X or O? This is the ancient battle of Tic-Tac-Toe!</string>
+    <string name="desc_four_in_row">Be the first to fill four spaces in a row.</string>
 </resources>

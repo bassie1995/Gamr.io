@@ -48,18 +48,9 @@ public class GameDetailFragment extends Fragment {
 
             final Activity activity = this.getActivity();
             CollapsingToolbarLayout toolBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
-            AppBarLayout appBarLayout = (AppBarLayout) activity.findViewById(R.id.app_bar);
-            final TextView mTxtvTitle = (TextView) activity.findViewById(R.id.txtvTitle);
+
             if (toolBarLayout != null) {
-                mTxtvTitle.setText(mItem.name);
                 toolBarLayout.setTitle(mItem.name);
-                appBarLayout.addOnOffsetChangedListener(new AppBarStateChangeListener() {
-                    @Override
-                    public void onStateChanged(AppBarLayout appBarLayout1, State state) {
-                        if (state.name().equals("IDLE"))
-                            mTxtvTitle.setVisibility(View.INVISIBLE);
-                    }
-                });
             }
         }
     }

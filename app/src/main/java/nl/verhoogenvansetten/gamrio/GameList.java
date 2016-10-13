@@ -1,14 +1,11 @@
 package nl.verhoogenvansetten.gamrio;
 
-import android.content.Context;
 import android.util.SparseArray;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import nl.verhoogenvansetten.gamrio.model.Game;
-import nl.verhoogenvansetten.gamrio.util.InternalStorageUtil;
 import nl.verhoogenvansetten.gamrio.util.StaticGameData;
 
 class GameList {
@@ -20,7 +17,7 @@ class GameList {
     private static final SparseArray<Game> ITEM_MAP = new SparseArray<>();
 
     static{
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < StaticGameData.gameIds.length; i++) {
             addGame(new Game(StaticGameData.gameIds[i], StaticGameData.gameNames[i], StaticGameData.gameDetails[i]));
         }
     }

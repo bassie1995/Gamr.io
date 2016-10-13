@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="nl.verhoogenvansetten.gamrio.GameListActivity">
+    tools:context="nl.verhoogenvansetten.gamrio.GameListActivity" >
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
@@ -38,7 +38,8 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         app:srcCompat="@drawable/ic_open_network_white_24dp"
-        android:transitionName="@string/transition_fab" />
+        android:transitionName="@string/transition_fab"
+        app:pressedTranslationZ="12dp" />
 
 
 </android.support.design.widget.CoordinatorLayout>

@@ -9,15 +9,17 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+import nl.verhoogenvansetten.gamrio.GameListActivity;
+
 /**
  * Created by Jori on 3-10-2016.
  * Util class for saving/storing data to device storage.
  */
 
-public class InternalStorageUtil {
+class InternalStorageUtil {
     //Method for writing objects to the internal storage
-    public static void writeObject(String fileName, Object object, Context context) throws IOException {
-        FileOutputStream fos = context.openFileOutput(fileName, Context.MODE_PRIVATE);
+    static void writeObject(String fileName, Object object) throws IOException {
+        FileOutputStream fos = GameListActivity.getContext().openFileOutput(fileName, Context.MODE_PRIVATE);
         ObjectOutputStream oos = new ObjectOutputStream(fos);
         oos.writeObject(object);
         oos.close();
@@ -25,23 +27,19 @@ public class InternalStorageUtil {
     }
 
     //Method for reading objects from the internal storage
-    public static Object readObject(String fileName, Context context) throws IOException, ClassNotFoundException {
+    static Object readObject(String fileName) throws IOException, ClassNotFoundException {
         // String dir = context.getFilesDir().getAbsolutePath();
-        FileInputStream fis = context.openFileInput(fileName);
+        FileInputStream fis = GameListActivity.getContext().openFileInput(fileName);
         ObjectInputStream ois = new ObjectInputStream(fis);
         return ois.readObject();
     }
 
-    public static boolean deleteFile(String fileName, Context context){
-        if (fileExists(fileName, context)){
-            return context.deleteFile(fileName);
-        } else {
-            return false;
-        }
+    static boolean deleteFile(String fileName){
+        return (fileExists(fileName) && GameListActivity.getContext().deleteFile(fileName));
     }
 
-    public static boolean fileExists(String fileName, Context context){
-        File file = context.getFileStreamPath(fileName);
+    static boolean fileExists(String fileName){
+        File file = GameListActivity.getContext().getFileStreamPath(fileName);
         return file != null && file.exists();
     }
 }

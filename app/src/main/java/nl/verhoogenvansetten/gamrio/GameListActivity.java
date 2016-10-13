@@ -3,18 +3,23 @@ package nl.verhoogenvansetten.gamrio;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.util.Pair;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.graphics.Palette;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.support.v4.util.Pair;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,11 +29,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.lang.ref.WeakReference;
 import java.util.List;
 
 import nl.verhoogenvansetten.gamrio.model.Game;
 import nl.verhoogenvansetten.gamrio.util.HighScoreTest;
-import nl.verhoogenvansetten.gamrio.util.InternalStorageUtil;
 
 /**
  * An activity representing a list of Games. This activity
@@ -53,14 +58,17 @@ public class GameListActivity extends AppCompatActivity implements SearchView.On
 
     FloatingActionButton fab;
 
+    private static WeakReference<Context> mContext;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mContext = new WeakReference<>(getApplicationContext());
         setContentView(R.layout.activity_game_list);
 
         //Todo remove
         if(debug){
-            HighScoreTest.test(getApplicationContext());
+            HighScoreTest.test();
         }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -108,7 +116,7 @@ public class GameListActivity extends AppCompatActivity implements SearchView.On
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
         adapter = new SimpleItemRecyclerViewAdapter(GameList.getList());
         recyclerView.setAdapter(adapter);
-        //recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        // recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
     }
 
     @Override
@@ -150,6 +158,8 @@ public class GameListActivity extends AppCompatActivity implements SearchView.On
         return false;
     }
 
+    public static Context getContext(){ return mContext.get(); }
+
     public class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
@@ -171,6 +181,14 @@ public class GameListActivity extends AppCompatActivity implements SearchView.On
             holder.mItem = mValues.get(position);
             holder.mContentView.setText(mValues.get(position).name);
 
+            BitmapDrawable drawable = (BitmapDrawable) holder.mImageView.getDrawable();
+            Palette.from(drawable.getBitmap()).generate(new Palette.PaletteAsyncListener() {
+                @Override
+                public void onGenerated(Palette palette) {
+                    holder.mCardView.setBackgroundColor(palette.getLightVibrantColor(ContextCompat.getColor(getApplicationContext(), R.color.md_white)));
+                }
+            });
+
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -187,17 +205,19 @@ public class GameListActivity extends AppCompatActivity implements SearchView.On
                         Intent intent = new Intent(context, GameDetailActivity.class);
                         intent.putExtra(GameDetailFragment.ARG_ITEM_ID, holder.mItem.id);
 
-                        String headerTransition = getString(R.string.transition_header);
-                        String fabTransition = getString(R.string.transition_fab);
-                        String nameTransition = getString(R.string.transition_name);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            String headerTransition = getString(R.string.transition_header);
+                            String fabTransition = getString(R.string.transition_fab);
 
-                        Pair<View, String> headerPair = Pair.create((View) holder.mImageView, headerTransition);
-                        Pair<View, String> fabPair = Pair.create((View) fab, fabTransition);
-                        Pair<View, String> namePair = Pair.create((View) holder.mContentView, nameTransition);
+                            Pair<View, String> headerPair = Pair.create((View) holder.mImageView, headerTransition);
+                            Pair<View, String> fabPair = Pair.create((View) fab, fabTransition);
 
-                        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(GameListActivity.this, headerPair, namePair, fabPair);
+                            ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(GameListActivity.this, headerPair, fabPair);
 
-                        ActivityCompat.startActivity(GameListActivity.this, intent, options.toBundle());
+                            ActivityCompat.startActivity(GameListActivity.this, intent, options.toBundle());
+                        } else {
+                            startActivity(intent);
+                        }
                     }
                 }
             });
@@ -218,6 +238,7 @@ public class GameListActivity extends AppCompatActivity implements SearchView.On
             final View mView;
             final TextView mContentView;
             final ImageView mImageView;
+            final CardView mCardView;
             Game mItem;
 
             ViewHolder(View view) {
@@ -225,6 +246,7 @@ public class GameListActivity extends AppCompatActivity implements SearchView.On
                 mView = view;
                 mContentView = (TextView) view.findViewById(R.id.txtv_title);
                 mImageView = (ImageView) view.findViewById(R.id.game_image);
+                mCardView = (CardView) view.findViewById(R.id.card_list);
             }
 
             @Override
