@@ -58,8 +58,6 @@ public class GameListActivity extends AppCompatActivity implements SearchView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_list);
 
-        //Init the InternalStorage
-        InternalStorageUtil.getInstance();
         //Todo remove
         if(debug){
             HighScoreTest.test(getApplicationContext());
