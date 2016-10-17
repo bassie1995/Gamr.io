@@ -13,4 +13,11 @@
     tools:context="nl.verhoogenvansetten.gamrio.FourInARow"
     tools:showIn="@layout/activity_four_in_a_row">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="No data yet"
+        android:id="@+id/dataview"
+        />
+
 </RelativeLayout>

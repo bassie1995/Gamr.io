@@ -27,10 +27,12 @@ public class FourInARow extends GameCompat {
                         .setAction("Action", null).show();
             }
         });
+
+        data = (TextView) findViewById(R.id.dataview);
     }
 
     public void update(String data) {
-
+        this.data.setText(data);
     }
 
 }
