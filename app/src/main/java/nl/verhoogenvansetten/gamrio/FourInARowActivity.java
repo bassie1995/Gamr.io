@@ -8,9 +8,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 
-public class FourInARow extends GameCompat {
+public class FourInARowActivity extends GameCompat {
 
-    TextView data;
+    TextView dataView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,11 +28,10 @@ public class FourInARow extends GameCompat {
             }
         });
 
-        data = (TextView) findViewById(R.id.dataview);
+        dataView = (TextView) findViewById(R.id.dataview);
     }
 
     public void update(String data) {
-        this.data.setText(data);
+        this.dataView.setText(data);
     }
-
 }
