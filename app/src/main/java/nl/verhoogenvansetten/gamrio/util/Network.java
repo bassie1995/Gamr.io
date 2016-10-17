@@ -1,6 +1,6 @@
 package nl.verhoogenvansetten.gamrio.util;
 
-import nl.verhoogenvansetten.gamrio.SignInDialogFragment;
+//import nl.verhoogenvansetten.gamrio.SignInDialogFragment;
 import nl.verhoogenvansetten.gamrio.model.Game;
 import nl.verhoogenvansetten.gamrio.ui.DeviceDialogFragment;
 

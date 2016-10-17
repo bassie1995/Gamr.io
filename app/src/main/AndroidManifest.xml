@@ -41,7 +41,7 @@
                 android:value="nl.verhoogenvansetten.gamrio.GameListActivity" />
             <meta-data
                 android:name="android.app.shortcuts"
-                android:resource="@xml/shortcuts"/>
+                android:resource="@xml/shortcuts" />
         </activity>
         <activity
             android:name=".SettingsActivity"
@@ -51,6 +51,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="nl.verhoogenvansetten.gamrio.GameListActivity" />
         </activity>
+        <activity
+            android:name=".FourInARow"
+            android:label="@string/title_activity_four_in_arow"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
