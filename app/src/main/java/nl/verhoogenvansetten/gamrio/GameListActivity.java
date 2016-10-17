@@ -4,8 +4,10 @@ package nl.verhoogenvansetten.gamrio;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -55,6 +57,8 @@ public class GameListActivity extends AppCompatActivity implements SearchView.On
      * device.
      */
     private boolean mTwoPane;
+    IntentFilter intentFilter;
+    Network network;
 
     public static SimpleItemRecyclerViewAdapter adapter;
     //Temporary debug
@@ -80,7 +84,7 @@ public class GameListActivity extends AppCompatActivity implements SearchView.On
         setSupportActionBar(toolbar);
         toolbar.setTitle(getTitle());
 
-        final Network network = new Network(this);
+        network = Network.getInstance();
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -103,6 +107,12 @@ public class GameListActivity extends AppCompatActivity implements SearchView.On
             // activity should be in two-pane mode.
             mTwoPane = true;
         }
+
+        intentFilter = new IntentFilter();
+        intentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
+        intentFilter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
+        intentFilter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
+        intentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
 
         //handleIntent(getIntent());
     }
@@ -265,5 +275,19 @@ public class GameListActivity extends AppCompatActivity implements SearchView.On
                 return super.toString() + " '" + mContentView.getText() + "'";
             }
         }
+    }
+
+    /* register the broadcast receiver with the intent values to be matched */
+    @Override
+    protected void onResume() {
+        super.onResume();
+        registerReceiver(network.getReceiver(), intentFilter);
+    }
+
+    /* unregister the broadcast receiver */
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(network.getReceiver());
     }
 }

@@ -19,14 +19,16 @@ import android.app.Activity;
  */
 
 class Server {
-    private Activity activity;
+    //private Activity activity;
     private ServerSocket serverSocket;
     private String message = "";
     //String reply = "";
     private static final int socketServerPORT = 12345;
+    Network network;
 
-    Server(Activity activity) {
-        this.activity = activity;
+    Server(Network network) {
+        this.network = network;
+        //this.activity = activity;
         Thread sockerServerThread = new Thread(new SocketServerThread());
         sockerServerThread.start();
     }
@@ -124,10 +126,11 @@ class Server {
                 message += "Something wrong! " + e.toString() + "\n";
             }
 
-            activity.runOnUiThread(new Runnable() {
+            network.getGame().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     //TODO activity.msg.setText(message);
+                    network.update(message);
                 }
             });
         }

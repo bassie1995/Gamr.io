@@ -21,17 +21,16 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
     Network network;
     private WifiP2pManager mManager;
     private WifiP2pManager.Channel mChannel;
-    private Activity mActivity;
+    //private Activity mActivity;
     private List peers = new ArrayList();
     Server server;
 
-    public WiFiDirectBroadcastReceiver(Network network, WifiP2pManager manager, WifiP2pManager.Channel channel,
-                                       Activity activity) {
+    public WiFiDirectBroadcastReceiver(Network network, WifiP2pManager manager, WifiP2pManager.Channel channel) {
         super();
         this.network= network;
         this.mManager = manager;
         this.mChannel = channel;
-        this.mActivity = activity;
+        //this.mActivity = activity;
     }
 
     private WifiP2pManager.PeerListListener peerListListener = new WifiP2pManager.PeerListListener() {
@@ -69,7 +68,8 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
             if (info.isConnected()) {
                 //setup server
                 network.setConnected(true);
-                server = new Server(mActivity);
+                server = new Server(network);
+                network.update("server started");
                 //mActivity.infoip.setText(server.getIpAddress() + ":" + server.getPort());
 
                 mManager.requestGroupInfo(mChannel, new WifiP2pManager.GroupInfoListener() {

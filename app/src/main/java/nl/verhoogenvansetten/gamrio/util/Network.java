@@ -1,6 +1,8 @@
 package nl.verhoogenvansetten.gamrio.util;
 
 //import nl.verhoogenvansetten.gamrio.SignInDialogFragment;
+import nl.verhoogenvansetten.gamrio.GameCompat;
+import nl.verhoogenvansetten.gamrio.GameListActivity;
 import nl.verhoogenvansetten.gamrio.model.Game;
 import nl.verhoogenvansetten.gamrio.ui.DeviceDialogFragment;
 
@@ -32,26 +34,28 @@ public class Network {
     private static WifiP2pManager.Channel mChannel;
     private BroadcastReceiver mReceiver;
     private int ID;
-    private Game game;
-    private Activity main;
+    private GameCompat game;
+    //private Activity main;
     private String ip;
     private String iface;
     private int port = 12345;
     private boolean isConnected;
     IntentFilter mIntentFilter;
+    private static Network instance;
 
-    public Network(Activity main) {
+    public static Network getInstance() {
+        if (instance==null)
+            instance = new Network();
+        return instance;
+    }
+
+    public Network() {
         //TODO
+        Context main = GameListActivity.getContext();
         mManager = (WifiP2pManager) main.getSystemService(Context.WIFI_P2P_SERVICE);
         mChannel = mManager.initialize(main, main.getMainLooper(), null);
-        mReceiver = new WiFiDirectBroadcastReceiver(this, mManager, mChannel, main);
-        this.main = main;
-
-        mIntentFilter = new IntentFilter();
-        mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
-        mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
-        mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
-        mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
+        mReceiver = new WiFiDirectBroadcastReceiver(this, mManager, mChannel);
+        //this.main = main;
 
         //get broadcast receiver
     }
@@ -60,7 +64,7 @@ public class Network {
         mManager.discoverPeers(mChannel, new WifiP2pManager.ActionListener() {
             @Override
             public void onSuccess() {
-                Toast.makeText(main, "scanning", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(main, "scanning", Toast.LENGTH_SHORT).show();
                 DeviceDialogFragment fragment = DeviceDialogFragment.newInstance();
                 fragment.show(manager, "device_list_fragment_dialog");
             }
@@ -77,10 +81,9 @@ public class Network {
         DeviceDialogFragment.filterAdapter(l);
     }
 
-    public void registerGame(int id, Game game) {
+    public void registerGame(int id, GameCompat game) {
         ID = id;
         this.game = game;
-        //TODO send a startup message
     }
 
     public void unregisterGame() {
@@ -115,7 +118,7 @@ public class Network {
     }
 
     public void enableWifi() {
-        WifiManager wifi = (WifiManager) main.getSystemService(Context.WIFI_SERVICE);
+        WifiManager wifi = (WifiManager) GameListActivity.getContext().getSystemService(Context.WIFI_SERVICE);
         if (wifi.getWifiState() == WifiManager.WIFI_STATE_DISABLED) {
             wifi.setWifiEnabled(true);
         }
@@ -179,5 +182,17 @@ public class Network {
             }
         }
         return null;
+    }
+
+    public void update(String data) {
+        try {
+            game.update(data);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public GameCompat getGame() {
+        return game;
     }
 }

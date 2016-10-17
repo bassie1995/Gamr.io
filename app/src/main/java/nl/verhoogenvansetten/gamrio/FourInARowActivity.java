@@ -8,9 +8,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 
+import nl.verhoogenvansetten.gamrio.util.Network;
+
 public class FourInARowActivity extends GameCompat {
 
     TextView dataView;
+    Network network;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +32,10 @@ public class FourInARowActivity extends GameCompat {
         });
 
         dataView = (TextView) findViewById(R.id.dataview);
+
+        network = Network.getInstance();
+
+        network.registerGame(1, this);
     }
 
     public void update(String data) {
