@@ -54,7 +54,9 @@
         <activity
             android:name=".FourInARowActivity"
             android:label="@string/title_activity_four_in_arow"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".games.battleship.ui.BattleshipSetupActivity" />
+        <activity android:name=".games.battleship.ui.BattleshipGameActivity"></activity>
     </application>
 
 </manifest>

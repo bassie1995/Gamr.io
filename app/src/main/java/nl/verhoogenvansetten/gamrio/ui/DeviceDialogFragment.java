@@ -1,5 +1,6 @@
 package nl.verhoogenvansetten.gamrio.ui;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.net.Uri;
 import android.net.wifi.WpsInfo;
@@ -32,6 +33,10 @@ public class DeviceDialogFragment extends DialogFragment {
     RecyclerView mRecyclerView;
     public static MyRecyclerAdapter adapter;
 
+    public DeviceDialogFragment() {
+        // Empty constructor is required.
+    }
+
     public static DeviceDialogFragment newInstance() {
         DeviceDialogFragment fragment = new DeviceDialogFragment();
         Bundle args = new Bundle();
@@ -41,17 +46,22 @@ public class DeviceDialogFragment extends DialogFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        //inflate layout with recycler view
+        // inflate layout with recycler view
         View v = inflater.inflate(R.layout.fragment_device_dialog, container, false);
         mRecyclerView = (RecyclerView) v.findViewById(R.id.device_list);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        //setadapter
+        // setadapter
         ArrayList<WifiP2pDevice> wifiP2pDevices = new ArrayList<>();
-        //wifiP2pDevices.add("yolo");
+        WifiP2pDevice yolo = new WifiP2pDevice();
+        yolo.deviceName = "Yolo";
+        wifiP2pDevices.add(yolo);
         adapter = new MyRecyclerAdapter(wifiP2pDevices);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setAdapter(adapter);
-        //get your recycler view and populate it.
+        // get your recycler view and populate it.
+
+        getDialog().setTitle("Verbinden");
+
         return v;
     }
 
