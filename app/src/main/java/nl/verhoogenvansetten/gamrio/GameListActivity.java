@@ -12,7 +12,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.FragmentManager;
@@ -137,6 +136,8 @@ public class GameListActivity extends AppCompatActivity implements SearchView.On
         // recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
     }
 
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -206,7 +207,7 @@ public class GameListActivity extends AppCompatActivity implements SearchView.On
             Palette.from(drawable.getBitmap()).generate(new Palette.PaletteAsyncListener() {
                 @Override
                 public void onGenerated(Palette palette) {
-                    holder.mCardView.setBackgroundColor(palette.getLightVibrantColor(ContextCompat.getColor(getApplicationContext(), R.color.md_white)));
+                    holder.mCardView.setBackgroundColor(palette.getVibrantColor(ContextCompat.getColor(getApplicationContext(), R.color.md_white)));
                 }
             });
 

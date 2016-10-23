@@ -1,28 +1,23 @@
 package nl.verhoogenvansetten.gamrio.util;
 
-//import nl.verhoogenvansetten.gamrio.SignInDialogFragment;
-import nl.verhoogenvansetten.gamrio.GameCompat;
-import nl.verhoogenvansetten.gamrio.GameListActivity;
-import nl.verhoogenvansetten.gamrio.model.Game;
-import nl.verhoogenvansetten.gamrio.ui.DeviceDialogFragment;
-
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.IntentFilter;
 import android.net.wifi.WifiManager;
 import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pManager;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.List;
 
-import android.app.Activity;
-import android.widget.Toast;
+import nl.verhoogenvansetten.gamrio.GameCompat;
+import nl.verhoogenvansetten.gamrio.GameListActivity;
+import nl.verhoogenvansetten.gamrio.ui.DeviceDialogFragment;
 
 /**
  * Created by bloodyfool on 12-10-16.
@@ -49,7 +44,7 @@ public class Network {
         return instance;
     }
 
-    public Network() {
+    private Network() {
         //TODO
         Context main = GameListActivity.getContext();
         mManager = (WifiP2pManager) main.getSystemService(Context.WIFI_P2P_SERVICE);
@@ -64,7 +59,6 @@ public class Network {
         mManager.discoverPeers(mChannel, new WifiP2pManager.ActionListener() {
             @Override
             public void onSuccess() {
-                //Toast.makeText(main, "scanning", Toast.LENGTH_SHORT).show();
                 DeviceDialogFragment fragment = DeviceDialogFragment.newInstance();
                 fragment.show(manager, "device_list_fragment_dialog");
             }
@@ -184,7 +178,7 @@ public class Network {
         return null;
     }
 
-    public void update(String data) {
+    void update(String data) {
         try {
             game.update(data);
         } catch (NullPointerException e) {

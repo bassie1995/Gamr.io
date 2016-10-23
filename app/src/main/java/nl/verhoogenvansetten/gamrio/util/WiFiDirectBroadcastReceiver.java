@@ -10,11 +10,8 @@ import android.net.wifi.p2p.WifiP2pManager;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import android.app.Activity;
 
 public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
 
@@ -36,9 +33,9 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
     private WifiP2pManager.PeerListListener peerListListener = new WifiP2pManager.PeerListListener() {
         @Override
         public void onPeersAvailable(WifiP2pDeviceList peerList) {
-        peers.clear();
-        peers.addAll(peerList.getDeviceList());
-        network.setDeviceList(peers);
+            peers.clear();
+            peers.addAll(peerList.getDeviceList());
+            network.setDeviceList(peers);
         }
 
     };
@@ -46,7 +43,6 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
-        WifiP2pManager.PeerListListener myPeerListListener;
 
         if (WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION.equals(action)) {
             int state = intent.getIntExtra(WifiP2pManager.EXTRA_WIFI_STATE, -1);

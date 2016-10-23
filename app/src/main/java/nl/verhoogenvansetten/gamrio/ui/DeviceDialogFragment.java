@@ -1,6 +1,5 @@
 package nl.verhoogenvansetten.gamrio.ui;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.net.Uri;
 import android.net.wifi.WpsInfo;
@@ -8,14 +7,12 @@ import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,13 +26,9 @@ import nl.verhoogenvansetten.gamrio.util.Network;
  */
 
 public class DeviceDialogFragment extends DialogFragment {
-    private OnFragmentInteractionListener mListener;
+    //private OnFragmentInteractionListener mListener;
     RecyclerView mRecyclerView;
     public static MyRecyclerAdapter adapter;
-
-    public DeviceDialogFragment() {
-        // Empty constructor is required.
-    }
 
     public static DeviceDialogFragment newInstance() {
         DeviceDialogFragment fragment = new DeviceDialogFragment();
@@ -44,29 +37,48 @@ public class DeviceDialogFragment extends DialogFragment {
         return fragment;
     }
 
+    /*@NonNull
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+
+        builder.setView(inflater.inflate(R.layout.fragment_device_dialog, null)).setTitle("Verbinden")
+            .setNegativeButton("Cancel",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) { }
+                }
+            );
+        return builder.create();
+    }*/
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // inflate layout with recycler view
-        View v = inflater.inflate(R.layout.fragment_device_dialog, container, false);
+        //inflate layout with recycler view
+        View v = inflater.inflate(R.layout.fragment_device_dialog, container);
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
         mRecyclerView = (RecyclerView) v.findViewById(R.id.device_list);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        // setadapter
+
         ArrayList<WifiP2pDevice> wifiP2pDevices = new ArrayList<>();
+        WifiP2pDevice test = new WifiP2pDevice();
+        test.deviceName = "test";
         WifiP2pDevice yolo = new WifiP2pDevice();
-        yolo.deviceName = "Yolo";
+        yolo.deviceName = "yolo";
+        wifiP2pDevices.add(test);
         wifiP2pDevices.add(yolo);
+
         adapter = new MyRecyclerAdapter(wifiP2pDevices);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setAdapter(adapter);
-        // get your recycler view and populate it.
 
-        getDialog().setTitle("Verbinden");
+        this.getDialog().setTitle("Verbinden");
 
         return v;
     }
 
-    public static void filterAdapter (List<WifiP2pDevice> deviceList) {
-        Log.d("DEVICE DEBUG", deviceList.toString());
+    public static void filterAdapter(List<WifiP2pDevice> deviceList) {
         adapter.setFilter(deviceList);
     }
 
@@ -74,7 +86,7 @@ public class DeviceDialogFragment extends DialogFragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+            //mListener = (OnFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -84,7 +96,7 @@ public class DeviceDialogFragment extends DialogFragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
+        //mListener = null;
     }
 
     /**
@@ -125,7 +137,6 @@ public class DeviceDialogFragment extends DialogFragment {
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(getActivity(), "hai", Toast.LENGTH_SHORT).show();
                     WifiP2pDevice device = mValues.get(position);
                     WifiP2pConfig config = new WifiP2pConfig();
                     config.deviceAddress = device.deviceAddress;
@@ -142,7 +153,7 @@ public class DeviceDialogFragment extends DialogFragment {
 
         void setFilter (List<WifiP2pDevice> deviceList) {
             mValues.clear();
-            mValues.addAll(deviceList); // Use actual gameList here
+            mValues.addAll(deviceList);
             notifyDataSetChanged();
         }
 
