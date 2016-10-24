@@ -17,7 +17,7 @@ public final class StaticGameData {
             R.drawable.battleship_header,
             R.drawable.battleship_header,
             R.drawable.battleship_header,
-            R.drawable.battleship_header
+            R.drawable.checkers_header
     };
     public final static String[] gameNames = {GameListActivity.getContext().getString(R.string.name_battleship),
             GameListActivity.getContext().getString(R.string.name_bingo),

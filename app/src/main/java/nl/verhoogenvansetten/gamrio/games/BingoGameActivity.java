@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import nl.verhoogenvansetten.gamrio.R;
+
 public class BingoGameActivity extends AppCompatActivity {
 
     public Random random = new Random();

@@ -4,6 +4,7 @@ import nl.verhoogenvansetten.gamrio.model.Game;
 
 /**
  * Created by Jori on 13-10-2016.
+ *
  */
 
 public class Checkers extends Game {
@@ -107,7 +108,7 @@ public class Checkers extends Game {
     }
 
     private boolean movesLeft(){
-       return true;
+        return true;
     }
 
 

@@ -1,79 +1,85 @@
 package nl.verhoogenvansetten.gamrio.games.checkers.ui;
 
+import android.app.Fragment;
 import android.content.Context;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+
+import android.support.v7.widget.GridLayout;
+import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import nl.verhoogenvansetten.gamrio.R;
+import nl.verhoogenvansetten.gamrio.games.checkers.model.Checkers;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link CheckersFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link CheckersFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class CheckersFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
+    public final static String TAG = "Checkers fragment";
+    float scale;
+    Checkers checkers = null;
+    GridLayout gl = null;
     private OnFragmentInteractionListener mListener;
 
     public CheckersFragment() {
-        // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment CheckersFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static CheckersFragment newInstance(String param1, String param2) {
+    public static CheckersFragment newInstance() {
         CheckersFragment fragment = new CheckersFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
+        checkers = new Checkers(7, R.drawable.checkers_header,
+                getResources().getString(R.string.name_checkers),
+                getResources().getString(R.string.desc_checkers));
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_checkers, container, false);
+        GridLayout view = (GridLayout) inflater.inflate(R.layout.fragment_checkers, container, false);
+        //Get the GridLayoutView
+        gl = (GridLayout) view.getRootView();
+        //Calculate the size of the squares
+        DisplayMetrics displaymetrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+        int screenHeight = displaymetrics.heightPixels;
+        int screenWidth = displaymetrics.widthPixels;
+
+        int padding = (int)((getResources().getDimensionPixelSize(R.dimen.checkers_padding)
+                * displaymetrics.density) + 0.5);
+        int squareSize;
+        if(screenWidth <= screenHeight){
+            squareSize = (screenWidth - padding * 2) / gl.getColumnCount();
+        }else{
+            squareSize = (screenHeight - padding * 2) / gl.getRowCount();
+        }
+
+        //Add the Squares to the GridLayout.
+        for(int x = 0 ; x < 8; x++){
+            for(int y = 0; y < 8; y++){
+                Button square = createNewSquare(x, y);
+                gl.addView(square);
+                //After adding the square, set the dimensions
+                ((GridLayout.LayoutParams)square.getLayoutParams()).width =  squareSize;
+                ((GridLayout.LayoutParams)square.getLayoutParams()).height =  squareSize;
+            }
+        }
+
+
+        return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
 
     @Override
     public void onAttach(Context context) {
@@ -92,18 +98,49 @@ public class CheckersFragment extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
+
     public interface OnFragmentInteractionListener {
+        /**
+         * This interface must be implemented by activities that contain this
+         * fragment to allow an interaction in this fragment to be communicated
+         * to the activity and potentially other fragments contained in that
+         * activity.
+         * <p>
+         * See the Android Training lesson <a href=
+         * "http://developer.android.com/training/basics/fragments/communicating.html"
+         * >Communicating with Other Fragments</a> for more information.
+         */
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    private Button createNewSquare(int x, int y){
+        Square newSquare = new Square(getActivity());
+        //Set the color of the button based on the location
+        int remainder = -1;
+        if((x % 2) == 0)
+            if((y % 2) == 0)
+                newSquare.setBackgroundColor(Color.BLACK);
+            else
+                newSquare.setBackgroundColor(Color.WHITE);
+        else
+        if((y % 2) == 0)
+            newSquare.setBackgroundColor(Color.WHITE);
+        else
+            newSquare.setBackgroundColor(Color.BLACK);
+
+        //Set the text of the button
+        newSquare.setText("");
+        //Set size of buttons
+        newSquare.setWidth(0);
+        newSquare.setHeight(0);
+        //Set the column and row location and weight in the parameters
+        GridLayout.LayoutParams lp = new GridLayout.LayoutParams();
+        lp.columnSpec = GridLayout.spec(x, 1); //With x as the column and 1 as the weight
+        lp.rowSpec = GridLayout.spec(y, 1);
+        //Apply the parameters to the Square
+        newSquare.setLayoutParams(lp);
+
+        return newSquare;
     }
 }

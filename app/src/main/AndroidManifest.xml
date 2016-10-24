@@ -72,6 +72,18 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="nl.verhoogenvansetten.gamrio.GameListActivity" />
         </activity>
+        <activity
+            android:name=".games.checkers.ui.CheckersActivity"
+            android:label="Checkers"
+            android:parentActivityName=".GameListActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="nl.verhoogvansetten.gamrio.games.checkers.ui.CheckersActivity" />
+            </intent-filter>
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="nl.verhoogenvansetten.gamrio.GameListActivity" />
+        </activity>
     </application>
 
 </manifest>
