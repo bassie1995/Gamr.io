@@ -2,7 +2,7 @@
 <shortcuts
     xmlns:android="http://schemas.android.com/apk/res/android">
     <shortcut enabled="true"
-        shortcutId="Battleship"
+        shortcutId="battleship"
         shortcutShortLabel="@string/pref_header_battleship"
         shortcutLongLabel="@string/pref_header_battleship"> <!-- Make long? "Start Battleship" -->
         <intent android:targetPackage="nl.verhoogenvansetten.gamrio"
@@ -11,9 +11,9 @@
             android:data="battleship"/>
     </shortcut>
     <shortcut enabled="true"
-    shortcutId="Battleship"
+    shortcutId="four-in-row"
     shortcutShortLabel="@string/pref_header_four_in_row"
-    shortcutLongLabel="@string/pref_header_four_in_row"> <!-- Make long? "Start Battleship" -->
+    shortcutLongLabel="@string/pref_header_four_in_row"> <!-- Make long? "Start <game name>" -->
     <intent android:targetPackage="nl.verhoogenvansetten.gamrio"
         android:targetClass="nl.verhoogenvansetten.gamrio.FourInARowActivity"
         android:action="android.intent.action.VIEW"

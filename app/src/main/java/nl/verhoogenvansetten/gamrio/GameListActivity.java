@@ -136,8 +136,6 @@ public class GameListActivity extends AppCompatActivity implements SearchView.On
         // recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
     }
 
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();

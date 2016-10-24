@@ -11,8 +11,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
-import nl.verhoogenvansetten.gamrio.games.battleship.ui.BattleshipGameActivity;
-
 /**
  * An activity representing a single Game detail screen. This
  * activity is only used narrow width devices. On tablet-size devices,

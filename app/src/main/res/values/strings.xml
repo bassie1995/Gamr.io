@@ -79,4 +79,6 @@
     <string name="desc_checkers">A simplified version of chess</string>
     <string name="title_activity_battleship_setup">Battleship Setup</string>
     <string name="title_activity_battleship_game">Battleship</string>
+    <string name="play_battleship">Play Battleship</string>
+    <string name="done">Done</string>
 </resources>
