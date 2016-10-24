@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.net.wifi.WifiManager;
 import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pManager;
+import android.os.AsyncTask;
 import android.support.v4.app.FragmentManager;
 import android.widget.Toast;
 
@@ -33,7 +34,7 @@ public class Network {
     //private Activity main;
     private String ip;
     private String iface;
-    private int port = 12345;
+    private int port = 12346;
     private boolean isConnected;
     IntentFilter mIntentFilter;
     private static Network instance;
@@ -107,6 +108,7 @@ public class Network {
     }
 
     public Boolean sendData(int id, String data) {
+        new Client(this, ip, port, data).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         //TODO send data
         return true;
     }

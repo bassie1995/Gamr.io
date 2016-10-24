@@ -79,7 +79,11 @@ public class DeviceDialogFragment extends DialogFragment {
     }
 
     public static void filterAdapter(List<WifiP2pDevice> deviceList) {
-        adapter.setFilter(deviceList);
+        try {
+            adapter.setFilter(deviceList);
+        } catch(NullPointerException e) {
+            //go fuck yourself
+        }
     }
 
     @Override

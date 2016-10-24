@@ -64,8 +64,12 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
             if (info.isConnected()) {
                 //setup server
                 network.setConnected(true);
-                server = new Server(network);
-                network.update("server started");
+                if(Server.serverSocket == null) {
+                    server = new Server(network);
+                    network.update("server started");
+                } else {
+                    network.update("server restart attempted");
+                }
                 //mActivity.infoip.setText(server.getIpAddress() + ":" + server.getPort());
 
                 mManager.requestGroupInfo(mChannel, new WifiP2pManager.GroupInfoListener() {

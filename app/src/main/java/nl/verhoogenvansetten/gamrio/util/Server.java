@@ -5,6 +5,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.PrintStream;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.ServerSocket;
@@ -13,6 +14,8 @@ import java.net.SocketException;
 import java.util.Enumeration;
 
 import android.app.Activity;
+import android.app.ActivityManager;
+import android.os.AsyncTask;
 
 /**
  * Created by bloodyfool on 11-10-16.
@@ -20,17 +23,18 @@ import android.app.Activity;
 
 class Server {
     //private Activity activity;
-    private ServerSocket serverSocket;
+    static ServerSocket serverSocket;
     private String message = "";
     //String reply = "";
-    private static final int socketServerPORT = 12345;
+    private static final int socketServerPORT = 12346;
     Network network;
 
     Server(Network network) {
         this.network = network;
         //this.activity = activity;
-        Thread sockerServerThread = new Thread(new SocketServerThread());
-        sockerServerThread.start();
+        //Thread sockerServerThread = new Thread(new SocketServerThread());
+        //sockerServerThread.start();
+        new SocketServerTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     private int getPort() {
@@ -48,11 +52,13 @@ class Server {
         //activity.infoip.setText("Connection Lost");
     }
 
-    private class SocketServerThread extends Thread {
+    //private class SocketServerThread extends Thread {
+    private class SocketServerTask extends AsyncTask<Void, Void, Void> {
         int count = 0;
 
         @Override
-        public void run() {
+        //public void run() {
+        protected Void doInBackground(Void... params) {
             try {
                 serverSocket = new ServerSocket(getPort());
 
@@ -68,36 +74,57 @@ class Server {
                         }
                     });**/
 
-                    SocketServerReplyThread socketServerReplyThread = new SocketServerReplyThread(socket, count);
-                    socketServerReplyThread.run();
+                    //SocketServerReplyThread socketServerReplyThread = new SocketServerReplyThread(socket, count);
+                    //socketServerReplyThread.run();
+                    //SocketServerReplyTask task = new SocketServerReplyTask(socket, count).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
+                    class StartTask implements Runnable {
+                        Socket s;
+
+                        StartTask(Socket s) {
+                            this.s = s;
+                        }
+
+                        @Override public void run() {
+                            new SocketServerReplyTask(s, count).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                        }
+                    }
+
+
+
+                    network.getGame().runOnUiThread(new StartTask(socket));
+
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            return null;
         }
     }
 
-    private class SocketServerReplyThread extends Thread {
+    //private class SocketServerReplyThread extends Thread {
+    private class SocketServerReplyTask extends AsyncTask<Void, Void, Void> {
 
         private Socket hostThreadSocket;
         int cnt;
 
-        SocketServerReplyThread(Socket socket, int c) {
+        SocketServerReplyTask(Socket socket, int c) {
             hostThreadSocket = socket;
             cnt = c;
         }
 
         @Override
-        public void run() {
+        //public void run() {
+        protected Void doInBackground(Void... params) {
             OutputStream outputStream;
             //String msgReply = "Hello from server, you are #" + cnt;
             try {
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(hostThreadSocket.getInputStream()));
 
-                /**for (String data; (data = bufferedReader.readLine()) != null; ) {
-                    reply += "\n" + data;
+                for (String data; (data = bufferedReader.readLine()) != null; ) {
+                    message += "\n" + data;
                 }
-
+                /**
                 activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -129,10 +156,12 @@ class Server {
             network.getGame().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    //TODO activity.msg.setText(message);
                     network.update(message);
+                    //network.update("message");
                 }
             });
+            message = "";
+            return null;
         }
     }
 
