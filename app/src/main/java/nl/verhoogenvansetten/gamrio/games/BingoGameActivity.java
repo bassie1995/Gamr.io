@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class MainActivity extends AppCompatActivity {
+public class BingoGameActivity extends AppCompatActivity {
 
     public Random random = new Random();
     public int num;
@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_bingo);
 
         define_buttons();
     }
@@ -221,7 +221,7 @@ public class MainActivity extends AppCompatActivity {
 
         resultMessage="You Win!";
 
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MainActivity.this);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(BingoGameActivity.this);
         alertDialogBuilder.setTitle("GAME OVER");
 
         alertDialogBuilder
@@ -230,7 +230,7 @@ public class MainActivity extends AppCompatActivity {
                 .setNegativeButton("Play Again",new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog,int id) {
 
-                        Intent intent= new Intent(MainActivity.this,MainActivity.class);
+                        Intent intent= new Intent(BingoGameActivity.this,BingoGameActivity.class);
                         startActivity(intent);
                         finish();
                     }
