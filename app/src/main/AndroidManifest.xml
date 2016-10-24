@@ -53,12 +53,17 @@
         <activity
             android:name=".FourInARowActivity"
             android:label="@string/title_activity_four_in_arow"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:exported="true" />
         <activity
             android:name=".games.battleship.ui.BattleshipSetupActivity"
             android:label="@string/title_activity_battleship_setup"
             android:parentActivityName=".GameListActivity"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppTheme"
+            android:exported="true" >
+            <meta-data
+                android:name="android.app.shortcuts"
+                android:resource="@xml/shortcuts"/>
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="nl.verhoogenvansetten.gamrio.GameListActivity" />
