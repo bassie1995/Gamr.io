@@ -6,19 +6,19 @@ import android.os.AsyncTask;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
 /**
- * Created by bloodyfool on 11-10-16.
+ * This class manages the client side of the communication. Access to this class should only be done
+ * through the functions of the Network class.
  */
 
-public class Client extends AsyncTask<Void, Void, Void> {
+class Client extends AsyncTask<Void, Void, Void> {
 
     private String dstAddress;
     private int dstPort;
     private boolean response;
     private String message;
-    Network network;
+    private Network network;
 
     Client(Network network, String addr, int port, String theMessage) {
         this.network = network;
@@ -40,9 +40,6 @@ public class Client extends AsyncTask<Void, Void, Void> {
             printStream.close();
             response = true;
 
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-            response = false;
         } catch (IOException e) {
             e.printStackTrace();
             response = false;

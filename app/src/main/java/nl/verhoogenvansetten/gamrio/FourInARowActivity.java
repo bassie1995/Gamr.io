@@ -3,7 +3,6 @@ package nl.verhoogenvansetten.gamrio;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
@@ -31,8 +30,9 @@ public class FourInARowActivity extends GameCompat {
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
-                //network.send(ID, "helloooo");
-                dataView.setText(String.valueOf(network.getOtherGameID()));
+                network.send(ID, "helloooo");
+                //dataView.setText(String.valueOf(network.getOtherGameID()));
+                //dataView.setText(network.getConnectedDeviceName());
             }
         });
 
@@ -47,7 +47,7 @@ public class FourInARowActivity extends GameCompat {
 
     @Override
     public void onPause() {
-        network.unregisterGame();
+        network.unregisterGame(ID);
         super.onPause();
     }
 
