@@ -9,11 +9,13 @@ import android.view.View;
 import android.widget.TextView;
 
 import nl.verhoogenvansetten.gamrio.util.Network;
+import nl.verhoogenvansetten.gamrio.util.Server;
 
 public class FourInARowActivity extends GameCompat {
 
     TextView dataView;
     Network network;
+    Server server;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +30,7 @@ public class FourInARowActivity extends GameCompat {
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
-                network.send(1, "helloooo");
+                network.send(11, "helloooo");
             }
         });
 
@@ -42,4 +44,10 @@ public class FourInARowActivity extends GameCompat {
     public void update(String data) {
         this.dataView.setText(data);
     }
+
+    @Override
+    public void onPause() {
+
+    }
+
 }

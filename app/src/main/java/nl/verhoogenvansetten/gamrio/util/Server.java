@@ -21,19 +21,15 @@ import android.os.AsyncTask;
  * Created by bloodyfool on 11-10-16.
  */
 
-class Server {
+public class Server {
     //private Activity activity;
     static ServerSocket serverSocket;
     private String message = "";
-    //String reply = "";
     private static final int socketServerPORT = 12346;
     Network network;
 
     Server(Network network) {
         this.network = network;
-        //this.activity = activity;
-        //Thread sockerServerThread = new Thread(new SocketServerThread());
-        //sockerServerThread.start();
         new SocketServerTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
@@ -41,7 +37,7 @@ class Server {
         return socketServerPORT;
     }
 
-    void onDestroy() {
+    public void onDestroy() {
         if (serverSocket != null) {
             try {
                 serverSocket.close();
@@ -49,7 +45,6 @@ class Server {
                 e.printStackTrace();
             }
         }
-        //activity.infoip.setText("Connection Lost");
     }
 
     //private class SocketServerThread extends Thread {
@@ -57,7 +52,6 @@ class Server {
         int count = 0;
 
         @Override
-        //public void run() {
         protected Void doInBackground(Void... params) {
             try {
                 serverSocket = new ServerSocket(getPort());
@@ -90,8 +84,6 @@ class Server {
                         }
                     }
 
-
-
                     network.getGame().runOnUiThread(new StartTask(socket));
 
                 }
@@ -102,7 +94,6 @@ class Server {
         }
     }
 
-    //private class SocketServerReplyThread extends Thread {
     private class SocketServerReplyTask extends AsyncTask<Void, Void, Void> {
 
         private Socket hostThreadSocket;
@@ -117,7 +108,6 @@ class Server {
         //public void run() {
         protected Void doInBackground(Void... params) {
             OutputStream outputStream;
-            //String msgReply = "Hello from server, you are #" + cnt;
             try {
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(hostThreadSocket.getInputStream()));
 
@@ -158,9 +148,9 @@ class Server {
                 public void run() {
                     network.update(message);
                     //network.update("message");
+                    message = "";
                 }
             });
-            message = "";
             return null;
         }
     }

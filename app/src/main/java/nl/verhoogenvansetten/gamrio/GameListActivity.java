@@ -40,6 +40,8 @@ import nl.verhoogenvansetten.gamrio.model.Game;
 import nl.verhoogenvansetten.gamrio.ui.DeviceDialogFragment;
 import nl.verhoogenvansetten.gamrio.util.HighScoreTest;
 import nl.verhoogenvansetten.gamrio.util.Network;
+import nl.verhoogenvansetten.gamrio.util.WiFiDirectBroadcastReceiver;
+import nl.verhoogenvansetten.gamrio.util.Server;
 
 /**
  * An activity representing a list of Games. This activity
@@ -75,7 +77,7 @@ public class GameListActivity extends AppCompatActivity implements SearchView.On
         setContentView(R.layout.activity_game_list);
 
         //Todo remove
-        if(debug){
+        if (debug) {
             HighScoreTest.test();
         }
 
@@ -114,6 +116,8 @@ public class GameListActivity extends AppCompatActivity implements SearchView.On
         intentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
 
         //handleIntent(getIntent());
+        registerReceiver(network.getReceiver(), intentFilter);
+
     }
 
     protected void onNewIntent(Intent intent) {
@@ -175,9 +179,12 @@ public class GameListActivity extends AppCompatActivity implements SearchView.On
         return false;
     }
 
-    public static Context getContext(){ return mContext.get(); }
+    public static Context getContext() {
+        return mContext.get();
+    }
 
-    public void onFragmentInteraction(Uri uri) {}
+    public void onFragmentInteraction(Uri uri) {
+    }
 
     public class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
@@ -248,7 +255,7 @@ public class GameListActivity extends AppCompatActivity implements SearchView.On
             return mValues.size();
         }
 
-        void setFilter (List<Game> gameList) {
+        void setFilter(List<Game> gameList) {
             mValues.clear();
             mValues.addAll(gameList); // Use actual gameList here
             notifyDataSetChanged();
@@ -276,17 +283,28 @@ public class GameListActivity extends AppCompatActivity implements SearchView.On
         }
     }
 
-    /* register the broadcast receiver with the intent values to be matched */
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        try {
+            ((WiFiDirectBroadcastReceiver) network.getReceiver()).getServer().onDestroy();
+        } catch (NullPointerException e) {
+        }
+        unregisterReceiver(network.getReceiver());
+
+    }
+
+    /* register the broadcast receiver with the intent values to be matched
     @Override
     protected void onResume() {
         super.onResume();
         registerReceiver(network.getReceiver(), intentFilter);
     }
 
-    /* unregister the broadcast receiver */
+    /* unregister the broadcast receiver
     @Override
     protected void onPause() {
         super.onPause();
         unregisterReceiver(network.getReceiver());
-    }
+    }*/
 }

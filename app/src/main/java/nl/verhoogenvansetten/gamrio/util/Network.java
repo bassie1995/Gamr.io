@@ -51,9 +51,6 @@ public class Network {
         mManager = (WifiP2pManager) main.getSystemService(Context.WIFI_P2P_SERVICE);
         mChannel = mManager.initialize(main, main.getMainLooper(), null);
         mReceiver = new WiFiDirectBroadcastReceiver(this, mManager, mChannel);
-        //this.main = main;
-
-        //get broadcast receiver
     }
 
     public void discoverPeers(final FragmentManager manager) {
@@ -109,7 +106,7 @@ public class Network {
 
     public Boolean sendData(int id, String data) {
         new Client(this, ip, port, data).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-        //TODO send data
+        //TODO check for id
         return true;
     }
 
@@ -122,11 +119,12 @@ public class Network {
 
     void afterSend(boolean status) {
         if(!status) {
-            // TODO game.setText("Send failed");
+            game.update(null);
         }
     }
 
     public void send(int ID, String message) {
+
         if(ip == null)
             ip = getIpFromArpCache(iface);
         Client client = new Client(this, ip, port, message);
