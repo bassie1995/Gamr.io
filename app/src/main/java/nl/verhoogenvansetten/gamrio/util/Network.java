@@ -31,16 +31,15 @@ public class Network {
     private BroadcastReceiver mReceiver;
     private int ID;
     private GameCompat game;
-    //private Activity main;
     private String ip;
     private String iface;
     private int port = 12346;
     private boolean isConnected;
-    IntentFilter mIntentFilter;
     private static Network instance;
+    private Server server;
 
     public static Network getInstance() {
-        if (instance==null)
+        if (instance == null)
             instance = new Network();
         return instance;
     }
@@ -69,16 +68,20 @@ public class Network {
 
     }
 
-    void setDeviceList(List l) {
+    protected void setDeviceList(List l) {
         DeviceDialogFragment.filterAdapter(l);
     }
 
     public void registerGame(int id, GameCompat game) {
         ID = id;
         this.game = game;
+        if(ID>=10)
+            startServer();
     }
 
     public void unregisterGame() {
+        if(ID>=10)
+            onDestroy();
         ID = 0;
         this.game = null;
         //TODO send shutdown message
@@ -117,17 +120,25 @@ public class Network {
         }
     }
 
-    void afterSend(boolean status) {
-        if(!status) {
+    protected void afterSend(boolean status) {
+        if (!status) {
             game.update(null);
         }
     }
 
     public void send(int ID, String message) {
 
-        if(ip == null)
+        String address;
+
+        if (ip == null)
             ip = getIpFromArpCache(iface);
-        Client client = new Client(this, ip, port, message);
+
+        if (ID >= 10)
+            address = "127.0.0.1";
+        else
+            address = ip;
+
+        Client client = new Client(this, address, port, message);
         client.execute();
     }
 
@@ -135,15 +146,15 @@ public class Network {
         return mReceiver;
     }
 
-    void setConnected(boolean state) {
+    protected void setConnected(boolean state) {
         isConnected = state;
     }
 
-    void setIp(String ip) {
+    protected void setIp(String ip) {
         this.ip = ip;
     }
 
-    void setIface(String iface) {
+    protected void setIface(String iface) {
         this.iface = iface;
     }
 
@@ -178,12 +189,29 @@ public class Network {
         return null;
     }
 
-    void update(String data) {
+    protected void update(String data) {
         try {
             game.update(data);
         } catch (NullPointerException e) {
             e.printStackTrace();
         }
+    }
+
+    protected void startServer() {
+        if (Server.serverSocket == null)
+            server = new Server(this);
+    }
+
+    public void onDestroy() {
+        try {
+            server.onDestroy();
+        } catch (NullPointerException e) {
+
+        }
+    }
+
+    protected int getPort() {
+        return port;
     }
 
     public GameCompat getGame() {

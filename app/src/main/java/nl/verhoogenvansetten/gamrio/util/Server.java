@@ -22,10 +22,8 @@ import android.os.AsyncTask;
  */
 
 public class Server {
-    //private Activity activity;
     static ServerSocket serverSocket;
     private String message = "";
-    private static final int socketServerPORT = 12346;
     Network network;
 
     Server(Network network) {
@@ -33,44 +31,28 @@ public class Server {
         new SocketServerTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
-    private int getPort() {
-        return socketServerPORT;
-    }
 
     public void onDestroy() {
         if (serverSocket != null) {
             try {
                 serverSocket.close();
+                serverSocket = null;
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
 
-    //private class SocketServerThread extends Thread {
     private class SocketServerTask extends AsyncTask<Void, Void, Void> {
         int count = 0;
 
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                serverSocket = new ServerSocket(getPort());
+                serverSocket = new ServerSocket(network.getPort());
 
                 while (true) {
                     Socket socket = serverSocket.accept();
-                    //count++;
-                    //message += "#" + count + " from " + socket.getInetAddress() + ":" + socket.getPort() + "\n";
-
-                    /**activity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            activity.msg.setText(message);
-                        }
-                    });**/
-
-                    //SocketServerReplyThread socketServerReplyThread = new SocketServerReplyThread(socket, count);
-                    //socketServerReplyThread.run();
-                    //SocketServerReplyTask task = new SocketServerReplyTask(socket, count).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
                     class StartTask implements Runnable {
                         Socket s;
@@ -112,7 +94,7 @@ public class Server {
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(hostThreadSocket.getInputStream()));
 
                 for (String data; (data = bufferedReader.readLine()) != null; ) {
-                    message += "\n" + data;
+                    message += data + "\n";
                 }
                 /**
                 activity.runOnUiThread(new Runnable() {
@@ -147,40 +129,10 @@ public class Server {
                 @Override
                 public void run() {
                     network.update(message);
-                    //network.update("message");
                     message = "";
                 }
             });
             return null;
         }
     }
-
-    public String getIpAddress() {
-        String ip = "";
-        try {
-            Enumeration<NetworkInterface> enumNetworkInterfaces = NetworkInterface
-                    .getNetworkInterfaces();
-            while (enumNetworkInterfaces.hasMoreElements()) {
-                NetworkInterface networkInterface = enumNetworkInterfaces
-                        .nextElement();
-                Enumeration<InetAddress> enumInetAddress = networkInterface
-                        .getInetAddresses();
-                while (enumInetAddress.hasMoreElements()) {
-                    InetAddress inetAddress = enumInetAddress
-                            .nextElement();
-
-                    if (inetAddress.isSiteLocalAddress()) {
-                        ip += "Server running at : "
-                                + inetAddress.getHostAddress() + networkInterface.getDisplayName();
-                    }
-                }
-            }
-
-        } catch (SocketException e) {
-            e.printStackTrace();
-            ip += "Something Wrong! " + e.toString() + "\n";
-        }
-        return ip;
-    }
-
 }
