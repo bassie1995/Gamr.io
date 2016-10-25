@@ -16,9 +16,12 @@ import android.widget.Toast;
 
 import nl.verhoogenvansetten.gamrio.R;
 import nl.verhoogenvansetten.gamrio.databinding.ActivityBattleshipSetupBinding;
+import nl.verhoogenvansetten.gamrio.games.battleship.model.Ship;
 
 public class BattleshipSetupActivity extends AppCompatActivity {
     ActivityBattleshipSetupBinding binding;
+    Ship[] mShips;
+    int mCurrentShip;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +30,12 @@ public class BattleshipSetupActivity extends AppCompatActivity {
         setTitle("Battleship setup");
         binding = DataBindingUtil.setContentView(this, R.layout.activity_battleship_setup);
 
+        mShips[0] = new Ship(5);
+        mShips[1] = new Ship(4);
+        mShips[2] = new Ship(3);
+        mShips[3] = new Ship(3);
+        mShips[4] = new Ship(2);
+        mCurrentShip = 0;
     }
 
     public void onClick(View v) {
@@ -34,7 +43,6 @@ public class BattleshipSetupActivity extends AppCompatActivity {
 
         button.setText("X");
         button.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.md_amber_100), PorterDuff.Mode.MULTIPLY);
-        //button.setBackgroundColor(ContextCompat.getColor(this, R.color.md_amber_50));
     }
 
     @Override
@@ -50,18 +58,26 @@ public class BattleshipSetupActivity extends AppCompatActivity {
             case R.id.menu_play_battleship:
                 startActivity(new Intent(this, BattleshipGameActivity.class));
                 return true;
+            case R.id.menu_clear_all_battleship:
+                clearGrid();
+                return true;
+            case R.id.menu_clear_battleship:
+                clearCurrentShip();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-    public void onResume() {
-        super.onResume();
+    public void clearCurrentShip() {
 
+    }
+
+    public void clearGrid() {
         for (int i = 0; i < binding.battleshipGrid.getChildCount(); i++) {
             Button b = (Button) binding.battleshipGrid.getChildAt(i);
-            //b.setBackgroundColor(ContextCompat.getColor(this, R.color.md_amber_50));
-            b.setText("O");
+            b.setText("");
+            b.getBackground().clearColorFilter();
         }
     }
 }

@@ -5,6 +5,9 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.net.wifi.p2p.WifiP2pManager;
@@ -16,6 +19,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.util.Pair;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -30,6 +34,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -38,6 +43,7 @@ import java.util.List;
 
 import nl.verhoogenvansetten.gamrio.model.Game;
 import nl.verhoogenvansetten.gamrio.ui.DeviceDialogFragment;
+import nl.verhoogenvansetten.gamrio.util.ColorUtil;
 import nl.verhoogenvansetten.gamrio.util.HighScoreTest;
 import nl.verhoogenvansetten.gamrio.util.Network;
 import nl.verhoogenvansetten.gamrio.util.WiFiDirectBroadcastReceiver;
@@ -136,6 +142,10 @@ public class GameListActivity extends AppCompatActivity implements SearchView.On
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
         adapter = new SimpleItemRecyclerViewAdapter(GameList.getList());
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setItemViewCacheSize(20);
+        recyclerView.setDrawingCacheEnabled(true);
+        recyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
         recyclerView.setAdapter(adapter);
         // recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
     }
@@ -205,14 +215,24 @@ public class GameListActivity extends AppCompatActivity implements SearchView.On
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
             holder.mItem = mValues.get(position);
-            holder.mContentView.setText(mValues.get(position).name);
             holder.mImageView.setImageResource(holder.mItem.image);
 
             BitmapDrawable drawable = (BitmapDrawable) holder.mImageView.getDrawable();
             Palette.from(drawable.getBitmap()).generate(new Palette.PaletteAsyncListener() {
                 @Override
                 public void onGenerated(Palette palette) {
-                    holder.mCardView.setBackgroundColor(palette.getVibrantColor(ContextCompat.getColor(getApplicationContext(), R.color.md_white)));
+                    int color = palette.getVibrantColor(ContextCompat.getColor(getApplicationContext(), R.color.md_white));
+                    holder.mCardView.setBackgroundColor(color);
+                    if (ColorUtil.isColorDark(color)) {
+                        holder.mContentView.setTextColor(ContextCompat.getColor(GameListActivity.this, R.color.md_white));
+                        DrawableCompat.setTint(holder.mFavoriteButton.getDrawable(), ContextCompat.getColor(GameListActivity.this, R.color.md_grey_200));
+                        DrawableCompat.setTint(holder.mShareButton.getDrawable(), ContextCompat.getColor(GameListActivity.this, R.color.md_grey_200));
+                    } else {
+                        holder.mContentView.setTextColor(ContextCompat.getColor(GameListActivity.this, R.color.md_black));
+                        DrawableCompat.setTint(holder.mFavoriteButton.getDrawable(), ContextCompat.getColor(GameListActivity.this, R.color.md_grey_500));
+                        DrawableCompat.setTint(holder.mShareButton.getDrawable(), ContextCompat.getColor(GameListActivity.this, R.color.md_grey_500));
+                    }
+                    holder.mContentView.setText(mValues.get(holder.getAdapterPosition()).name);
                 }
             });
 
@@ -266,6 +286,8 @@ public class GameListActivity extends AppCompatActivity implements SearchView.On
             final TextView mContentView;
             final ImageView mImageView;
             final CardView mCardView;
+            final ImageButton mFavoriteButton;
+            final ImageButton mShareButton;
             Game mItem;
 
             ViewHolder(View view) {
@@ -274,6 +296,8 @@ public class GameListActivity extends AppCompatActivity implements SearchView.On
                 mContentView = (TextView) view.findViewById(R.id.txtv_title);
                 mImageView = (ImageView) view.findViewById(R.id.game_image);
                 mCardView = (CardView) view.findViewById(R.id.card_list);
+                mFavoriteButton = (ImageButton) view.findViewById(R.id.btn_card_favorite);
+                mShareButton = (ImageButton) view.findViewById(R.id.btn_card_share);
             }
 
             @Override

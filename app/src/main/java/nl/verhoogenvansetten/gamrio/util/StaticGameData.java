@@ -28,7 +28,7 @@ public final class StaticGameData {
 
     public final static int[] gameImages = {
             R.drawable.battleship_header,
-            R.drawable.battleship_header,
+            R.drawable.bingo_header,
             R.drawable.battleship_header,
             R.drawable.battleship_header,
             R.drawable.battleship_header,
