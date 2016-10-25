@@ -31,16 +31,17 @@ public class Network {
     private BroadcastReceiver mReceiver;
     private int ID;
     private GameCompat game;
-    //private Activity main;
     private String ip;
     private String iface;
     private int port = 12346;
     private boolean isConnected;
-    IntentFilter mIntentFilter;
+    private boolean isOwner;
     private static Network instance;
+    private Server server;
+    private int otherGameID = 0;
 
     public static Network getInstance() {
-        if (instance==null)
+        if (instance == null)
             instance = new Network();
         return instance;
     }
@@ -76,12 +77,26 @@ public class Network {
     public void registerGame(int id, GameCompat game) {
         ID = id;
         this.game = game;
+        if(ID>=10)
+            startServer();
+        if(ID>10) {
+            send(10, "\n" + Integer.toString(id));
+        }
+        else
+            send(0, "\n" + Integer.toString(id));
+
     }
 
     public void unregisterGame() {
+        if(ID>10) {
+            send(10, "\n" + "0");
+        }
+        else
+            send(0, "\n" + "0");
+        if(ID>=10)
+            onDestroy();
         ID = 0;
         this.game = null;
-        //TODO send shutdown message
     }
 
     public String getConnectedDeviceName() {
@@ -104,12 +119,6 @@ public class Network {
         });
     }
 
-    public Boolean sendData(int id, String data) {
-        new Client(this, ip, port, data).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-        //TODO check for id
-        return true;
-    }
-
     public void enableWifi() {
         WifiManager wifi = (WifiManager) GameListActivity.getContext().getSystemService(Context.WIFI_SERVICE);
         if (wifi.getWifiState() == WifiManager.WIFI_STATE_DISABLED) {
@@ -118,16 +127,29 @@ public class Network {
     }
 
     void afterSend(boolean status) {
-        if(!status) {
-            game.update(null);
+        if (!status) {
+            try {
+                game.update(null);
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
         }
     }
 
-    public void send(int ID, String message) {
+    public void send(int ID, String m) {
 
-        if(ip == null)
+        String address;
+        String message = ID + "\n" + m;
+
+        if (ip == null)
             ip = getIpFromArpCache(iface);
-        Client client = new Client(this, ip, port, message);
+
+        if (ID >= 10)
+            address = "127.0.0.1";
+        else
+            address = ip;
+
+        Client client = new Client(this, address, port, message);
         client.execute();
     }
 
@@ -178,12 +200,45 @@ public class Network {
         return null;
     }
 
-    void update(String data) {
-        try {
-            game.update(data);
-        } catch (NullPointerException e) {
-            e.printStackTrace();
+    protected void update(String data) {
+        String data2[] = data.split("\n", 2);
+        int id = Integer.valueOf(data2[0]);
+        data = data2[1];
+        if(id == ID)
+            game.update(data + id);
+        else if(id == 10 || id == 0) {
+            otherGameID = Integer.valueOf(data.replace("\n", ""));
         }
+        //TODO else send failed??
+    }
+
+    protected void startServer() {
+        if (Server.serverSocket == null)
+            server = new Server(this);
+    }
+
+    public void onDestroy() {
+        try {
+            server.onDestroy();
+        } catch (NullPointerException e) {
+
+        }
+    }
+
+    protected int getPort() {
+        return port;
+    }
+
+    void setOwner(boolean is) {
+        isOwner = is;
+    }
+
+    public boolean isGroupOwner() {
+        return isOwner;
+    }
+
+    public int getOtherGameID() {
+        return otherGameID;
     }
 
     public GameCompat getGame() {

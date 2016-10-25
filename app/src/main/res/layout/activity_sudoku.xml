@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:grid="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="8dp">
+
+    <android.support.v7.widget.GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/sudoku_grid"
+        grid:columnCount="9"
+        grid:rowCount="9"
+        android:padding="1dp"
+        android:background="@drawable/sudoku_grid"
+        android:layout_centerHorizontal="true"
+        grid:orientation="horizontal">
+    </android.support.v7.widget.GridLayout>
+</android.support.v7.widget.LinearLayoutCompat>

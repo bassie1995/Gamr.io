@@ -92,11 +92,12 @@
         <activity android:name=".games.BingoGameActivity"
             android:label="Bingo"
             android:parentActivityName=".GameListActivity"
-            android:theme="@style/AppTheme" >
+            android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="nl.verhoogenvansetten.gamrio.GameListActivity" />
         </activity>
+        <activity android:name=".games.sudoku.SudokuActivity"></activity>
     </application>
 
 </manifest>

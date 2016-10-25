@@ -16,6 +16,7 @@ public class FourInARowActivity extends GameCompat {
     TextView dataView;
     Network network;
     Server server;
+    int ID = 11;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,15 +31,14 @@ public class FourInARowActivity extends GameCompat {
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
-                network.send(11, "helloooo");
+                //network.send(ID, "helloooo");
+                dataView.setText(String.valueOf(network.getOtherGameID()));
             }
         });
 
         dataView = (TextView) findViewById(R.id.dataview);
 
         network = Network.getInstance();
-
-        network.registerGame(1, this);
     }
 
     public void update(String data) {
@@ -47,7 +47,14 @@ public class FourInARowActivity extends GameCompat {
 
     @Override
     public void onPause() {
+        network.unregisterGame();
+        super.onPause();
+    }
 
+    @Override
+    public void onResume() {
+        network.registerGame(ID, this);
+        super.onResume();
     }
 
 }

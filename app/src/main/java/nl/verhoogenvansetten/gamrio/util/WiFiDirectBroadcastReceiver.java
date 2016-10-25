@@ -27,7 +27,6 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
         this.network= network;
         this.mManager = manager;
         this.mChannel = channel;
-        //this.mActivity = activity;
     }
 
     private WifiP2pManager.PeerListListener peerListListener = new WifiP2pManager.PeerListListener() {
@@ -57,20 +56,12 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
             if (mManager != null) {
                 mManager.requestPeers(mChannel, peerListListener);
             }
-            //Toast(MainActivity.this , "P2P peers changed", Toast.LENGTH_SHORT).show();
         } else if (WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION.equals(action)) {
             // Respond to new connection or disconnections
             NetworkInfo info = intent.getParcelableExtra(WifiP2pManager.EXTRA_NETWORK_INFO);
             if (info.isConnected()) {
                 //setup server
-                network.setConnected(true);
-                if(Server.serverSocket == null) {
-                    server = new Server(network);
-                    network.update("server started");
-                } else {
-                    network.update("server restart attempted");
-                }
-                //mActivity.infoip.setText(server.getIpAddress() + ":" + server.getPort());
+                network.startServer();
 
                 mManager.requestGroupInfo(mChannel, new WifiP2pManager.GroupInfoListener() {
                     @Override
@@ -80,6 +71,8 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
                             String ipaddress = getIpFromArpCache(iface);
                             network.setIp(ipaddress);
                             network.setIface(iface);
+                            network.setOwner(group.isGroupOwner());
+
                             // TODO mActivity.chipper(ipaddress);
                         } catch (NullPointerException e) {
                             // TODO mActivity.chipper("no current group");
@@ -90,7 +83,7 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
 
             } else {
                 try {
-                    server.onDestroy();
+                    network.onDestroy();
                 } catch (NullPointerException e) {}
                 network.setConnected(false);
             }
@@ -109,7 +102,7 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
             while ((line = br.readLine()) != null) {
                 String[] splitted = line.split(" +");
                 if (splitted.length >= 4 && iface.equals(splitted[5])) {
-                    // Basic sanity check
+                    // Sanity check
                     String ip = splitted[0];
                     if (ip.matches("\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}")) {
                         return ip;
@@ -129,10 +122,6 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
             }
         }
         return null;
-    }
-
-    public Server getServer() {
-        return server;
     }
 
 }

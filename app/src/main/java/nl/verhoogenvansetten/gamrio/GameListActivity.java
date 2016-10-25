@@ -286,10 +286,7 @@ public class GameListActivity extends AppCompatActivity implements SearchView.On
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        try {
-            ((WiFiDirectBroadcastReceiver) network.getReceiver()).getServer().onDestroy();
-        } catch (NullPointerException e) {
-        }
+        network.onDestroy();
         unregisterReceiver(network.getReceiver());
 
     }
