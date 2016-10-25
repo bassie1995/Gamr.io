@@ -8,6 +8,8 @@ abstract class Piece {
 
     private boolean crowned = false;
     private Side side = null;
+    int posX = -1;
+    int posY = -1;
 
     public boolean isCrowned() {
         return crowned;
@@ -27,8 +29,9 @@ abstract class Piece {
     }
 
 
-    public Piece() {
-
+    public Piece(int posX, int posY) {
+        this.posX = posX;
+        this.posY = posY;
     }
 
     void crown(){

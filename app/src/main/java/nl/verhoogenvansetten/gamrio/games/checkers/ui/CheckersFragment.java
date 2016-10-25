@@ -8,11 +8,9 @@ import android.os.Bundle;
 
 import android.support.v7.widget.GridLayout;
 import android.util.DisplayMetrics;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Toast;
 
 import nl.verhoogenvansetten.gamrio.R;
@@ -52,13 +50,10 @@ public class CheckersFragment extends Fragment {
 
         if(savedInstanceState == null){
             checkers = new Checkers();
-            //Setup the board by initializing all the boardpositions
             //Since its a new game set all the Pieces to the starting positions
-            checkers.setUpBoard(true);
+            checkers.setUpBoard();
         } else {
-            //Setup the board by initializing all the boardpositions
-            //Don't set the starting positions
-            checkers.setUpBoard(false);
+            //Don't set the starting position
         }
     }
 
@@ -78,9 +73,9 @@ public class CheckersFragment extends Fragment {
                 * displaymetrics.density) + 0.5);
         int squareSize;
         if(screenWidth <= screenHeight){
-            squareSize = (screenWidth - padding * 2) / gl.getColumnCount();
+            squareSize = (screenWidth - padding) / gl.getColumnCount();
         }else{
-            squareSize = (screenHeight - padding * 2) / gl.getRowCount();
+            squareSize = (screenHeight - padding) / gl.getRowCount();
         }
 
         //Add the Squares to the GridLayout.

@@ -5,7 +5,8 @@ package nl.verhoogenvansetten.gamrio.games.checkers.model;
  */
 
 public class WhitePiece extends Piece {
-    public WhitePiece() {
+    public WhitePiece(int posX, int posY) {
+        super(posX, posY);
         this.setSide(Side.WHITE);
     }
 }
