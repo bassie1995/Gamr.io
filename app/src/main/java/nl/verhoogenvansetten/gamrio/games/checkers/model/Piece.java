@@ -7,14 +7,7 @@ package nl.verhoogenvansetten.gamrio.games.checkers.model;
 abstract class Piece {
 
     private boolean crowned = false;
-
-    public int getAvailableSteps() {
-        return availableSteps;
-    }
-
-    public void setAvailableSteps(int availableSteps) {
-        this.availableSteps = availableSteps;
-    }
+    private Side side = null;
 
     public boolean isCrowned() {
         return crowned;
@@ -24,7 +17,6 @@ abstract class Piece {
         this.crowned = crowned;
     }
 
-    private int availableSteps = 1;
 
     public Side getSide() {
         return side;
@@ -34,7 +26,6 @@ abstract class Piece {
         this.side = side;
     }
 
-    private Side side = null;
 
     public Piece() {
 
@@ -45,7 +36,6 @@ abstract class Piece {
     }
 
     void step(){
-        this.availableSteps--;
         //todo implement
         if(this.crowned){
 
@@ -55,47 +45,38 @@ abstract class Piece {
     }
 
     void jump(){
-        this.availableSteps--;
         if(this.crowned){
 
         }
     }
 
-    boolean canStep(Piece[][] board){
-        if (availableSteps > 0){
-            if(this.crowned){
-                //todo implement
-                return true;
-            }else{
-                //todo implement
-                return true;
-            }
-        } else {
-            return false;
+    boolean canStep(BoardPosition[][] board){
+        if(this.crowned){
+            //todo implement
+            return true;
+        }else{
+            //todo implement
+            return true;
         }
     }
 
-    boolean canJump(Piece[][] board){
-        if (availableSteps > 0){
-            if(this.crowned){
-                //If there is a Piece to jump.
-                if(true){
-                    //todo implement
-                    return true;
-                }else{
-                    return false;
-                }
+    boolean canJump(BoardPosition[][] board){
+        if(this.crowned){
+            //If there is a Piece to jump.
+            if(true){
+                //todo implement
+                return true;
             }else{
-                //If there is a Piece to jump.
-                if(true){
-                    //todo implement
-                    return true;
-                }else{
-                    return false;
-                }
+                return false;
             }
-        } else {
-            return false;
+        }else{
+            //If there is a Piece to jump.
+            if(true){
+                //todo implement
+                return true;
+            }else{
+                return false;
+            }
         }
     }
 

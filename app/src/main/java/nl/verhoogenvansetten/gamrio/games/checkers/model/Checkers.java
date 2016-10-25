@@ -1,5 +1,11 @@
 package nl.verhoogenvansetten.gamrio.games.checkers.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import java.io.Serializable;
+
+import nl.verhoogenvansetten.gamrio.games.checkers.ui.Square;
 import nl.verhoogenvansetten.gamrio.model.Game;
 
 /**
@@ -7,15 +13,27 @@ import nl.verhoogenvansetten.gamrio.model.Game;
  *
  */
 
-public class Checkers extends Game {
+public class Checkers implements Serializable {
 
-    private Side turn = Side.BLACK;
-    private Piece[][] board;
+    private Side turn;
+    public BoardPosition[][] board;
 
-    public Checkers(int id, Class<?> className, int image, String name, String details) {
-        super(id, className, image, name, details);
-        setUpBoard();
+    public Checkers() {
+        //Instantiate the variables
+        turn = Side.BLACK;
+        //Init the board variable
+        board = new BoardPosition[8][8];
+        //Init all the spaces on the board
+        for (int x = 0; x < 8; x++){
+            for (int y = 0; y < 8; y++){
+                if (board[x][y] == null){
+                    board[x][y] = new BoardPosition(null, null);
+                }
+            }
+        }
     }
+
+
 
     void nextTurn(){
         if(this.turn == Side.BLACK){
@@ -41,8 +59,8 @@ public class Checkers extends Game {
         boolean blackWon = true;
         for (int x = 0; x < 8; x++){
             for (int y = 0; y < 8; y++){
-                if(board[x][y] != null){
-                    Piece piece = board[x][y];
+                if(board[x][y].piece != null){
+                    Piece piece = board[x][y].piece;
                     if (piece.canStep(board) || piece.canJump(board)){
                         if(piece.getSide() == Side.WHITE){
                             blackWon = false;
@@ -64,47 +82,42 @@ public class Checkers extends Game {
         }
     }
 
-    private void setUpBoard(){
+    public void setUpBoard(boolean newGame){
 
-        board = new Piece[8][8];
 
-        //Init all the spaces on the board with null
-        for (int x = 0; x < 8; x++){
-            for (int y = 0; y < 8; y++){
-                board[x][y] = null;
-            }
+        if(newGame) {
+            // place the white pieces
+            board[0][1].piece = new WhitePiece();
+            board[0][3].piece = new WhitePiece();
+            board[0][5].piece = new WhitePiece();
+            board[0][7].piece = new WhitePiece();
+
+            board[1][0].piece = new WhitePiece();
+            board[1][2].piece = new WhitePiece();
+            board[1][4].piece = new WhitePiece();
+            board[1][6].piece = new WhitePiece();
+
+            board[2][1].piece = new WhitePiece();
+            board[2][3].piece = new WhitePiece();
+            board[2][5].piece = new WhitePiece();
+            board[2][7].piece = new WhitePiece();
+
+            //Place the black pieces
+            board[7][0].piece = new WhitePiece();
+            board[7][2].piece = new WhitePiece();
+            board[7][4].piece = new WhitePiece();
+            board[7][6].piece = new WhitePiece();
+
+            board[6][1].piece = new WhitePiece();
+            board[6][3].piece = new WhitePiece();
+            board[6][5].piece = new WhitePiece();
+            board[6][7].piece = new WhitePiece();
+
+            board[5][0].piece = new WhitePiece();
+            board[5][2].piece = new WhitePiece();
+            board[5][4].piece = new WhitePiece();
+            board[5][6].piece = new WhitePiece();
         }
-        // place the white pieces
-        board[0][1] = new WhitePiece();
-        board[0][3] = new WhitePiece();
-        board[0][5] = new WhitePiece();
-        board[0][7] = new WhitePiece();
-
-        board[1][0] = new WhitePiece();
-        board[1][2] = new WhitePiece();
-        board[1][4] = new WhitePiece();
-        board[1][6] = new WhitePiece();
-
-        board[2][1] = new WhitePiece();
-        board[2][3] = new WhitePiece();
-        board[2][5] = new WhitePiece();
-        board[2][7] = new WhitePiece();
-
-        //Place the black pieces
-        board[7][0] = new WhitePiece();
-        board[7][2] = new WhitePiece();
-        board[7][4] = new WhitePiece();
-        board[7][6] = new WhitePiece();
-
-        board[6][1] = new WhitePiece();
-        board[6][3] = new WhitePiece();
-        board[6][5] = new WhitePiece();
-        board[6][7] = new WhitePiece();
-
-        board[5][0] = new WhitePiece();
-        board[5][2] = new WhitePiece();
-        board[5][4] = new WhitePiece();
-        board[5][6] = new WhitePiece();
     }
 
     private boolean movesLeft(){

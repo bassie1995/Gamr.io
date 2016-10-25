@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import nl.verhoogenvansetten.gamrio.R;
 import nl.verhoogenvansetten.gamrio.games.checkers.model.Checkers;
@@ -35,12 +36,30 @@ public class CheckersFragment extends Fragment {
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnFragmentInteractionListener) {
+            mListener = (OnFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        checkers = new Checkers(7, CheckersActivity.class, R.drawable.checkers_header,
-                getResources().getString(R.string.name_checkers),
-                getResources().getString(R.string.desc_checkers));
+        if(savedInstanceState == null){
+            checkers = new Checkers();
+            //Setup the board by initializing all the boardpositions
+            //Since its a new game set all the Pieces to the starting positions
+            checkers.setUpBoard(true);
+        } else {
+            //Setup the board by initializing all the boardpositions
+            //Don't set the starting positions
+            checkers.setUpBoard(false);
+        }
     }
 
     @Override
@@ -55,7 +74,6 @@ public class CheckersFragment extends Fragment {
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
         int screenHeight = displaymetrics.heightPixels;
         int screenWidth = displaymetrics.widthPixels;
-
         int padding = (int)((getResources().getDimensionPixelSize(R.dimen.checkers_padding)
                 * displaymetrics.density) + 0.5);
         int squareSize;
@@ -68,11 +86,14 @@ public class CheckersFragment extends Fragment {
         //Add the Squares to the GridLayout.
         for(int x = 0 ; x < 8; x++){
             for(int y = 0; y < 8; y++){
-                Button square = createNewSquare(x, y);
+                Square square = createNewSquare(x, y);
+                //Add the square to the view
                 gl.addView(square);
                 //After adding the square, set the dimensions
                 ((GridLayout.LayoutParams)square.getLayoutParams()).width =  squareSize;
                 ((GridLayout.LayoutParams)square.getLayoutParams()).height =  squareSize;
+                //Add the Square to the board.
+                checkers.board[x][y].setSquare(square);
             }
         }
 
@@ -80,16 +101,18 @@ public class CheckersFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if(savedInstanceState != null){
+
+        }
+    }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        //todo Save fragment
     }
 
     @Override
@@ -114,7 +137,7 @@ public class CheckersFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
-    private Button createNewSquare(int x, int y){
+    private Square createNewSquare(int x, int y){
         Square newSquare = new Square(getActivity());
         //Set the color of the button based on the location
         int remainder = -1;
@@ -128,6 +151,17 @@ public class CheckersFragment extends Fragment {
             newSquare.setBackgroundColor(Color.WHITE);
         else
             newSquare.setBackgroundColor(Color.BLACK);
+
+        //Add the eventlistener
+        newSquare.setOnClickListener(new Square.OnClickListener(){
+            public void onClick(View v){
+                //CharSequence text = "Button Pressed" + square.boardPosX + " " + square.boardPosY;
+                CharSequence text = "Button Pressed";
+
+                Toast toast = Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT);
+                toast.show();
+            }
+        });
 
         //Set the text of the button
         newSquare.setText("");
