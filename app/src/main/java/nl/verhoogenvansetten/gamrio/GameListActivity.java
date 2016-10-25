@@ -5,9 +5,6 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.net.wifi.p2p.WifiP2pManager;
@@ -45,9 +42,7 @@ import nl.verhoogenvansetten.gamrio.model.Game;
 import nl.verhoogenvansetten.gamrio.ui.DeviceDialogFragment;
 import nl.verhoogenvansetten.gamrio.util.ColorUtil;
 import nl.verhoogenvansetten.gamrio.util.HighScoreTest;
-import nl.verhoogenvansetten.gamrio.util.Network;
-import nl.verhoogenvansetten.gamrio.util.WiFiDirectBroadcastReceiver;
-import nl.verhoogenvansetten.gamrio.util.Server;
+import nl.verhoogenvansetten.gamrio.util.network.Network;
 
 /**
  * An activity representing a list of Games. This activity

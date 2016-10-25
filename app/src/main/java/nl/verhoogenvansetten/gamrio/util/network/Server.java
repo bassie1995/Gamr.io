@@ -1,4 +1,4 @@
-package nl.verhoogenvansetten.gamrio.util;
+package nl.verhoogenvansetten.gamrio.util.network;
 
 
 import java.io.BufferedReader;
@@ -14,7 +14,7 @@ import android.os.AsyncTask;
  * through the functions of the Network class.
  */
 
-public class Server {
+class Server {
     static ServerSocket serverSocket;
     private String message = "";
     private Network network;

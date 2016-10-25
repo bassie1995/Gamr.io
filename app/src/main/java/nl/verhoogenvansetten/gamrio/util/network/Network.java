@@ -1,4 +1,4 @@
-package nl.verhoogenvansetten.gamrio.util;
+package nl.verhoogenvansetten.gamrio.util.network;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;

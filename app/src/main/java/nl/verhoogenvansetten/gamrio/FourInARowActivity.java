@@ -2,19 +2,16 @@ package nl.verhoogenvansetten.gamrio;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 
-import nl.verhoogenvansetten.gamrio.util.Network;
-import nl.verhoogenvansetten.gamrio.util.Server;
+import nl.verhoogenvansetten.gamrio.util.network.Network;
 
 public class FourInARowActivity extends GameCompat {
 
     TextView dataView;
     Network network;
-    Server server;
     int ID = 11;
 
     @Override
@@ -28,8 +25,6 @@ public class FourInARowActivity extends GameCompat {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
                 network.send(ID, "helloooo");
                 //dataView.setText(String.valueOf(network.getOtherGameID()));
                 //dataView.setText(network.getConnectedDeviceName());
