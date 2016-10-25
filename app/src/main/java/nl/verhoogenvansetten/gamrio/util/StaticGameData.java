@@ -6,6 +6,7 @@ import nl.verhoogenvansetten.gamrio.R;
 import nl.verhoogenvansetten.gamrio.games.BingoGameActivity;
 import nl.verhoogenvansetten.gamrio.games.battleship.ui.BattleshipSetupActivity;
 import nl.verhoogenvansetten.gamrio.games.checkers.ui.CheckersActivity;
+import nl.verhoogenvansetten.gamrio.games.sudoku.SudokuActivity;
 
 /**
  * Created by Daniel on 13-10-2016.
@@ -19,7 +20,7 @@ public final class StaticGameData {
             BattleshipSetupActivity.class,
             BingoGameActivity.class,
             BattleshipSetupActivity.class,
-            BattleshipSetupActivity.class,
+            SudokuActivity.class,
             BattleshipSetupActivity.class,
             FourInARowActivity.class,
             CheckersActivity.class
