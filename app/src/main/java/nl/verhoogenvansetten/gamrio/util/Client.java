@@ -25,7 +25,6 @@ public class Client extends AsyncTask<Void, Void, Void> {
         dstAddress = addr;
         dstPort = port;
         message = theMessage;
-        network.update("sent");
     }
 
     @Override

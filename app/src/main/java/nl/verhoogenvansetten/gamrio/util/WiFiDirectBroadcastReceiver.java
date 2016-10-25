@@ -71,6 +71,8 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
                             String ipaddress = getIpFromArpCache(iface);
                             network.setIp(ipaddress);
                             network.setIface(iface);
+                            network.setOwner(group.isGroupOwner());
+
                             // TODO mActivity.chipper(ipaddress);
                         } catch (NullPointerException e) {
                             // TODO mActivity.chipper("no current group");

@@ -31,7 +31,8 @@ public class FourInARowActivity extends GameCompat {
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
-                network.send(ID, "helloooo");
+                //network.send(ID, "helloooo");
+                dataView.setText(String.valueOf(network.getOtherGameID()));
             }
         });
 

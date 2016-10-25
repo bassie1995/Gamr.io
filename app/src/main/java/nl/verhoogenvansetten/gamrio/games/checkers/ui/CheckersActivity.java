@@ -51,9 +51,6 @@ public class CheckersActivity extends GameCompat implements CheckersFragment.OnF
 //        network = Network.getInstance();
 //        network.registerGame(7, this);
 
-        //Edit Size of the LinearLayout holding the fragment to make it square
-        makeSquare();
-
         //Now we add the fragment. Only on first boot.
         if(savedInstanceState == null){
             addFragment();
@@ -95,28 +92,6 @@ public class CheckersActivity extends GameCompat implements CheckersFragment.OnF
     @Override
     public void onFragmentInteraction(Uri uri) {
 
-    }
-
-    @SuppressWarnings("SuspiciousNameCombination")
-    private void makeSquare(){
-        LinearLayout ll = (LinearLayout) findViewById(R.id.fragment_container);
-        DisplayMetrics displaymetrics = new DisplayMetrics();
-        this.getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
-        int height = displaymetrics.heightPixels;
-        int width = displaymetrics.widthPixels;
-
-        ViewGroup.LayoutParams lp;
-        if(width <= height){
-            //If width is smaller then the height, asume the screen is vertical
-            //Set the height to the same size as the width
-            lp = new CoordinatorLayout.LayoutParams(width, width);
-        }else{
-            //Asume the screen is horizontal.
-            //Set the width to the same size as the height.
-            lp = new CoordinatorLayout.LayoutParams(height, height);
-        }
-        //Set the parameters
-        ll.setLayoutParams(lp);
     }
 
 }
