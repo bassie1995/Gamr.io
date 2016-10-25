@@ -12,8 +12,8 @@ public class Checkers extends Game {
     private Side turn = Side.BLACK;
     private Piece[][] board;
 
-    public Checkers(int id, int image, String name, String details) {
-        super(id, image, name, details);
+    public Checkers(int id, Class<?> className, int image, String name, String details) {
+        super(id, className, image, name, details);
         setUpBoard();
     }
 

@@ -2,10 +2,11 @@ package nl.verhoogenvansetten.gamrio.games;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
@@ -42,7 +43,7 @@ public class BingoGameActivity extends AppCompatActivity {
     }
 
     public void define_buttons() {
-        buttons = new ArrayList<Integer>();
+        buttons = new ArrayList<>();
 
         for (int id : BUTTON_IDS) {
             Button button = (Button) findViewById(id);
@@ -59,8 +60,9 @@ public class BingoGameActivity extends AppCompatActivity {
     public void onClick(View v) {
         Button b = (Button) v;
         b.setClickable(false);
-        b.setBackgroundColor(Color.RED);
-        b.setTextColor(Color.WHITE);
+
+        b.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.md_red_a200), PorterDuff.Mode.MULTIPLY);
+        b.setTextColor(ContextCompat.getColor(this, R.color.md_white));
         temp = b.getText().toString();
         findPosition(b);
 

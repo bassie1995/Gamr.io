@@ -1,7 +1,11 @@
 package nl.verhoogenvansetten.gamrio.util;
 
+import nl.verhoogenvansetten.gamrio.FourInARowActivity;
 import nl.verhoogenvansetten.gamrio.GameListActivity;
 import nl.verhoogenvansetten.gamrio.R;
+import nl.verhoogenvansetten.gamrio.games.BingoGameActivity;
+import nl.verhoogenvansetten.gamrio.games.battleship.ui.BattleshipSetupActivity;
+import nl.verhoogenvansetten.gamrio.games.checkers.ui.CheckersActivity;
 
 /**
  * Created by Daniel on 13-10-2016.
@@ -10,6 +14,17 @@ import nl.verhoogenvansetten.gamrio.R;
 
 public final class StaticGameData {
     public final static int[] gameIds = {1,2,3,4,5,6,7};
+
+    public final static Class<?>[] gameClasses = {
+            BattleshipSetupActivity.class,
+            BingoGameActivity.class,
+            BattleshipSetupActivity.class,
+            BattleshipSetupActivity.class,
+            BattleshipSetupActivity.class,
+            FourInARowActivity.class,
+            CheckersActivity.class
+    };
+
     public final static int[] gameImages = {
             R.drawable.battleship_header,
             R.drawable.battleship_header,

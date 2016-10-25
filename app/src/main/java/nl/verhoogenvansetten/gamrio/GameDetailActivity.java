@@ -32,7 +32,7 @@ public class GameDetailActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                 startActivity(new Intent(GameDetailActivity.this, FourInARowActivity.class));
+                 startActivity(new Intent(GameDetailActivity.this, GameList.getGame(getIntent().getIntExtra(GameDetailFragment.ARG_ITEM_ID, -1)).className));
             }
         });
 

@@ -38,7 +38,7 @@ public class CheckersFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        checkers = new Checkers(7, R.drawable.checkers_header,
+        checkers = new Checkers(7, CheckersActivity.class, R.drawable.checkers_header,
                 getResources().getString(R.string.name_checkers),
                 getResources().getString(R.string.desc_checkers));
     }
