@@ -11,11 +11,13 @@ import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import nl.verhoogenvansetten.gamrio.R;
 import nl.verhoogenvansetten.gamrio.games.checkers.model.Checkers;
-
+import nl.verhoogenvansetten.gamrio.games.checkers.model.Piece;
+import nl.verhoogenvansetten.gamrio.games.checkers.model.Side;
 
 public class CheckersFragment extends Fragment {
     public final static String TAG = "Checkers fragment";
@@ -74,12 +76,12 @@ public class CheckersFragment extends Fragment {
                 * displaymetrics.density) + 0.5);
         int squareSize;
         if(screenWidth <= screenHeight){
-            squareSize = (screenWidth - padding) / gl.getColumnCount();
+            squareSize = (screenWidth - padding * 2) / gl.getColumnCount();
         }else{
-            squareSize = (screenHeight - padding) / gl.getRowCount();
+            squareSize = (screenHeight - padding * 2) / gl.getRowCount();
         }
 
-        //Add the Squares to the GridLayout.
+        //Add all the Squares to the GridLayout.
         for(int x = 0 ; x < 8; x++){
             for(int y = 0; y < 8; y++){
                 Square square = createNewSquare(x, y);
@@ -89,6 +91,34 @@ public class CheckersFragment extends Fragment {
                 ((GridLayout.LayoutParams)square.getLayoutParams()).width =  squareSize;
                 ((GridLayout.LayoutParams)square.getLayoutParams()).height =  squareSize;
                 //Add the Square to the board.
+                checkers.board[x][y].setSquare(square);
+            }
+        }
+
+        //Add a piece image if they contain pieces
+
+        for(int x = 0 ; x < 8; x++){
+            for(int y = 0; y < 8; y++){
+                Piece piece = checkers.board[x][y].getPiece();
+                Square square = checkers.board[x][y].getSquare();
+                if(piece != null){
+                    if(piece.getSide() == Side.BLACK)
+                        if(piece.isCrowned())
+                            square.setImageResource(R.drawable.checkers_blackpiece_crowned);
+                        else
+                            square.setImageResource(R.drawable.checkers_blackpiece);
+                    else{
+                        if(piece.isCrowned())
+                            square.setImageResource(R.drawable.checkers_whitepiece_crowned);
+                        else
+                            square.setImageResource(R.drawable.checkers_whitepiece);
+                    }
+                    //Make sure the image fits the button
+                    square.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                } else{
+                    square.setImageResource(android.R.color.transparent);
+                }
+                //Save
                 checkers.board[x][y].setSquare(square);
             }
         }
@@ -135,31 +165,40 @@ public class CheckersFragment extends Fragment {
     }
 
     private Square createNewSquare(int x, int y){
-        Square newSquare = new Square(getActivity());
+        Square newSquare = new Square(getActivity(), -1);
         //Set the color of the button based on the location
         int remainder = -1;
         if((x % 2) == 0)
-            if((y % 2) == 0)
-                newSquare.setBackgroundColor(Color.BLACK);
-            else
+            if((y % 2) == 0) {
                 newSquare.setBackgroundColor(Color.WHITE);
-        else
-        if((y % 2) == 0)
-            newSquare.setBackgroundColor(Color.WHITE);
-        else
-            newSquare.setBackgroundColor(Color.BLACK);
-
-        //Add the eventlistener
-        newSquare.setOnClickListener(new Square.OnClickListener(){
-            public void onClick(View v){
-                //CharSequence text = "Button Pressed" + square.boardPosX + " " + square.boardPosY;
-                CharSequence text = "Button Pressed";
-
-                Toast toast = Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT);
-                toast.show();
+                newSquare.setColor(Color.WHITE);
             }
-        });
+            else{
+                newSquare.setBackgroundColor(Color.BLACK);
+                newSquare.setColor(Color.BLACK);
+            }
+        else
+            if((y % 2) == 0) {
+                newSquare.setBackgroundColor(Color.BLACK);
+                newSquare.setColor(Color.BLACK);
+            }
+            else {
+                newSquare.setBackgroundColor(Color.WHITE);
+                newSquare.setColor(Color.WHITE);
+            }
+        //Add the eventlistener for the black squares only. Since those are the only squares
+        // which can contain pieces.
+        if(newSquare.getColor() == Color.BLACK){
+            newSquare.setOnClickListener(new Square.OnClickListener(){
+                public void onClick(View v){
+                    //CharSequence text = "Button Pressed" + square.boardPosX + " " + square.boardPosY;
+                    CharSequence text = "Button Pressed";
 
+                    Toast toast = Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+            });
+        }
         //Set the column and row location and weight in the parameters
         GridLayout.LayoutParams lp = new GridLayout.LayoutParams();
         lp.columnSpec = GridLayout.spec(x, 1); //With x as the column and 1 as the weight

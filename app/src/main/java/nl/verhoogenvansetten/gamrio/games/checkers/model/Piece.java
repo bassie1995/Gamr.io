@@ -4,7 +4,7 @@ package nl.verhoogenvansetten.gamrio.games.checkers.model;
  * Created by Jori on 13-10-2016.
  */
 
-abstract class Piece {
+ public class Piece {
 
     private boolean crowned = false;
     private Side side = null;
@@ -19,7 +19,6 @@ abstract class Piece {
         this.crowned = crowned;
     }
 
-
     public Side getSide() {
         return side;
     }
@@ -27,7 +26,6 @@ abstract class Piece {
     public void setSide(Side side) {
         this.side = side;
     }
-
 
     public Piece(int posX, int posY) {
         this.posX = posX;
