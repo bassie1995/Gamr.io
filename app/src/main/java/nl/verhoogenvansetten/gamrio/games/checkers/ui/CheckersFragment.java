@@ -29,7 +29,6 @@ public class CheckersFragment extends Fragment {
 
     public static CheckersFragment newInstance() {
         CheckersFragment fragment = new CheckersFragment();
-        Bundle args = new Bundle();
         return fragment;
     }
 
@@ -54,6 +53,8 @@ public class CheckersFragment extends Fragment {
             checkers.setUpBoard();
         } else {
             //Don't set the starting position
+            //Get the saved game by loading the checkers object
+            this.checkers = (Checkers)savedInstanceState.getSerializable("checkers");
         }
     }
 
@@ -107,7 +108,8 @@ public class CheckersFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        //todo Save fragment
+        //Save fragmentstate by saving the checkers object
+        outState.putSerializable("checkers", this.checkers);
     }
 
     @Override
@@ -158,11 +160,6 @@ public class CheckersFragment extends Fragment {
             }
         });
 
-        //Set the text of the button
-        newSquare.setText("");
-        //Set size of buttons
-        newSquare.setWidth(0);
-        newSquare.setHeight(0);
         //Set the column and row location and weight in the parameters
         GridLayout.LayoutParams lp = new GridLayout.LayoutParams();
         lp.columnSpec = GridLayout.spec(x, 1); //With x as the column and 1 as the weight

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 /**
@@ -11,7 +12,7 @@ import android.widget.Toast;
  *
  */
 
-public class Square extends Button implements OnClickListener {
+public class Square extends ImageButton implements OnClickListener {
 
     public Square(Context context) {
         super(context);
