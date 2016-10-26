@@ -43,9 +43,13 @@ import nl.verhoogenvansetten.gamrio.ui.DeviceDialogFragment;
  * The update(String data) function also has to be overridden. This function will be called every
  * time a message is received for your game. This function will be called with data = null if the
  * previous attempt at sending failed.
+ *
+ * The peerDown() and peerUp() functions will be called every time the peer closes or opens the
+ * current game.
  * <p>
  * To send messages the network.send(int ID, String message) has to be called with the game ID and a
- * string of the message.
+ * string of the message. This function will return true if the message was sent and false if the ID
+ * on the other machine doesn't match the one in the current one.
  * <p>
  * -------------------------------------------------
  * Getting other information from the Network class.
@@ -175,7 +179,10 @@ public class Network {
         }
     }
 
-    public void send(int ID, String m) {
+    public boolean send(int ID, String m) {
+
+        if(ID != otherGameID && ID != 0 && ID != 10)
+            return false;
 
         String address;
         String message = ID + "\n" + m;
@@ -190,6 +197,7 @@ public class Network {
 
         Client client = new Client(this, address, port, message);
         client.execute();
+        return true;
     }
 
     public BroadcastReceiver getReceiver() {
@@ -240,11 +248,16 @@ public class Network {
     void update(String data) {
         String data2[] = data.split("\n", 2);
         int id = Integer.valueOf(data2[0]);
-        data = data2[1];
+        data = data2[1].replace("\n", "");
         if (id == ID)
             game.update(data);
         else if (id == 10 || id == 0) {
-            otherGameID = Integer.valueOf(data.replace("\n", ""));
+            id = Integer.valueOf(data);
+            otherGameID = id;
+            if(id == ID)
+                game.peerUp();
+            else if (id == 0)
+                game.peerDown();
         }
     }
 
@@ -278,6 +291,10 @@ public class Network {
     }
 
     public GameCompat getGame() {
-        return game;
+        try {
+            return game;
+        } catch (NullPointerException e) {
+            throw e;
+        }
     }
 }

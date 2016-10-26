@@ -8,4 +8,6 @@ import android.support.v7.app.AppCompatActivity;
 
 public abstract class GameCompat extends AppCompatActivity {
     public abstract void update(String data);
+    public abstract void peerDown();
+    public abstract void peerUp();
 }

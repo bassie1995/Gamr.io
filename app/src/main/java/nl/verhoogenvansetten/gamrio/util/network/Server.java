@@ -59,7 +59,11 @@ class Server {
                         }
                     }
 
-                    network.getGame().runOnUiThread(new StartTask(socket));
+                    try {
+                        network.getGame().runOnUiThread(new StartTask(socket));
+                    } catch (NullPointerException e) {
+                        e.printStackTrace();
+                    }
 
                 }
             } catch (IOException e) {

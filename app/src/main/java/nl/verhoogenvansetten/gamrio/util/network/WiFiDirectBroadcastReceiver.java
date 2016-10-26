@@ -13,6 +13,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
 
@@ -64,7 +65,7 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
                             network.setIface(iface);
                             network.setOwner(group.isGroupOwner());
                             network.setPeerName(group.getClientList().iterator().next().deviceName);
-                        } catch (NullPointerException e) {
+                        } catch (NullPointerException | NoSuchElementException e) {
                             e.printStackTrace();
                         }
 

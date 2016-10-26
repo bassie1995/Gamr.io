@@ -13,12 +13,16 @@ import nl.verhoogenvansetten.gamrio.util.network.Network;
 
 public class FourInARowActivity extends GameCompat {
 
-    TextView dataView;
-    Network network;
-    int ID = 11;
-    int[][] grid = new int[8][8];
+    private TextView dataView;
+    private Network network;
+    private int ID = 1;
+    private int[][] idGrid = new int[8][8];
+    private int[][] valueGrid = new int[8][8];
 
-    int count = 0;
+    private int count = 0;
+
+    private String localPlayer = "X";
+    private String otherPlayer = "O";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,21 +46,29 @@ public class FourInARowActivity extends GameCompat {
 
         network = Network.getInstance();
 
-        setGrid();
+        setIdGrid();
     }
 
 
     public void onClick(View v) {
         Button b = (Button) v;
-        int x, y;
-        x = Integer.valueOf(String.valueOf(b.getTag().toString().charAt(1)));
-        y = Integer.valueOf(String.valueOf(b.getTag().toString().charAt(2)));
-        count++;
-        dataView.setText("Count:" + count + " " + String.valueOf(x) + String.valueOf(y));
-        //b.setText("x");
-        Button bb = (Button) findViewById(getResources().getIdentifier("b" + String.valueOf(x) + String.valueOf(y), "id", getPackageName()));
-        bb.setText("O");
+
+        String sx = String.valueOf(b.getTag().toString().charAt(1));
+        String sy = String.valueOf(b.getTag().toString().charAt(2));
+
+        setCoords(sx, sy, localPlayer);
+
+        //if (localWin(sx, sy))
+            //sendWin(sx, sy);
+        //else
+            sendCoord(sx, sy);
     }
+
+    /**
+     * ---------------------------------------------------------------------------------------------
+     * Communication functions
+     * ---------------------------------------------------------------------------------------------
+     */
 
     public void update(String data) {
         String[] typeData = data.split("\n", 2);
@@ -71,27 +83,50 @@ public class FourInARowActivity extends GameCompat {
         this.dataView.setText(data);
     }
 
-    private void recvCoord(String s) {
+    public void peerDown(){
 
     }
 
-    private void sendCoord(char x, int y) {
-        //1 to indicate that this is a coordinate
+    public void peerUp(){
+
+    }
+
+    /**
+     * Communication helper functions.
+     */
+
+    private void recvCoord(String data) {
+        String[] coords = data.split("\n", 3);
+        setCoords(coords[0], coords[1], otherPlayer);
+    }
+
+    private void sendCoord(String x, String y) {
+        /** 1 to indicate that this is a coordinate */
         String message = "1\n";
-        message += x + y;
+        message += x + "\n" + y;
         network.send(ID, message);
     }
 
-    private void setGrid() {
+    /**
+     * ---------------------------------------------------------------------------------------------
+     * Helper Functions
+     * ---------------------------------------------------------------------------------------------
+     */
+
+    private void setCoords(String x, String y, String text) {
+        ((Button) findViewById(idGrid[Integer.valueOf(x)][Integer.valueOf(y)])).setText(text);
+    }
+
+    private void setIdGrid() {
         for (int i = 0; i < 8; i++)
             for (int j = 0; j < 8; j++)
-                grid[i][j] = getResources().getIdentifier("b" + String.valueOf(i) + String.valueOf(j), "id", getPackageName());
+                idGrid[i][j] = getResources().getIdentifier("b" + String.valueOf(i) + String.valueOf(j), "id", getPackageName());
     }
 
     private void clearBoard() {
         for (int i = 0; i < 8; i++)
-            for(int j = 0; j < 8; j++)
-                ((Button) findViewById(grid[i][j])).setText("");
+            for (int j = 0; j < 8; j++)
+                ((Button) findViewById(idGrid[i][j])).setText("");
 
     }
 
