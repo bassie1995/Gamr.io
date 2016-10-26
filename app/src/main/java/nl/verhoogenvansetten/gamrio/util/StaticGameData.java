@@ -1,6 +1,6 @@
 package nl.verhoogenvansetten.gamrio.util;
 
-import nl.verhoogenvansetten.gamrio.FourInARowActivity;
+import nl.verhoogenvansetten.gamrio.games.fourinrow.FourInARowActivity;
 import nl.verhoogenvansetten.gamrio.GameListActivity;
 import nl.verhoogenvansetten.gamrio.R;
 import nl.verhoogenvansetten.gamrio.games.BingoGameActivity;

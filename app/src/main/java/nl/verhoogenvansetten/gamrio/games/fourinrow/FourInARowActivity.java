@@ -1,4 +1,4 @@
-package nl.verhoogenvansetten.gamrio;
+package nl.verhoogenvansetten.gamrio.games.fourinrow;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -6,6 +6,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 
+import nl.verhoogenvansetten.gamrio.GameCompat;
+import nl.verhoogenvansetten.gamrio.R;
 import nl.verhoogenvansetten.gamrio.util.network.Network;
 
 public class FourInARowActivity extends GameCompat {

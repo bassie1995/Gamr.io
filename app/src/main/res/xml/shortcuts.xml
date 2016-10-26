@@ -15,7 +15,7 @@
     shortcutShortLabel="@string/pref_header_four_in_row"
     shortcutLongLabel="@string/pref_header_four_in_row"> <!-- Make long? "Start <game name>" -->
     <intent android:targetPackage="nl.verhoogenvansetten.gamrio"
-        android:targetClass="nl.verhoogenvansetten.gamrio.FourInARowActivity"
+        android:targetClass="nl.verhoogenvansetten.gamrio.games.fourinrow.FourInARowActivity"
         android:action="android.intent.action.VIEW"
         android:data="four_in_row"/>
     </shortcut>
