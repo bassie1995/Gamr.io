@@ -242,7 +242,7 @@ public class Network {
         int id = Integer.valueOf(data2[0]);
         data = data2[1];
         if (id == ID)
-            game.update(data + id);
+            game.update(data);
         else if (id == 10 || id == 0) {
             otherGameID = Integer.valueOf(data.replace("\n", ""));
         }
