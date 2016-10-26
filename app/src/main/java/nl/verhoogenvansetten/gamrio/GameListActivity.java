@@ -250,11 +250,13 @@ public class GameListActivity extends AppCompatActivity implements SearchView.On
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                             String headerTransition = getString(R.string.transition_header);
                             String fabTransition = getString(R.string.transition_fab);
+                            String backgroundTransition = getString(R.string.transition_background);
 
                             Pair<View, String> headerPair = Pair.create((View) holder.mImageView, headerTransition);
                             Pair<View, String> fabPair = Pair.create((View) fab, fabTransition);
+                            Pair<View, String> backgroundPair = Pair.create((View) holder.mCardView, backgroundTransition);
 
-                            ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(GameListActivity.this, headerPair, fabPair);
+                            ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(GameListActivity.this, headerPair, fabPair, backgroundPair);
 
                             ActivityCompat.startActivity(GameListActivity.this, intent, options.toBundle());
                         } else {

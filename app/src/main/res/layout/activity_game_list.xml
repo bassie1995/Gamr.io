@@ -39,7 +39,8 @@
         android:layout_margin="@dimen/fab_margin"
         app:srcCompat="@drawable/ic_open_network_white_24dp"
         android:transitionName="@string/transition_fab"
-        app:pressedTranslationZ="12dp" />
+        app:pressedTranslationZ="12dp"
+        android:stateListAnimator="@drawable/lift_on_touch" />
 
 
 </android.support.design.widget.CoordinatorLayout>

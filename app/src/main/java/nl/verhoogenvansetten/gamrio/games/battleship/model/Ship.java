@@ -21,4 +21,8 @@ public class Ship {
     public int[] getCoordinates() {
         return coordinates;
     }
+
+    public void setCoordinates(int[] coordinates) {
+        this.coordinates = coordinates;
+    }
 }

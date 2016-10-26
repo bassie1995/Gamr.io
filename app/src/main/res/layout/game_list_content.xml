@@ -11,7 +11,9 @@
     android:layout_marginRight="@dimen/card_margin"
     android:layout_marginStart="@dimen/card_margin"
     android:layout_marginTop="@dimen/inter_card_margin"
-    android:foreground="?android:attr/selectableItemBackground" >
+    android:foreground="?android:attr/selectableItemBackground"
+    android:stateListAnimator="@drawable/lift_on_touch"
+    android:transitionName="@string/transition_background" >
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
