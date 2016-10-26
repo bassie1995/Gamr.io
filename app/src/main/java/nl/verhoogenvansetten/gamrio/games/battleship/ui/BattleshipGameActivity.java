@@ -6,18 +6,24 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 
 import nl.verhoogenvansetten.gamrio.R;
-import nl.verhoogenvansetten.gamrio.databinding.ActivityBattleshipGameBinding;
+import nl.verhoogenvansetten.gamrio.databinding.BattleshipBinding;
 
 public class BattleshipGameActivity extends AppCompatActivity {
+    BattleshipBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_battleship_game);
+        setContentView(R.layout.battleship);
         setTitle("Battleship");
-        ActivityBattleshipGameBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_battleship_game);
+        binding = DataBindingUtil.setContentView(this, R.layout.battleship);
+
+    }
+
+    public void onClick(View v) {
 
     }
 
