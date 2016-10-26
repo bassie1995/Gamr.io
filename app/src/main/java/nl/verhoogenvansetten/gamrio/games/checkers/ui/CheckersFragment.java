@@ -50,7 +50,7 @@ public class CheckersFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         if(savedInstanceState == null){
-            checkers = new Checkers();
+            checkers = new Checkers(getActivity());
             //Since its a new game set all the Pieces to the starting positions
             checkers.setUpBoard();
         } else {
@@ -96,7 +96,6 @@ public class CheckersFragment extends Fragment {
         }
 
         //Add a piece image if they contain pieces
-
         for(int x = 0 ; x < 8; x++){
             for(int y = 0; y < 8; y++){
                 Piece piece = checkers.board[x][y].getPiece();
@@ -164,8 +163,8 @@ public class CheckersFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
-    private Square createNewSquare(int x, int y){
-        Square newSquare = new Square(getActivity(), -1);
+    private Square createNewSquare(final int x, final int y){
+        final Square newSquare = new Square(getActivity(), -1, x, y);
         //Set the color of the button based on the location
         int remainder = -1;
         if((x % 2) == 0)
@@ -191,11 +190,11 @@ public class CheckersFragment extends Fragment {
         if(newSquare.getColor() == Color.BLACK){
             newSquare.setOnClickListener(new Square.OnClickListener(){
                 public void onClick(View v){
-                    //CharSequence text = "Button Pressed" + square.boardPosX + " " + square.boardPosY;
-                    CharSequence text = "Button Pressed";
-
-                    Toast toast = Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT);
-                    toast.show();
+                    //CharSequence text = "Button " + newSquare.getPosX()  + " " +
+                    //        newSquare.getPosY() + " Pressed";
+                    //Toast toast = Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT);
+                    //toast.show();
+                    checkers.turn(x, y);
                 }
             });
         }

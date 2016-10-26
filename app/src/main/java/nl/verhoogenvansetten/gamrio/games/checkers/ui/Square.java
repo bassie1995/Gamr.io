@@ -16,6 +16,24 @@ import android.widget.Toast;
 public class Square extends ImageButton implements OnClickListener {
 
     private int color;
+    private int posX = -1;
+    private int posY = -1;
+
+    public int getPosX() {
+        return posX;
+    }
+
+    public void setPosX(int posX) {
+        this.posX = posX;
+    }
+
+    public int getPosY() {
+        return posY;
+    }
+
+    public void setPosY(int posY) {
+        this.posY = posY;
+    }
 
     public int getColor() {
         return color;
@@ -25,9 +43,11 @@ public class Square extends ImageButton implements OnClickListener {
         this.color = color;
     }
 
-    public Square(Context context, int color) {
+    public Square(Context context, int color, int posX, int posY) {
         super(context);
         this.color = color;
+        this.posX = posX;
+        this.posY = posY;
     }
 
     @Override
