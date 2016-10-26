@@ -1,4 +1,4 @@
-package nl.verhoogenvansetten.gamrio.util;
+package nl.verhoogenvansetten.gamrio.util.network;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -10,6 +10,7 @@ import android.net.wifi.p2p.WifiP2pManager;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,13 +19,11 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
     Network network;
     private WifiP2pManager mManager;
     private WifiP2pManager.Channel mChannel;
-    //private Activity mActivity;
     private List peers = new ArrayList();
-    Server server;
 
     public WiFiDirectBroadcastReceiver(Network network, WifiP2pManager manager, WifiP2pManager.Channel channel) {
         super();
-        this.network= network;
+        this.network = network;
         this.mManager = manager;
         this.mChannel = channel;
     }
@@ -43,16 +42,8 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
 
-        if (WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION.equals(action)) {
-            int state = intent.getIntExtra(WifiP2pManager.EXTRA_WIFI_STATE, -1);
-            if (state == WifiP2pManager.WIFI_P2P_STATE_ENABLED) {
-                // Wifi P2P is enabled
-            } else {
-                // Wi-Fi P2P is not enabled
-            }
-            // Check to see if Wi-Fi is enabled and notify appropriate activity
-        } else if (WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION.equals(action)) {
-            // Call WifiP2pManager.requestPeers() to get a list of current peers
+        if (WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION.equals(action)) {
+            // get list of current peers
             if (mManager != null) {
                 mManager.requestPeers(mChannel, peerListListener);
             }
@@ -72,10 +63,9 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
                             network.setIp(ipaddress);
                             network.setIface(iface);
                             network.setOwner(group.isGroupOwner());
-
-                            // TODO mActivity.chipper(ipaddress);
+                            network.setPeerName(group.getClientList().iterator().next().deviceName);
                         } catch (NullPointerException e) {
-                            // TODO mActivity.chipper("no current group");
+                            e.printStackTrace();
                         }
 
                     }
@@ -84,11 +74,11 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
             } else {
                 try {
                     network.onDestroy();
-                } catch (NullPointerException e) {}
-                network.setConnected(false);
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                }
+                network.setPeerName("");
             }
-        } else if (WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION.equals(action)) {
-            // Respond to this device's wifi state changing
         }
     }
 
@@ -111,13 +101,14 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
                     }
                 }
             }
-        } catch (Exception e) {
-            // TODO mActivity.chipper("exception");
+        } catch (IOException e) {
             e.printStackTrace();
         } finally {
             try {
-                br.close();
-            } catch (Exception e) {
+                if (br != null) {
+                    br.close();
+                }
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }

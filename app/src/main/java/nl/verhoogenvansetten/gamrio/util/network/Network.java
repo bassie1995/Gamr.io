@@ -1,13 +1,11 @@
-package nl.verhoogenvansetten.gamrio.util;
+package nl.verhoogenvansetten.gamrio.util.network;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.IntentFilter;
 import android.net.wifi.WifiManager;
 import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pManager;
-import android.os.AsyncTask;
 import android.support.v4.app.FragmentManager;
 import android.widget.Toast;
 
@@ -21,7 +19,47 @@ import nl.verhoogenvansetten.gamrio.GameListActivity;
 import nl.verhoogenvansetten.gamrio.ui.DeviceDialogFragment;
 
 /**
- * Created by bloodyfool on 12-10-16.
+ * -------------------------------------
+ * Using the Network class in your game.
+ * -------------------------------------
+ * This network class handles the management of the WiFi P2P connection.
+ * It also handles the sending and receiving of information which it will pass on to a GameCompat
+ * object.
+ * <p>
+ * To use this class you first have to make an activity that inherits from the GameCompat class.
+ * <p>
+ * You need to get an object of this class by calling the
+ * Network.getInstance()
+ * function in de onCreate().
+ * <p>
+ * You need to register your game in de onResume function and pass the ID of your game and an object
+ * of your games activity.
+ * network.registerGame(int ID, GameCompat this)
+ * <p>
+ * You also need to unregister your game in the onPause class to not get updated when your activity
+ * is paused.
+ * network.unregisterGame(int ID)
+ * <p>
+ * The update(String data) function also has to be overridden. This function will be called every
+ * time a message is received for your game. This function will be called with data = null if the
+ * previous attempt at sending failed.
+ * <p>
+ * To send messages the network.send(int ID, String message) has to be called with the game ID and a
+ * string of the message.
+ * <p>
+ * -------------------------------------------------
+ * Getting other information from the Network class.
+ * -------------------------------------------------
+ * int getOtherGameID() returns the game the other payer is playing. 0 will be returned if no game
+ * is running.
+ * <p>
+ * boolean isGroupOwner() will return true if the current device is the WiFi P2P group owner.
+ * This can be useful if some asynchronous processing is required to differentiate between a host
+ * and client.
+ * <p>
+ * void enableWifi() will enable the wifi on the system.
+ * <p>
+ * String getConnectedDeviceName will return the name of the connected peer.
  */
 
 public class Network {
@@ -34,11 +72,11 @@ public class Network {
     private String ip;
     private String iface;
     private int port = 12346;
-    private boolean isConnected;
     private boolean isOwner;
     private static Network instance;
     private Server server;
     private int otherGameID = 0;
+    private String peerName = "";
 
     public static Network getInstance() {
         if (instance == null)
@@ -47,7 +85,6 @@ public class Network {
     }
 
     private Network() {
-        //TODO
         Context main = GameListActivity.getContext();
         mManager = (WifiP2pManager) main.getSystemService(Context.WIFI_P2P_SERVICE);
         mChannel = mManager.initialize(main, main.getMainLooper(), null);
@@ -64,7 +101,6 @@ public class Network {
 
             @Override
             public void onFailure(int reasonCode) {
-                //TODO main.chipper("OnFailure");
             }
         });
 
@@ -77,31 +113,34 @@ public class Network {
     public void registerGame(int id, GameCompat game) {
         ID = id;
         this.game = game;
-        if(ID>=10)
+        if (ID >= 10)
             startServer();
-        if(ID>10) {
+        if (ID > 10) {
             send(10, "\n" + Integer.toString(id));
-        }
-        else
+        } else
             send(0, "\n" + Integer.toString(id));
 
     }
 
-    public void unregisterGame() {
-        if(ID>10) {
-            send(10, "\n" + "0");
+    public void unregisterGame(int id) {
+        if (id == ID) {
+            if (ID > 10) {
+                send(10, "\n" + "0");
+            } else
+                send(0, "\n" + "0");
+            if (ID >= 10)
+                onDestroy();
+            ID = 0;
+            this.game = null;
         }
-        else
-            send(0, "\n" + "0");
-        if(ID>=10)
-            onDestroy();
-        ID = 0;
-        this.game = null;
     }
 
     public String getConnectedDeviceName() {
-        //TODO return connected device name
-        return "";
+        return peerName;
+    }
+
+    void setPeerName(String name) {
+        peerName = name;
     }
 
     public static void connect(WifiP2pConfig config, final Activity activity) {
@@ -157,10 +196,6 @@ public class Network {
         return mReceiver;
     }
 
-    void setConnected(boolean state) {
-        isConnected = state;
-    }
-
     void setIp(String ip) {
         this.ip = ip;
     }
@@ -192,7 +227,9 @@ public class Network {
             e.printStackTrace();
         } finally {
             try {
-                br.close();
+                if (br != null) {
+                    br.close();
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -200,19 +237,18 @@ public class Network {
         return null;
     }
 
-    protected void update(String data) {
+    void update(String data) {
         String data2[] = data.split("\n", 2);
         int id = Integer.valueOf(data2[0]);
         data = data2[1];
-        if(id == ID)
+        if (id == ID)
             game.update(data + id);
-        else if(id == 10 || id == 0) {
+        else if (id == 10 || id == 0) {
             otherGameID = Integer.valueOf(data.replace("\n", ""));
         }
-        //TODO else send failed??
     }
 
-    protected void startServer() {
+    void startServer() {
         if (Server.serverSocket == null)
             server = new Server(this);
     }
@@ -221,11 +257,11 @@ public class Network {
         try {
             server.onDestroy();
         } catch (NullPointerException e) {
-
+            e.printStackTrace();
         }
     }
 
-    protected int getPort() {
+    int getPort() {
         return port;
     }
 

@@ -61,7 +61,7 @@
     <string name="connect">Connect to host or game</string>
     <string name="transition_header">header_transition</string>
     <string name="transition_fab">fab_transition</string>
-    <string name="transition_name">name_transition</string>
+    <string name="transition_background">background_transition</string>
     <string name="name_battleship">Battleship</string>
     <string name="name_bingo" translatable="false">Bingo</string>
     <string name="name_dots_and_boxes">Dots and Boxes</string>
@@ -81,4 +81,6 @@
     <string name="title_activity_battleship_game">Battleship</string>
     <string name="play_battleship">Play Battleship</string>
     <string name="done">Done</string>
+    <string name="clear_current_ship">Clear current ship</string>
+    <string name="clear_all">Clear all</string>
 </resources>

@@ -10,7 +10,7 @@ import android.widget.Button;
 
 import nl.verhoogenvansetten.gamrio.GameCompat;
 import nl.verhoogenvansetten.gamrio.R;
-import nl.verhoogenvansetten.gamrio.util.Network;
+import nl.verhoogenvansetten.gamrio.util.network.Network;
 
 public class SudokuActivity extends GameCompat implements View.OnClickListener{
 

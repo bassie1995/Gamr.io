@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import nl.verhoogenvansetten.gamrio.R;
-import nl.verhoogenvansetten.gamrio.util.Network;
+import nl.verhoogenvansetten.gamrio.util.network.Network;
 
 /**
  * Created by Bas on 13-10-2016.

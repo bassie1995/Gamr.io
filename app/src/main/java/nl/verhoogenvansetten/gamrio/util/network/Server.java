@@ -1,30 +1,23 @@
-package nl.verhoogenvansetten.gamrio.util;
+package nl.verhoogenvansetten.gamrio.util.network;
 
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.PrintStream;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.SocketException;
-import java.util.Enumeration;
 
-import android.app.Activity;
-import android.app.ActivityManager;
 import android.os.AsyncTask;
 
 /**
- * Created by bloodyfool on 11-10-16.
+ * This class manages the server side of the communication. Access to this class should only be done
+ * through the functions of the Network class.
  */
 
-public class Server {
+class Server {
     static ServerSocket serverSocket;
     private String message = "";
-    Network network;
+    private Network network;
 
     Server(Network network) {
         this.network = network;
@@ -32,7 +25,7 @@ public class Server {
     }
 
 
-    public void onDestroy() {
+    void onDestroy() {
         if (serverSocket != null) {
             try {
                 serverSocket.close();
@@ -55,9 +48,9 @@ public class Server {
                     Socket socket = serverSocket.accept();
 
                     class StartTask implements Runnable {
-                        Socket s;
+                        private Socket s;
 
-                        StartTask(Socket s) {
+                        private StartTask(Socket s) {
                             this.s = s;
                         }
 
@@ -89,38 +82,16 @@ public class Server {
         @Override
         //public void run() {
         protected Void doInBackground(Void... params) {
-            OutputStream outputStream;
             try {
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(hostThreadSocket.getInputStream()));
 
                 for (String data; (data = bufferedReader.readLine()) != null; ) {
                     message += data + "\n";
                 }
-                /**
-                activity.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        //activity.response.setText(reply);
-                        reply = "";
-                    }
-                });**/
-
                 bufferedReader.close();
 
-                /**outputStream = hostThreadSocket.getOutputStream();
-                PrintStream printStream = new PrintStream(outputStream);
-                printStream.print(msgReply);
-//                printStream.close();
-
-                message += "replayed: " + msgReply + "\n";
-                activity.runOnUiThread(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        activity.msg.setText(message);
-                    }
-                });**/
             } catch (IOException e) {
+
                 e.printStackTrace();
                 message += "Something wrong! " + e.toString() + "\n";
             }

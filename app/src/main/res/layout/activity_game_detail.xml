@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     tools:context="nl.verhoogenvansetten.gamrio.GameDetailActivity"
-    tools:ignore="MergeRootFrame">
+    tools:ignore="MergeRootFrame" >
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
@@ -68,8 +68,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_anchor="@+id/app_bar"
-        app:layout_anchorGravity="bottom|right|end"
-        android:translationZ="8dp" >
+        app:layout_anchorGravity="bottom|right|end" >
 
         <android.support.design.widget.FloatingActionButton
             android:contentDescription="@string/connect"
@@ -79,7 +78,8 @@
             android:layout_gravity="center_vertical|start"
             android:layout_margin="@dimen/fab_margin"
             app:srcCompat="@drawable/ic_open_network_white_24dp"
-            android:transitionName="@string/transition_fab" />
+            android:transitionName="@string/transition_fab"
+            android:stateListAnimator="@drawable/fab_lift_on_touch" />
 
     </FrameLayout>
 
