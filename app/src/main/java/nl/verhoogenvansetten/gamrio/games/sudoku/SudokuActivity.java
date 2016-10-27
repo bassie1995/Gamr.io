@@ -80,10 +80,6 @@ public class SudokuActivity extends GameCompat implements View.OnClickListener{
 
     }
 
-    public void peerUp(){}
-
-    public void peerDown(){}
-
     @Override
     public void peerDown() {
 
