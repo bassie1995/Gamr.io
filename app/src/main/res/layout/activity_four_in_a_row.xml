@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:id="@+id/content_four_in_arow"
     tools:context="nl.verhoogenvansetten.gamrio.games.fourinrow.FourInARowActivity">
 
     <android.support.design.widget.AppBarLayout

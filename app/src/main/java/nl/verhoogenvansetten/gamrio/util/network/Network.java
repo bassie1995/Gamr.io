@@ -43,7 +43,7 @@ import nl.verhoogenvansetten.gamrio.ui.DeviceDialogFragment;
  * The update(String data) function also has to be overridden. This function will be called every
  * time a message is received for your game. This function will be called with data = null if the
  * previous attempt at sending failed.
- *
+ * <p>
  * The peerDown() and peerUp() functions will be called every time the peer closes or opens the
  * current game.
  * <p>
@@ -181,7 +181,7 @@ public class Network {
 
     public boolean send(int ID, String m) {
 
-        if(ID != otherGameID && ID != 0 && ID != 10)
+        if (ID != otherGameID && ID != 0 && ID != 10)
             return false;
 
         String address;
@@ -248,13 +248,13 @@ public class Network {
     void update(String data) {
         String data2[] = data.split("\n", 2);
         int id = Integer.valueOf(data2[0]);
-        data = data2[1].replace("\n", "");
+        data = data2[1];
         if (id == ID)
             game.update(data);
         else if (id == 10 || id == 0) {
-            id = Integer.valueOf(data);
+            id = Integer.valueOf(data.replace("\n", ""));
             otherGameID = id;
-            if(id == ID)
+            if (id == ID)
                 game.peerUp();
             else if (id == 0)
                 game.peerDown();

@@ -3,7 +3,7 @@ package nl.verhoogenvansetten.gamrio.util;
 import nl.verhoogenvansetten.gamrio.games.fourinrow.FourInARowActivity;
 import nl.verhoogenvansetten.gamrio.GameListActivity;
 import nl.verhoogenvansetten.gamrio.R;
-import nl.verhoogenvansetten.gamrio.games.BingoGameActivity;
+import nl.verhoogenvansetten.gamrio.games.bingo.BingoGameActivity;
 import nl.verhoogenvansetten.gamrio.games.battleship.ui.BattleshipSetupActivity;
 import nl.verhoogenvansetten.gamrio.games.checkers.ui.CheckersActivity;
 import nl.verhoogenvansetten.gamrio.games.sudoku.SudokuActivity;

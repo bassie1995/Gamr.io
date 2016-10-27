@@ -81,6 +81,16 @@ public class SudokuActivity extends GameCompat implements View.OnClickListener{
     }
 
     @Override
+    public void peerDown() {
+
+    }
+
+    @Override
+    public void peerUp() {
+
+    }
+
+    @Override
     public void onClick(View view) {
         Button b = (Button) view;
         changeNumber(Integer.parseInt((String)b.getText()));
