@@ -1,4 +1,4 @@
-package nl.verhoogenvansetten.gamrio.games;
+package nl.verhoogenvansetten.gamrio.games.bingo;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -9,21 +9,26 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import nl.verhoogenvansetten.gamrio.GameCompat;
 import nl.verhoogenvansetten.gamrio.R;
+import nl.verhoogenvansetten.gamrio.util.network.Network;
 
-public class BingoGameActivity extends AppCompatActivity {
+public class BingoGameActivity extends GameCompat {
+
+    Network network;
+    int ID = 5;
 
     public Random random = new Random();
-    public int num;
-    public String temp;
+    private int num, lineCount, otherPlayerIineCount;
+    private String temp, otherPlayerTemp, resultMessage, buttonsID;
     public int[][] elements=new int[5][5];
-    public String resultMessage;
-    int lineCount;
+
 
     public List<Integer> buttons;
     public final int[] BUTTON_IDS = {
@@ -38,6 +43,8 @@ public class BingoGameActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bingo);
+
+        network = Network.getInstance();
 
         define_buttons();
     }
@@ -60,119 +67,22 @@ public class BingoGameActivity extends AppCompatActivity {
     public void onClick(View v) {
         Button b = (Button) v;
         b.setClickable(false);
+        findPosition(b);
 
         b.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.md_red_a200), PorterDuff.Mode.MULTIPLY);
         b.setTextColor(ContextCompat.getColor(this, R.color.md_white));
+
         temp = b.getText().toString();
-        findPosition(b);
+        network.send(ID, temp);
 
         lineCount=checkLine();
         isGameOver(lineCount);
+        network.send(ID, lineCount+"");
     }
 
     public void findPosition(View v) {
-        switch (v.getId()) {
-            case  R.id.button1: {
-                elements[0][0]=1;
-                break;
-            }
-            case  R.id.button2: {
-                elements[0][1]=1;
-                break;
-            }
-            case  R.id.button3: {
-                elements[0][2]=1;
-                break;
-            }
-            case  R.id.button4: {
-                elements[0][3]=1;
-                break;
-            }
-            case  R.id.button5: {
-                elements[0][4]=1;
-                break;
-            }
-            case  R.id.button6: {
-                elements[1][0]=1;
-                break;
-            }
-            case  R.id.button7: {
-                elements[1][1]=1;
-                break;
-            }
-            case  R.id.button8: {
-                elements[1][2]=1;
-                break;
-            }
-            case  R.id.button9: {
-                elements[1][3]=1;
-                break;
-            }
-            case  R.id.button10: {
-                elements[1][4]=1;
-                break;
-            }
-            case  R.id.button11: {
-                elements[2][0]=1;
-                break;
-            }
-            case  R.id.button12: {
-                elements[2][1]=1;
-                break;
-            }
-            case  R.id.button13: {
-                elements[2][2]=1;
-                break;
-            }
-            case  R.id.button14: {
-                elements[2][3]=1;
-                break;
-            }
-            case  R.id.button15: {
-                elements[2][4]=1;
-                break;
-            }
-            case  R.id.button16: {
-                elements[3][0]=1;
-                break;
-            }
-            case  R.id.button17: {
-                elements[3][1]=1;
-                break;
-            }
-            case  R.id.button18: {
-                elements[3][2]=1;
-                break;
-            }
-            case  R.id.button19: {
-                elements[3][3]=1;
-                break;
-            }
-            case  R.id.button20: {
-                elements[3][4]=1;
-                break;
-            }
-            case  R.id.button21: {
-                elements[4][0]=1;
-                break;
-            }
-            case  R.id.button22: {
-                elements[4][1]=1;
-                break;
-            }
-            case  R.id.button23: {
-                elements[4][2]=1;
-                break;
-            }
-            case  R.id.button24: {
-                elements[4][3]=1;
-                break;
-            }
-            case  R.id.button25: {
-                elements[4][4]=1;
-                break;
-            }
-        }
+        int position= buttons.indexOf(Integer.parseInt(temp));
+        elements[position/5][position%5]=1;
     }
 
     public int checkLine(){
@@ -217,14 +127,21 @@ public class BingoGameActivity extends AppCompatActivity {
 
     public void isGameOver(int lineCount){
         if(lineCount>=5) {
+            if(lineCount==otherPlayerIineCount) {
+                resultMessage = "Draw!";
+                showResult();
+            }
+            else{
+                resultMessage = "You Win!";
+                showResult();
+            }
+        }else if(otherPlayerIineCount>5){
+            resultMessage = "You Lose!";
             showResult();
         }
     }
 
     public void showResult(){
-
-        resultMessage="You Win!";
-
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(BingoGameActivity.this);
         alertDialogBuilder.setTitle("GAME OVER");
 
@@ -247,6 +164,25 @@ public class BingoGameActivity extends AppCompatActivity {
 
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
+    }
+
+    public void update(String data) {
+        // this.otherPlayerLineCount=lineCount;
+        // this.otherPlayerTemp=temp;
+
+        if(buttons.contains(otherPlayerTemp)){
+            int index = buttons.indexOf(otherPlayerTemp);
+            elements[index/5][index%5]=1;
+            Button button = (Button) findViewById(getResources().getIdentifier("button"+ String.valueOf(index+1),"id" ,getPackageName()));
+            button.performClick();
+            button.setClickable(false);
+        }
+    }
+
+    public void peerUp(){
+
+    }
+    public void peerDown(){
 
     }
 }
