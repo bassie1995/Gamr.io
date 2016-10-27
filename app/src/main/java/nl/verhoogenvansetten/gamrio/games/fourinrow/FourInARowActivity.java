@@ -1,6 +1,5 @@
 package nl.verhoogenvansetten.gamrio.games.fourinrow;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -14,14 +13,13 @@ import android.widget.TextView;
 
 import nl.verhoogenvansetten.gamrio.GameCompat;
 import nl.verhoogenvansetten.gamrio.R;
-import nl.verhoogenvansetten.gamrio.games.battleship.ui.BattleshipGameActivity;
 import nl.verhoogenvansetten.gamrio.util.network.Network;
 
 public class FourInARowActivity extends GameCompat {
 
     private TextView dataView;
     private Network network;
-    private int ID = 1;
+    private int ID = Network.FOURINAROW;
     private int[][] idGrid = new int[8][8];
     private String[][] valueGrid = new String[8][8];
     private boolean lock;

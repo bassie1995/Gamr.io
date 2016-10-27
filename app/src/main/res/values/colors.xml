@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">@color/md_blue_grey_500</color>
     <color name="colorPrimaryDark">@color/md_blue_grey_700</color>
-    <color name="colorAccent">@color/md_deep_purple_a200</color>
+    <color name="colorAccent">@color/md_red_a200</color>
 
     <color name="translucent_scrim_top">#26000000</color>
     <color name="translucent_scrim_top_center">#0C000000</color>

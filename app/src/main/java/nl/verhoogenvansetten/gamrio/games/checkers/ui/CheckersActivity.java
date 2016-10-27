@@ -55,6 +55,10 @@ public class CheckersActivity extends GameCompat implements CheckersFragment.OnF
 
     }
 
+    public void peerUp(){}
+
+    public void peerDown(){}
+
     @Override
     protected void onStart() {
         super.onStart();

@@ -8,10 +8,12 @@ package nl.verhoogenvansetten.gamrio.games.battleship.model;
 public class Ship {
     private int length;
     private int[] coordinates;
+    private int[] buttons;
 
     public Ship(int length) {
         this.length = length;
         this.coordinates = new int[length];
+        this.buttons = new int[length];
     }
 
     public int getLength() {
@@ -24,5 +26,13 @@ public class Ship {
 
     public void setCoordinates(int[] coordinates) {
         this.coordinates = coordinates;
+    }
+
+    public int[] getButtons() {
+        return buttons;
+    }
+
+    public void setButtons(int[] buttons) {
+        this.buttons = buttons;
     }
 }

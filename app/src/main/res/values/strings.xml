@@ -80,7 +80,17 @@
     <string name="title_activity_battleship_setup">Battleship Setup</string>
     <string name="title_activity_battleship_game">Battleship</string>
     <string name="play_battleship">Play Battleship</string>
-    <string name="done">Done</string>
+    <string name="finish_turn">Finish turn</string>
     <string name="clear_current_ship">Clear current ship</string>
     <string name="clear_all">Clear all</string>
+    <string name="done_battleship">You have set up all your ships. You can reset from the toolbar or continue to the game.</string>
+    <string name="play">Play</string>
+    <string name="carrier">Carrier</string>
+    <string name="battleship">Battleship</string>
+    <string name="cruiser">Cruiser</string>
+    <string name="submarine">Submarine</string>
+    <string name="destroyer">Destroyer</string>
+    <string name="should_finish_setup_battleship">You have not set up all your ships</string>
+    <string name="view_opponent">View opponent\'s moves</string>
+    <string name="opponent_done">opponentDone</string>
 </resources>

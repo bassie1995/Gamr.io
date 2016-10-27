@@ -11,13 +11,58 @@
             android:data="battleship"/>
     </shortcut>
     <shortcut enabled="true"
-    shortcutId="four-in-row"
+        shortcutId="bingo"
+        shortcutShortLabel="@string/name_bingo"
+        shortcutLongLabel="@string/name_bingo"> <!-- Make long? "Start Battleship" -->
+        <intent android:targetPackage="nl.verhoogenvansetten.gamrio"
+            android:targetClass="nl.verhoogenvansetten.gamrio.games.bingo.BingoGameActivity"
+            android:action="android.intent.action.VIEW"
+            android:data="bingo"/>
+    </shortcut>
+    <shortcut enabled="true"
+        shortcutId="dots_and_boxes"
+        shortcutShortLabel="@string/name_dots_and_boxes"
+        shortcutLongLabel="@string/name_dots_and_boxes"> <!-- Make long? "Start Battleship" -->
+        <intent android:targetPackage="nl.verhoogenvansetten.gamrio"
+            android:targetClass="nl.verhoogenvansetten.gamrio.games.battleship.ui.BattleshipSetupActivity"
+            android:action="android.intent.action.VIEW"
+            android:data="dots_and_boxes"/>
+    </shortcut>
+    <shortcut enabled="true"
+        shortcutId="sudoku"
+        shortcutShortLabel="@string/name_sudoku"
+        shortcutLongLabel="@string/name_sudoku"> <!-- Make long? "Start Battleship" -->
+        <intent android:targetPackage="nl.verhoogenvansetten.gamrio"
+            android:targetClass="nl.verhoogenvansetten.gamrio.games.sudoku.SudokuActivity"
+            android:action="android.intent.action.VIEW"
+            android:data="sudoku"/>
+    </shortcut>
+    <shortcut enabled="true"
+        shortcutId="tic_tac_toe"
+        shortcutShortLabel="@string/name_tic_tac_toe"
+        shortcutLongLabel="@string/name_tic_tac_toe"> <!-- Make long? "Start Battleship" -->
+        <intent android:targetPackage="nl.verhoogenvansetten.gamrio"
+            android:targetClass="nl.verhoogenvansetten.gamrio.games.battleship.ui.BattleshipSetupActivity"
+            android:action="android.intent.action.VIEW"
+            android:data="tic_tac_toe"/>
+    </shortcut>
+    <shortcut enabled="true"
+    shortcutId="four_in_row"
     shortcutShortLabel="@string/pref_header_four_in_row"
     shortcutLongLabel="@string/pref_header_four_in_row"> <!-- Make long? "Start <game name>" -->
     <intent android:targetPackage="nl.verhoogenvansetten.gamrio"
         android:targetClass="nl.verhoogenvansetten.gamrio.games.fourinrow.FourInARowActivity"
         android:action="android.intent.action.VIEW"
         android:data="four_in_row"/>
+    </shortcut>
+    <shortcut enabled="true"
+        shortcutId="checkers"
+        shortcutShortLabel="@string/name_checkers"
+        shortcutLongLabel="@string/name_checkers"> <!-- Make long? "Start Battleship" -->
+        <intent android:targetPackage="nl.verhoogenvansetten.gamrio"
+            android:targetClass="nl.verhoogenvansetten.gamrio.games.checkers.ui.CheckersActivity"
+            android:action="android.intent.action.VIEW"
+            android:data="checkers"/>
     </shortcut>
     <!-- Add subsequent `shortcut` items here -->
 </shortcuts>

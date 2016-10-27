@@ -5,7 +5,6 @@ import android.databinding.DataBindingUtil;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -13,19 +12,25 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import java.util.Arrays;
-
+import nl.verhoogenvansetten.gamrio.GameCompat;
 import nl.verhoogenvansetten.gamrio.R;
 import nl.verhoogenvansetten.gamrio.databinding.BattleshipBinding;
 import nl.verhoogenvansetten.gamrio.games.battleship.model.Ship;
+import nl.verhoogenvansetten.gamrio.util.network.Network;
 
 import static nl.verhoogenvansetten.gamrio.R.layout.battleship;
 
-public class BattleshipSetupActivity extends AppCompatActivity {
+public class BattleshipSetupActivity extends GameCompat {
     BattleshipBinding binding;
     Ship[] mShips = new Ship[5];
+
+    private Network network;
+    private int ID = Network.BATTLESHIP;
+
     int mCurrentShip;
     int mShipNum;
+    boolean mSetupDone;
+    boolean mOpponentSetupDone = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +38,8 @@ public class BattleshipSetupActivity extends AppCompatActivity {
         setContentView(battleship);
         setTitle("Battleship setup");
         binding = DataBindingUtil.setContentView(this, battleship);
+
+        network = Network.getInstance();
 
         mShips[0] = new Ship(5);
         mShips[1] = new Ship(4);
@@ -44,31 +51,46 @@ public class BattleshipSetupActivity extends AppCompatActivity {
     }
 
     public void onClick(View v) {
-        Button b = (Button) v;
         int[] mCoords = mShips[mCurrentShip].getCoordinates();
+        int[] mButtons = mShips[mCurrentShip].getButtons();
         int position = Integer.parseInt(getResources().getResourceEntryName(v.getId()).replaceAll("[\\D]", ""));
 
-        if (isValidCoords(position, mCoords)) {
-            int[] mNewCoords = mCoords;
-            mNewCoords[mShipNum++] = position;
+        if (!mSetupDone && isValidCoords(position, mCoords)) {
+            Button b = (Button) v;
+            mCoords[mShipNum] = position;
+            mButtons[mShipNum] = b.getId();
+            mShipNum++;
 
             b.setClickable(false);
-            b.setText("X");
             b.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.md_light_blue_a200), PorterDuff.Mode.MULTIPLY);
-            mShips[mCurrentShip].setCoordinates(mNewCoords);
+            mShips[mCurrentShip].setCoordinates(mCoords);
+            mShips[mCurrentShip].setButtons(mButtons);
+
+            if (atLastShip() && currentShipSetupDone()) {
+                mShipNum = 0;
+                mCurrentShip = 0;
+                mSetupDone = true;
+                Toast.makeText(this, getString(R.string.done_battleship), Toast.LENGTH_LONG).show();
+            }
+            if (currentShipSetupDone()) {
+                mShipNum = 0;
+                mCurrentShip++;
+            }
         }
-        Toast.makeText(this, Arrays.toString(mShips), Toast.LENGTH_SHORT).show();
-
-
     }
 
     private boolean isValidCoords(int pos, int[] coords) {
         if (mShipNum == 0) return true;
-        else if (mShipNum == 1)
-            return (coords[mShipNum - 1] - 10 == pos || coords[mShipNum - 1] + 10 == pos || coords[mShipNum - 1] - 1 == pos || coords[mShipNum - 1] + 1 == pos);
-        else
-            return ((coords[mShipNum - 2] - 10 == pos || coords[mShipNum - 2] + 10 == pos) && coords[mShipNum - 1] - 10 == pos || coords[mShipNum - 1] + 10 == pos) ||
-                    ((coords[mShipNum - 2] - 1 == pos || coords[mShipNum - 2] + 1 == pos) && coords[mShipNum - 1] - 1 == pos || coords[mShipNum - 1] + 1 == pos);
+        else if (mShipNum == 1) return (pos == coords[mShipNum - 1] - 10 || pos == coords[mShipNum - 1] + 10 || pos == coords[mShipNum - 1] - 1 || pos == coords[mShipNum - 1] + 1);
+        else if (coords[mShipNum - 2] + 2 == pos && coords[mShipNum - 1] + 1 == pos) return true;
+        else if (coords[mShipNum - 2] - 1 == pos && coords[mShipNum - 1] - 2 == pos) return true;
+        else if (coords[mShipNum - 2] + 1 == pos && coords[mShipNum - 1] + 2 == pos) return true;
+        else if (coords[mShipNum - 2] - 2 == pos && coords[mShipNum - 1] - 1 == pos) return true;
+        else if (coords[mShipNum - 2] + 20 == pos && coords[mShipNum - 1] + 10 == pos) return true;
+        else if (coords[mShipNum - 2] - 10 == pos && coords[mShipNum - 1] - 20 == pos) return true;
+        else if (coords[mShipNum - 2] - 20 == pos && coords[mShipNum - 1] - 10 == pos) return true;
+        else if (coords[mShipNum - 2] + 10 == pos && coords[mShipNum - 1] + 20 == pos) return true;
+        else return false;
     }
 
     @Override
@@ -82,7 +104,8 @@ public class BattleshipSetupActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
             case R.id.menu_play_battleship:
-                startActivity(new Intent(this, BattleshipGameActivity.class));
+                if (mSetupDone) startBattleshipGame();
+                else Toast.makeText(this, R.string.should_finish_setup_battleship, Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.menu_clear_all_battleship:
                 clearGrid();
@@ -93,6 +116,14 @@ public class BattleshipSetupActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private boolean currentShipSetupDone() {
+        return mShipNum == mShips[mCurrentShip].getLength();
+    }
+
+    private boolean atLastShip() {
+        return mCurrentShip == mShips.length-1;
     }
 
     public void clearCurrentShip() {
@@ -106,7 +137,22 @@ public class BattleshipSetupActivity extends AppCompatActivity {
             b.getBackground().clearColorFilter();
             b.setClickable(true);
         }
+        mShips[mCurrentShip].setCoordinates(new int[mShips[mCurrentShip].getLength()]);
         mCurrentShip = 0;
+        mShipNum = 0;
+        mSetupDone = false;
+    }
+
+    private void startBattleshipGame() {
+        network.send(ID, "done");
+        Intent intent = new Intent(BattleshipSetupActivity.this, BattleshipGameActivity.class);
+        intent.putExtra(getString(R.string.carrier), mShips[0].getButtons());
+        intent.putExtra(getString(R.string.battleship), mShips[1].getButtons());
+        intent.putExtra(getString(R.string.cruiser), mShips[2].getButtons());
+        intent.putExtra(getString(R.string.submarine), mShips[3].getButtons());
+        intent.putExtra(getString(R.string.destroyer), mShips[4].getButtons());
+        intent.putExtra(getString(R.string.opponent_done), mOpponentSetupDone);
+        startActivity(intent);
     }
 
     public int min(int[] coords){
@@ -123,5 +169,33 @@ public class BattleshipSetupActivity extends AppCompatActivity {
             if (i > max)
                 max = i;
         return max;
+    }
+
+    @Override
+    public void update(String data) {
+        if (data.equals("done"))
+            mOpponentSetupDone = true;
+    }
+
+    @Override
+    public void peerDown() {
+
+    }
+
+    @Override
+    public void peerUp() {
+
+    }
+
+    @Override
+    public void onPause() {
+        network.unregisterGame(ID);
+        super.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        network.registerGame(ID, this);
+        super.onResume();
     }
 }

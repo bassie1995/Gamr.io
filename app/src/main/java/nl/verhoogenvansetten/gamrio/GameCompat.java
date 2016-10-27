@@ -3,7 +3,7 @@ package nl.verhoogenvansetten.gamrio;
 import android.support.v7.app.AppCompatActivity;
 
 /**
- * This is the superclass for all the game activuties.
+ * This is the superclass for all the game activities.
  */
 
 public abstract class GameCompat extends AppCompatActivity {
