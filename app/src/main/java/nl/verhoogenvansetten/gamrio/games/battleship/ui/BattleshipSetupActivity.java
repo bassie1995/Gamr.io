@@ -129,7 +129,13 @@ public class BattleshipSetupActivity extends GameCompat {
     }
 
     public void clearCurrentShip() {
-
+        for (int id : mShips[mCurrentShip].getButtons()) {
+            Button b = (Button) findViewById(id);
+            b.setClickable(true);
+            b.getBackground().clearColorFilter();
+        }
+        mShipNum = 0;
+        mSetupDone = false;
     }
 
     public void clearGrid() {
@@ -139,7 +145,6 @@ public class BattleshipSetupActivity extends GameCompat {
             b.getBackground().clearColorFilter();
             b.setClickable(true);
         }
-        //mShips[mCurrentShip].setCoordinates(new int[mShips[mCurrentShip].getLength()]);
         mCurrentShip = 0;
         mShipNum = 0;
         mSetupDone = false;
@@ -147,7 +152,6 @@ public class BattleshipSetupActivity extends GameCompat {
 
     private void startBattleshipGame() {
         Toast.makeText(this, Boolean.toString(mOpponentSetupDone), Toast.LENGTH_SHORT).show();
-        Log.e("BATTLESHIPSETUP", "Sending game start");
         if (!mOpponentSetupDone) network.send(ID, "done");
         Intent intent = new Intent(BattleshipSetupActivity.this, BattleshipGameActivity.class);
         intent.putExtra(getString(R.string.carrier), mShips[0].getButtons());
@@ -177,7 +181,6 @@ public class BattleshipSetupActivity extends GameCompat {
 
     @Override
     public void update(String data) {
-        Toast.makeText(this, data, Toast.LENGTH_SHORT).show();
         if (data.equals("done\n"))
             mOpponentSetupDone = true;
     }

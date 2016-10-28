@@ -130,8 +130,9 @@ public class Network {
             startServer();
         if (ID > 10) {
             send(10, Integer.toString(id));
-        } else
+        } else {
             send(0, Integer.toString(id));
+        }
 
     }
 
