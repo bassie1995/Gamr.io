@@ -16,6 +16,7 @@ import nl.verhoogenvansetten.gamrio.R;
 import nl.verhoogenvansetten.gamrio.games.checkers.model.Checkers;
 import nl.verhoogenvansetten.gamrio.games.checkers.model.Piece;
 import nl.verhoogenvansetten.gamrio.games.checkers.model.Side;
+import nl.verhoogenvansetten.gamrio.util.MessageUtil;
 
 public class CheckersFragment extends Fragment {
     public final static String TAG = "Checkers fragment";
@@ -23,6 +24,7 @@ public class CheckersFragment extends Fragment {
     Checkers checkers = null;
     GridLayout gl = null;
     private OnFragmentInteractionListener listener;
+    Side ourSide = null;
 
     public interface OnFragmentInteractionListener {
         public void onSendData(Checkers checkers);
@@ -32,8 +34,10 @@ public class CheckersFragment extends Fragment {
     public CheckersFragment() {
     }
 
-    public static CheckersFragment newInstance() {
+    public static CheckersFragment newInstance(Side side) {
         CheckersFragment fragment = new CheckersFragment();
+        //Set the side
+        fragment.ourSide = side;
         return fragment;
     }
 
@@ -53,7 +57,8 @@ public class CheckersFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         if(savedInstanceState == null){
-            checkers = new Checkers(getActivity());
+            //Init the checkers gamestate with the context and the side the player is on.
+            checkers = new Checkers(getActivity(), ourSide);
             //Since its a new game set all the Pieces to the starting positions
             checkers.setUpBoard();
             //Setup the listener for the checkers object
@@ -77,7 +82,6 @@ public class CheckersFragment extends Fragment {
     }
 
     private void endGame() {
-        //todo end the game
         listener.onEndGame(this.checkers);
     }
 
@@ -190,6 +194,7 @@ public class CheckersFragment extends Fragment {
         if(newSquare.getColor() == Color.BLACK){
             newSquare.setOnClickListener(new Square.OnClickListener(){
                 public void onClick(View v){
+                    //MessageUtil.showMessage(getActivity(), x + " " + y);
                     checkers.turn(x, y);
                 }
             });

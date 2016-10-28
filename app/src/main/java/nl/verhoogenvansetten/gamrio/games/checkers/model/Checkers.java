@@ -27,6 +27,7 @@ public class Checkers implements Serializable {
     private int availableMoves;
 
 
+
     //Interface for callback functions
     public interface CheckersListener {
         public void onUpdateGUI();
@@ -40,13 +41,14 @@ public class Checkers implements Serializable {
         this.listener = listener;
     }
 
-    public Checkers(Context context) {
+    public Checkers(Context context, Side side) {
         //Instantiate the variables
         this.listener = null;
         this.context = context;
+        //todo make preference setting
         this.turn = Side.BLACK;
-        //Todo remove debug line or set from preference
-        ourSide = Side.BLACK;
+        //Set our side
+        ourSide = side;
         this.availableMoves = 1;
         //Default score
         this.score = 10000;
@@ -404,11 +406,11 @@ public class Checkers implements Serializable {
                                 //We can only jump forward if not crowned.
                                 //Since "forward" is subjective to the side.
                             else if(selectedPiece.getSide() == Side.BLACK){
-                                if(selectedPiece.posY < y)
+                                if(selectedPiece.posY > y)
                                     canJump = true;
                             }
                             else {
-                                if(selectedPiece.posY > y)
+                                if(selectedPiece.posY < y)
                                     canJump = true;
                             }
                         }
@@ -461,14 +463,14 @@ public class Checkers implements Serializable {
                 if(piece != null){
                     //Only check when its belonging to the given side
                     if(piece.getSide() == ourSide){
-                        //Check if the piece has a possible step
-                        if(canJumpToPos(piece, piece.posX + 1, piece.posY + 1))
+                        //Check if the piece has a possible jump
+                        if(canJumpToPos(piece, piece.posX + 2, piece.posY + 2))
                             return true;
-                        else if (canJumpToPos(piece, piece.posX + 1, piece.posY - 1))
+                        else if (canJumpToPos(piece, piece.posX + 2, piece.posY - 2))
                             return true;
-                        else if (canJumpToPos(piece, piece.posX - 1, piece.posY + 1))
+                        else if (canJumpToPos(piece, piece.posX - 2, piece.posY + 2))
                             return true;
-                        else if (canJumpToPos(piece, piece.posX - 1, piece.posY - 1))
+                        else if (canJumpToPos(piece, piece.posX - 2, piece.posY - 2))
                             return true;
                     }
                 }
@@ -578,7 +580,11 @@ public class Checkers implements Serializable {
         return selectedPiece;
     }
 
-    public void setContext(Context context) {
-        this.context = context;
+    public void setOurSide(Side ourSide) {
+        this.ourSide = ourSide;
+    }
+
+    public Side getOurSide() {
+        return ourSide;
     }
 }

@@ -91,16 +91,12 @@ class HighScoreUtil {
         try {
              allScores = (List<Score>) InternalStorageUtil.readObject((FILENAME_PREFIX + gameID));
         } catch (ClassNotFoundException e) {
-            //TODO implement
             Log.e("","Exception! Wrong object type?");
             e.printStackTrace();
         } catch (FileNotFoundException e) {
-            //TODO implement
             e.printStackTrace();
         } catch (WriteAbortedException e) {
-            //TODO improve
         }catch (IOException e) {
-            //TODO implement
             e.printStackTrace();
         }
         return allScores;

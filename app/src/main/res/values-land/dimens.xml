@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Checkers -->
-    <dimen name="checkers_padding">40dp</dimen>
+    <dimen name="checkers_padding">37dp</dimen>
 </resources>

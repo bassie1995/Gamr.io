@@ -24,6 +24,7 @@ import nl.verhoogenvansetten.gamrio.GameCompat;
 import nl.verhoogenvansetten.gamrio.R;
 import nl.verhoogenvansetten.gamrio.games.checkers.model.BoardPosition;
 import nl.verhoogenvansetten.gamrio.games.checkers.model.Checkers;
+import nl.verhoogenvansetten.gamrio.games.checkers.model.Side;
 import nl.verhoogenvansetten.gamrio.util.MessageUtil;
 import nl.verhoogenvansetten.gamrio.util.network.Network;
 
@@ -49,19 +50,12 @@ public class CheckersActivity extends GameCompat implements CheckersFragment.OnF
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //todo implement networking
         network = Network.getInstance();
 
         //Now we add the fragment. Only on first boot.
         if(savedInstanceState == null){
             addFragment();
         }
-
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
     }
 
     @Override
@@ -76,22 +70,25 @@ public class CheckersActivity extends GameCompat implements CheckersFragment.OnF
         super.onPause();
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-    }
-
     private void addFragment() {
         LinearLayout ll = (LinearLayout) findViewById(R.id.fragment_container);
-        getFragmentManager().beginTransaction().add(ll.getId(),
-                CheckersFragment.newInstance(),
-                CheckersFragment.TAG).commit();
+        //if we aren't the host
+        if(network.isGroupOwner()) {
+            getFragmentManager().beginTransaction().add(ll.getId(),
+                    CheckersFragment.newInstance(Side.WHITE),
+                    CheckersFragment.TAG).commit();
+        }
+        //If we are the host.
+        else{
+            getFragmentManager().beginTransaction().add(ll.getId(),
+                    CheckersFragment.newInstance(Side.BLACK),
+                    CheckersFragment.TAG).commit();
+        }
     }
 
 
     public void update(String data) {
-        MessageUtil.showMessage(getApplicationContext(), "Data received:");
-        MessageUtil.showMessage(getApplicationContext(), data);
+        //MessageUtil.showMessage(getApplicationContext(), "Data received:");
 
         //Get the checkers fragment
         CheckersFragment cf = (CheckersFragment) getFragmentManager().findFragmentByTag(
@@ -105,6 +102,14 @@ public class CheckersActivity extends GameCompat implements CheckersFragment.OnF
             for(int y = 0; y < 8; y++){
                 cf.checkers.board[x][y].setPiece(tempBoard[x][y].getPiece());
             }
+
+        //todo remove debug
+        if(ID > 10){
+            if(cf.checkers.getOurSide() == Side.BLACK)
+                cf.checkers.setOurSide(Side.WHITE);
+            else
+                cf.checkers.setOurSide(Side.BLACK);
+        }
 
     }
 
@@ -126,7 +131,7 @@ public class CheckersActivity extends GameCompat implements CheckersFragment.OnF
 
         //Send the checkers object containing the current game
         if(network.send(ID, encodedCheckersBoard)){
-            MessageUtil.showMessage(getApplicationContext(), "Send the game");
+            //MessageUtil.showMessage(getApplicationContext(), "Send the game");
         }
         else {
             MessageUtil.showMessage(getApplicationContext(), "Something went wrong sending the game");
@@ -163,6 +168,7 @@ public class CheckersActivity extends GameCompat implements CheckersFragment.OnF
 
     @Override
     public void onEndGame(Checkers checkers) {
-
+        network.unregisterGame(ID);
+        this.finish();
     }
 }

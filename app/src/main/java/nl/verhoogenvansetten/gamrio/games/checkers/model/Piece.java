@@ -46,54 +46,6 @@ import java.io.Serializable;
         this.crowned = true;
     }
 
-    void step(){
-        //todo implement
-        if(this.crowned){
-
-        }else{
-
-        }
-    }
-
-    void jump(){
-        if(this.crowned){
-
-        }
-    }
-
-    boolean canStep(BoardPosition[][] board){
-        if(this.crowned){
-            //todo implement
-            return true;
-        }else{
-            //todo implement
-            return true;
-        }
-    }
-
-    boolean canJump(BoardPosition[][] board){
-        if(this.crowned){
-            //If there is a Piece to jump.
-            if(true){
-                //todo implement
-                return true;
-            }else{
-                return false;
-            }
-        }else{
-            //If there is a Piece to jump.
-            if(true){
-                //todo implement
-                return true;
-            }else{
-                return false;
-            }
-        }
-    }
-
-
-
-
 }
 
 
