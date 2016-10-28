@@ -193,7 +193,7 @@ public class Network {
             return false;
 
         String address;
-        String message = ID + "\n" + m;
+        String message = Integer.toString(ID) + "\n" + m;
 
         if (ip == null)
             ip = getIpFromArpCache(iface);
@@ -254,6 +254,7 @@ public class Network {
     }
 
     void update(String data) {
+        // data = data.substring(0, data.length()-1);
         String data2[] = data.split("\n", 2);
         int id = Integer.valueOf(data2[0]);
         data = data2[1];

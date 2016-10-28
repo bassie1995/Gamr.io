@@ -62,12 +62,9 @@ public class DeviceDialogFragment extends DialogFragment {
         mRecyclerView = (RecyclerView) v.findViewById(R.id.device_list);
 
         ArrayList<WifiP2pDevice> wifiP2pDevices = new ArrayList<>();
-        WifiP2pDevice test = new WifiP2pDevice();
-        test.deviceName = "test";
-        WifiP2pDevice yolo = new WifiP2pDevice();
-        yolo.deviceName = "yolo";
-        wifiP2pDevices.add(test);
-        wifiP2pDevices.add(yolo);
+        WifiP2pDevice placeholder = new WifiP2pDevice();
+        placeholder.deviceName = "Scanning...";
+        wifiP2pDevices.add(placeholder);
 
         adapter = new MyRecyclerAdapter(wifiP2pDevices);
         mRecyclerView.setHasFixedSize(true);

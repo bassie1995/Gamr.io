@@ -16,7 +16,7 @@ public class SudokuActivity extends GameCompat implements View.OnClickListener{
 
     Network network;
     DialogFragment newFragment;
-    Button button;
+    Button clickedButton;
     int[][] sudoku;
 
     @Override
@@ -29,14 +29,14 @@ public class SudokuActivity extends GameCompat implements View.OnClickListener{
 
         final GridLayout g = (GridLayout) findViewById(R.id.sudoku_grid);
         for(int i = 0; i < 81; i++){
-            Button b;
+            Button newButton;
             if(sudoku[i/9][i%9] != 0){
-                b = new Button(this, null, R.attr.borderlessButtonStyle);
+                newButton = new Button(this, null, R.attr.borderlessButtonStyle);
             }else{
-                b = new Button(this);
+                newButton = new Button(this);
                 //b.setStateListAnimator(null);
                 //b.setShadowLayer(0, 0, 0, ContextCompat.getColor(this, R.color.md_white));
-                b.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.md_amber_50), PorterDuff.Mode.MULTIPLY);
+                newButton.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.md_amber_50), PorterDuff.Mode.MULTIPLY);
             }
 
             GridLayout.LayoutParams p = new GridLayout.LayoutParams();
@@ -46,13 +46,13 @@ public class SudokuActivity extends GameCompat implements View.OnClickListener{
             p.rowSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f);
 
             //b.setText(String.valueOf(i%9+1));
-            b.setText(sudoku[i/9][i%9] != 0 ? String.valueOf(sudoku[i/9][i%9]) : "");
-            b.setId(i+1);
-            b.setLayoutParams(p);
-            b.setOnClickListener(new View.OnClickListener() {
+            newButton.setText(sudoku[i/9][i%9] != 0 ? String.valueOf(sudoku[i/9][i%9]) : "");
+            newButton.setId(i+1);
+            newButton.setLayoutParams(p);
+            newButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    button = (Button) v;
+                    clickedButton = (Button) v;
 
                     newFragment = new SudokuNumberFragment();
                     newFragment.show(getFragmentManager(), "number");
@@ -61,7 +61,7 @@ public class SudokuActivity extends GameCompat implements View.OnClickListener{
                     //        .setAction("Action", null).show();
                 }
             });
-            array[i/9][i%9] = b;
+            array[i/9][i%9] = newButton;
         }
 
         for(Button ba[] : array){
@@ -70,14 +70,19 @@ public class SudokuActivity extends GameCompat implements View.OnClickListener{
             }
         }
 
-        /*
         network = Network.getInstance();
-        network.registerGame(1, this);
-        */
+        network.registerGame(Network.SUDOKU, this);
     }
 
+    @Override
     public void update(String data) {
-
+        String[] array = data.split(" ");
+        switch (array[0]){
+            case "MOVE":
+                clickedButton = (Button)findViewById(Integer.parseInt(array[1]));
+                changeNumber(Integer.parseInt(array[2]));
+                break;
+        }
     }
 
     @Override
@@ -93,14 +98,15 @@ public class SudokuActivity extends GameCompat implements View.OnClickListener{
     @Override
     public void onClick(View view) {
         Button b = (Button) view;
-        changeNumber(Integer.parseInt((String)b.getText()));
-        b.setText("x");
+        int input = Integer.parseInt((String)b.getText());
+        changeNumber(input);
+        network.send(Network.SUDOKU, "MOVE " + b.getId() + " " + input);
         newFragment.getDialog().dismiss();
     }
 
     private void changeNumber(int i){
-        int id = button.getId()-1;
+        int id = clickedButton.getId()-1;
         sudoku[id/9][id%9] = i;
-        button.setText(String.valueOf(i));
+        clickedButton.setText(String.valueOf(i));
     }
 }
