@@ -5,6 +5,7 @@ import android.databinding.DataBindingUtil;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -145,7 +146,9 @@ public class BattleshipSetupActivity extends GameCompat {
     }
 
     private void startBattleshipGame() {
-        network.send(ID, "done");
+        Toast.makeText(this, Boolean.toString(mOpponentSetupDone), Toast.LENGTH_SHORT).show();
+        Log.e("BATTLESHIPSETUP", "Sending game start");
+        if (!mOpponentSetupDone) network.send(ID, "done");
         Intent intent = new Intent(BattleshipSetupActivity.this, BattleshipGameActivity.class);
         intent.putExtra(getString(R.string.carrier), mShips[0].getButtons());
         intent.putExtra(getString(R.string.battleship), mShips[1].getButtons());
@@ -174,7 +177,8 @@ public class BattleshipSetupActivity extends GameCompat {
 
     @Override
     public void update(String data) {
-        if (data.equals("done"))
+        Toast.makeText(this, data, Toast.LENGTH_SHORT).show();
+        if (data.equals("done\n"))
             mOpponentSetupDone = true;
     }
 

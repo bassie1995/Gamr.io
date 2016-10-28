@@ -68,7 +68,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_anchor="@+id/app_bar"
-        app:layout_anchorGravity="bottom|right|end" >
+        app:layout_anchorGravity="bottom|right|end"
+        android:translationZ="6dp" >
 
         <android.support.design.widget.FloatingActionButton
             android:contentDescription="@string/connect"

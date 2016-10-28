@@ -137,10 +137,10 @@ public class BattleshipGameActivity extends GameCompat {
         for (int id : mShips[4].getButtons())
             findViewById(id).getBackground().setColorFilter(ContextCompat.getColor(this, R.color.md_light_blue_a200), PorterDuff.Mode.MULTIPLY);
 
-        for (int id : mOpponentShots) {
+        /*for (int id : mOpponentShots) {
             Button b = (Button) findViewById(id);
             b.setText("X");
-        }
+        }*/
     }
 
     @Override
