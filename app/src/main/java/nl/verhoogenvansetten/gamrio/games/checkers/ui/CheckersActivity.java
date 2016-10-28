@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import nl.verhoogenvansetten.gamrio.GameCompat;
 import nl.verhoogenvansetten.gamrio.R;
+import nl.verhoogenvansetten.gamrio.util.MessageUtil;
 import nl.verhoogenvansetten.gamrio.util.network.Network;
 
 /**
@@ -21,7 +22,8 @@ import nl.verhoogenvansetten.gamrio.util.network.Network;
 public class CheckersActivity extends GameCompat implements CheckersFragment.OnFragmentInteractionListener{
 
     TextView dataView;
-    Network network;
+    private Network network;
+    private int ID = Network.CHECKERS;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,19 +36,8 @@ public class CheckersActivity extends GameCompat implements CheckersFragment.OnF
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //Set the button
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
         //todo implement networking
-//        network = Network.getInstance();
-//        network.registerGame(7, this);
+        network = Network.getInstance();
 
         //Now we add the fragment. Only on first boot.
         if(savedInstanceState == null){
@@ -62,11 +53,13 @@ public class CheckersActivity extends GameCompat implements CheckersFragment.OnF
 
     @Override
     protected void onResume() {
+        network.registerGame(ID, this);
         super.onResume();
     }
 
     @Override
     protected void onPause() {
+        network.unregisterGame(ID);
         super.onPause();
     }
 
@@ -88,12 +81,12 @@ public class CheckersActivity extends GameCompat implements CheckersFragment.OnF
 
     @Override
     public void peerDown() {
-
+        MessageUtil.showMessage(getApplicationContext(), "Peer down");
     }
 
     @Override
     public void peerUp() {
-
+        MessageUtil.showMessage(getApplicationContext(), "Peer up");
     }
 
     @Override

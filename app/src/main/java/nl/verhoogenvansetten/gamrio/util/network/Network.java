@@ -7,6 +7,7 @@ import android.net.wifi.WifiManager;
 import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
@@ -128,9 +129,9 @@ public class Network {
         if (ID >= 10)
             startServer();
         if (ID > 10) {
-            send(10, "\n" + Integer.toString(id));
+            send(10, Integer.toString(id));
         } else
-            send(0, "\n" + Integer.toString(id));
+            send(0, Integer.toString(id));
 
     }
 
@@ -254,9 +255,12 @@ public class Network {
     }
 
     void update(String data) {
-        // data = data.substring(0, data.length()-1);
+        data = data.substring(0, data.length()-1);
+        //if(data.charAt(0) == '\n')
+        //   data = data.substring(1);
         String data2[] = data.split("\n", 2);
         int id = Integer.valueOf(data2[0]);
+
         data = data2[1];
         if (id == ID)
             game.update(data);
