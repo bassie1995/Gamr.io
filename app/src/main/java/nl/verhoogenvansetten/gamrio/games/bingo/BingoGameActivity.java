@@ -4,10 +4,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +28,8 @@ public class BingoGameActivity extends GameCompat {
 
     public Random random = new Random();
     private int num, lineCount;
-    private String temp, resultMessage, otherPlayerLineCount;
+    private String temp, resultMessage;
+    private boolean running, win=false;
     public int[][] elements=new int[5][5];
 
 
@@ -77,11 +80,8 @@ public class BingoGameActivity extends GameCompat {
         b.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.md_red_a200), PorterDuff.Mode.MULTIPLY);
         b.setTextColor(ContextCompat.getColor(this, R.color.md_white));
 
-        network.send(ID, temp);
-
         lineCount=checkLine();
         isGameOver(lineCount);
-        network.send(ID, lineCount+"");
     }
 
     // Make a virtual table to mark which button is clicked
@@ -131,20 +131,12 @@ public class BingoGameActivity extends GameCompat {
         return lineCount;
     }
 
-    // Is someone make five line bingo, the game is over
+
     public void isGameOver(int lineCount){
         if(lineCount>=5) {
-            if(lineCount==Integer.parseInt(otherPlayerLineCount)) {
-                resultMessage = "Draw!";
-                network.send(ID,"Draw!");
-                showResult();
-            }
-            else{
-                resultMessage = "You Win!";
-                network.send(ID,"You Lose!!");
-                showResult();
-            }
+            network.send(ID, "win"+" "+temp);
         }
+        else network.send(ID,"number"+" "+temp);
     }
 
     // if the game is over, show the dialog
@@ -173,23 +165,44 @@ public class BingoGameActivity extends GameCompat {
         alertDialog.show();
     }
 
-    public void sendNumberClicked(){
-        if(buttons.contains(temp)){
-            int index = buttons.indexOf(temp);
+    public void updateButtonAndLine(){
+        Toast.makeText(this,"Other player selected "+temp,Toast.LENGTH_SHORT).show();
 
-            elements[index/5][index%5]=1;
-            Button button = (Button) findViewById(getResources().getIdentifier("button"+ String.valueOf(index+1),"id" ,getPackageName()));
+        if (buttons.contains(Integer.parseInt(temp))) {
+            int index = buttons.indexOf(Integer.parseInt(temp));
+
+            elements[index / 5][index % 5] = 1;
+            Button button = (Button) findViewById(getResources().getIdentifier("button" + String.valueOf(index + 1), "id", getPackageName()));
             button.performClick();
             button.setClickable(false);
-
-            network.send(ID,"Other player selected "+temp);
         }
     }
 
     public void update(String data) {
-        // this.otherPlayerLineCount=lineCount;
+        String[] array = data.split(" ");
+        switch (array[0]){
+            case "win":
+                temp=array[1];
+                updateButtonAndLine();
 
-        sendNumberClicked();
+                if(lineCount >= 5) {
+                    resultMessage = "Draw!";
+                    showResult();
+                } else {
+                    resultMessage = "You Lose!";
+                    network.send(ID,"lose");
+                    showResult();
+                }
+                break;
+            case "lose":
+                resultMessage = "You Win!";
+                break;
+
+            case "number":
+                temp=array[1];
+                updateButtonAndLine();
+                break;
+        }
     }
 
     public void peerUp(){
@@ -197,5 +210,17 @@ public class BingoGameActivity extends GameCompat {
     }
     public void peerDown(){
 
+    }
+
+    @Override
+    public void onPause() {
+        network.unregisterGame(ID);
+        super.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        network.registerGame(ID, this);
+        super.onResume();
     }
 }

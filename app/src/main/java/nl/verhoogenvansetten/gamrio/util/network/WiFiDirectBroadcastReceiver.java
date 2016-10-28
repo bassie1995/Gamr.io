@@ -64,7 +64,7 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
                             network.setIp(ipaddress);
                             network.setIface(iface);
                             network.setOwner(group.isGroupOwner());
-                            network.setPeerName(group.getClientList().iterator().next().deviceName);
+//                            network.setPeerName(group.getClientList().iterator().next().deviceName);
                         } catch (NullPointerException | NoSuchElementException e) {
                             e.printStackTrace();
                         }
