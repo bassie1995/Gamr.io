@@ -1,5 +1,6 @@
 package nl.verhoogenvansetten.gamrio.games.sudoku;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -9,6 +10,7 @@ import android.view.LayoutInflater;
 import nl.verhoogenvansetten.gamrio.R;
 
 public class SudokuNumberFragment extends DialogFragment {
+    @SuppressLint("InflateParams")
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());

@@ -1,5 +1,6 @@
 package nl.verhoogenvansetten.gamrio.games.sudoku;
 
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import java.util.Random;
@@ -52,10 +53,11 @@ public class SudokuLogic {
         return res;
     }
 
+    @Nullable
     public static int[][] removeNumbers(int[][] sudoku, int i){
         if(i >= 64){
             return null;
-        }else if(i%2 == 0){
+        }else if(i%2 == 0 && i > 0){
             i--;
         }
         int amountRemoved = 0;
