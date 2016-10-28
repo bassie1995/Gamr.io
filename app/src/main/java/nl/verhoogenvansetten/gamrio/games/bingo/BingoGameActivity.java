@@ -6,10 +6,8 @@ import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,14 +17,16 @@ import nl.verhoogenvansetten.gamrio.GameCompat;
 import nl.verhoogenvansetten.gamrio.R;
 import nl.verhoogenvansetten.gamrio.util.network.Network;
 
+
 public class BingoGameActivity extends GameCompat {
+
 
     Network network;
     int ID = 5;
 
     public Random random = new Random();
-    private int num, lineCount, otherPlayerIineCount;
-    private String temp, otherPlayerTemp, resultMessage, buttonsID;
+    private int num, lineCount;
+    private String temp, resultMessage, otherPlayerLineCount;
     public int[][] elements=new int[5][5];
 
 
@@ -44,11 +44,13 @@ public class BingoGameActivity extends GameCompat {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bingo);
 
+        // Network connection
         network = Network.getInstance();
 
         define_buttons();
     }
 
+    // Make buttons and put random numbers in them
     public void define_buttons() {
         buttons = new ArrayList<>();
 
@@ -56,6 +58,7 @@ public class BingoGameActivity extends GameCompat {
             Button button = (Button) findViewById(id);
             num = random.nextInt(39) + 1;
 
+            // Make the numbers don't duplicated
             while (buttons.contains(num)) {
                 num = random.nextInt(39) + 1;
             }
@@ -64,15 +67,16 @@ public class BingoGameActivity extends GameCompat {
         }
     }
 
+    // If player click the button, it changed and send the number to other player
     public void onClick(View v) {
         Button b = (Button) v;
         b.setClickable(false);
+        temp = b.getText().toString();
         findPosition(b);
 
         b.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.md_red_a200), PorterDuff.Mode.MULTIPLY);
         b.setTextColor(ContextCompat.getColor(this, R.color.md_white));
 
-        temp = b.getText().toString();
         network.send(ID, temp);
 
         lineCount=checkLine();
@@ -80,11 +84,13 @@ public class BingoGameActivity extends GameCompat {
         network.send(ID, lineCount+"");
     }
 
+    // Make a virtual table to mark which button is clicked
     public void findPosition(View v) {
         int position= buttons.indexOf(Integer.parseInt(temp));
-        elements[position/5][position%5]=1;
+         elements[position/5][position%5]=1;
     }
 
+    // Chenk how many lines are exist
     public int checkLine(){
         int lineCount=0;
         for(int i=0; i<5; ++i) {
@@ -125,22 +131,23 @@ public class BingoGameActivity extends GameCompat {
         return lineCount;
     }
 
+    // Is someone make five line bingo, the game is over
     public void isGameOver(int lineCount){
         if(lineCount>=5) {
-            if(lineCount==otherPlayerIineCount) {
+            if(lineCount==Integer.parseInt(otherPlayerLineCount)) {
                 resultMessage = "Draw!";
+                network.send(ID,"Draw!");
                 showResult();
             }
             else{
                 resultMessage = "You Win!";
+                network.send(ID,"You Lose!!");
                 showResult();
             }
-        }else if(otherPlayerIineCount>5){
-            resultMessage = "You Lose!";
-            showResult();
         }
     }
 
+    // if the game is over, show the dialog
     public void showResult(){
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(BingoGameActivity.this);
         alertDialogBuilder.setTitle("GAME OVER");
@@ -166,17 +173,23 @@ public class BingoGameActivity extends GameCompat {
         alertDialog.show();
     }
 
-    public void update(String data) {
-        // this.otherPlayerLineCount=lineCount;
-        // this.otherPlayerTemp=temp;
+    public void sendNumberClicked(){
+        if(buttons.contains(temp)){
+            int index = buttons.indexOf(temp);
 
-        if(buttons.contains(otherPlayerTemp)){
-            int index = buttons.indexOf(otherPlayerTemp);
             elements[index/5][index%5]=1;
             Button button = (Button) findViewById(getResources().getIdentifier("button"+ String.valueOf(index+1),"id" ,getPackageName()));
             button.performClick();
             button.setClickable(false);
+
+            network.send(ID,"Other player selected "+temp);
         }
+    }
+
+    public void update(String data) {
+        // this.otherPlayerLineCount=lineCount;
+
+        sendNumberClicked();
     }
 
     public void peerUp(){
