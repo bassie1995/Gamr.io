@@ -53,10 +53,62 @@ public class CheckersFragment extends Fragment {
             checkers = new Checkers(getActivity());
             //Since its a new game set all the Pieces to the starting positions
             checkers.setUpBoard();
+            //Setup the listener for the checkers object
+            checkers.setListener(new Checkers.CheckersListener(){
+                @Override
+                public void onUpdateGUI() {
+                    //todo: update GUI here
+                    updateGUI();
+                }
+            });
         } else {
             //Don't set the starting position
             //Get the saved game by loading the checkers object
             this.checkers = (Checkers)savedInstanceState.getSerializable("checkers");
+        }
+    }
+
+    private void updateGUI() {
+        //Add a piece image if the Square contains a piece
+        for(int x = 0 ; x < 8; x++){
+            for(int y = 0; y < 8; y++){
+                Piece piece = checkers.board[x][y].getPiece();
+                Square square = checkers.board[x][y].getSquare();
+                //If there is a piece on the square draw it
+                if(piece != null){
+                    if(piece.getSide() == Side.BLACK)
+                        if(piece.isCrowned())
+                            square.setImageResource(R.drawable.checkers_blackpiece_crowned);
+                        else
+                            square.setImageResource(R.drawable.checkers_blackpiece);
+                    else{
+                        if(piece.isCrowned())
+                            square.setImageResource(R.drawable.checkers_whitepiece_crowned);
+                        else
+                            square.setImageResource(R.drawable.checkers_whitepiece);
+                    }
+                    //Make sure the image fits the button
+                    square.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                }
+                //if there isnt a piece clear the drawings.
+                else{
+                    //Set the image to transparent
+                    square.setImageResource(android.R.color.transparent);
+                }
+                //Set the square background color in case it was selected
+                square = setDefaultSquareBackgroundColor(square, x, y);
+                //Save
+                checkers.board[x][y].setSquare(square);
+            }
+        }
+        //Set the background color of the square to red if a square has been selected
+        Piece piece = checkers.getSelectedPiece();
+        if(piece != null){
+            Square selectedSquare = checkers.board[piece.getPosX()][piece.getPosY()].getSquare();
+            //Make the background of the square red if the square is selected
+            selectedSquare.setBackgroundColor(Color.RED);
+            //Save the square
+            checkers.board[piece.getPosX()][piece.getPosY()].setSquare(selectedSquare);
         }
     }
 
@@ -94,35 +146,8 @@ public class CheckersFragment extends Fragment {
                 checkers.board[x][y].setSquare(square);
             }
         }
-
-        //Add a piece image if they contain pieces
-        for(int x = 0 ; x < 8; x++){
-            for(int y = 0; y < 8; y++){
-                Piece piece = checkers.board[x][y].getPiece();
-                Square square = checkers.board[x][y].getSquare();
-                if(piece != null){
-                    if(piece.getSide() == Side.BLACK)
-                        if(piece.isCrowned())
-                            square.setImageResource(R.drawable.checkers_blackpiece_crowned);
-                        else
-                            square.setImageResource(R.drawable.checkers_blackpiece);
-                    else{
-                        if(piece.isCrowned())
-                            square.setImageResource(R.drawable.checkers_whitepiece_crowned);
-                        else
-                            square.setImageResource(R.drawable.checkers_whitepiece);
-                    }
-                    //Make sure the image fits the button
-                    square.setScaleType(ImageView.ScaleType.FIT_CENTER);
-                } else{
-                    square.setImageResource(android.R.color.transparent);
-                }
-                //Save
-                checkers.board[x][y].setSquare(square);
-            }
-        }
-
-
+        //Update the GUI to draw the pieces.
+        updateGUI();
         return view;
     }
 
@@ -164,27 +189,9 @@ public class CheckersFragment extends Fragment {
     }
 
     private Square createNewSquare(final int x, final int y){
-        final Square newSquare = new Square(getActivity(), -1, x, y);
+        Square newSquare = new Square(getActivity(), -1, x, y);
         //Set the color of the button based on the location
-        int remainder = -1;
-        if((x % 2) == 0)
-            if((y % 2) == 0) {
-                newSquare.setBackgroundColor(Color.WHITE);
-                newSquare.setColor(Color.WHITE);
-            }
-            else{
-                newSquare.setBackgroundColor(Color.BLACK);
-                newSquare.setColor(Color.BLACK);
-            }
-        else
-            if((y % 2) == 0) {
-                newSquare.setBackgroundColor(Color.BLACK);
-                newSquare.setColor(Color.BLACK);
-            }
-            else {
-                newSquare.setBackgroundColor(Color.WHITE);
-                newSquare.setColor(Color.WHITE);
-            }
+        newSquare = setDefaultSquareBackgroundColor(newSquare, x, y);
         //Add the eventlistener for the black squares only. Since those are the only squares
         // which can contain pieces.
         if(newSquare.getColor() == Color.BLACK){
@@ -206,5 +213,27 @@ public class CheckersFragment extends Fragment {
         newSquare.setLayoutParams(lp);
 
         return newSquare;
+    }
+
+    private Square setDefaultSquareBackgroundColor(Square square, int x, int y) {
+        if((x % 2) == 0)
+            if((y % 2) == 0) {
+                square.setBackgroundColor(Color.WHITE);
+                square.setColor(Color.WHITE);
+            }
+            else{
+                square.setBackgroundColor(Color.BLACK);
+                square.setColor(Color.BLACK);
+            }
+        else
+        if((y % 2) == 0) {
+            square.setBackgroundColor(Color.BLACK);
+            square.setColor(Color.BLACK);
+        }
+        else {
+            square.setBackgroundColor(Color.WHITE);
+            square.setColor(Color.WHITE);
+        }
+        return square;
     }
 }

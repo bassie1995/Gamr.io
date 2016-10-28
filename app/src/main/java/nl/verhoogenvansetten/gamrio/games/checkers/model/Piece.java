@@ -11,6 +11,14 @@ package nl.verhoogenvansetten.gamrio.games.checkers.model;
     int posX = -1;
     int posY = -1;
 
+    public int getPosX() {
+        return posX;
+    }
+
+    public int getPosY() {
+        return posY;
+    }
+
     public boolean isCrowned() {
         return crowned;
     }

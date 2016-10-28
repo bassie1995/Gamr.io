@@ -25,8 +25,20 @@ public class Checkers implements Serializable {
     private Piece selectedPiece = null;
     private int availableMoves;
 
+    //Interface for callback functions
+    public interface CheckersListener {
+        public void onUpdateGUI();
+    }
+    //Listener
+    private CheckersListener listener;
+
+    public void setListener(CheckersListener listener) {
+        this.listener = listener;
+    }
+
     public Checkers(Context context) {
         //Instantiate the variables
+        this.listener = null;
         this.context = context;
         this.turn = Side.BLACK;
         //Todo remove debug line
@@ -87,10 +99,28 @@ public class Checkers implements Serializable {
                         }
                         //But if we can't jump with one of our other pieces
                         else{
-                            //Check if we can step to the selected boardposition
-                            if (canStepToPos(this.selectedPiece, posX, posY)){
-                                //When we can, step to the selected boardposition
-                                step(this.selectedPiece, posX, posY);
+                            //Check if the piece can step to a position
+                            if (stepsAvailableForPiece(selectedPiece)){
+                                //Check if we can step to the selected boardposition
+                                if (canStepToPos(this.selectedPiece, posX, posY)){
+                                    //When we can, step to the selected boardposition
+                                    step(this.selectedPiece, posX, posY);
+                                }
+                                //We can't step to that position
+                                else{
+                                    showMessage("Invalid step");
+                                }
+                            }
+                            //No steps available for piece
+                            else{
+                                //Inform player
+                                showMessage("No steps available for this piece");
+                                //Save the piece
+                                savePiece(selectedPiece);
+                                //Deselect the piece
+                                this.selectedPiece = null;
+                                //Update the interface
+                                this.updateGUI();
                             }
                         }
                     }
@@ -151,6 +181,20 @@ public class Checkers implements Serializable {
                 nextTurn();
             }
         }
+    }
+
+    private boolean stepsAvailableForPiece(Piece selectedPiece) {
+        boolean stepsAvailable = false;
+        if (canStepToPos(selectedPiece, selectedPiece.posX+1, selectedPiece.posY +1))
+            stepsAvailable = true;
+        else if (canStepToPos(selectedPiece, selectedPiece.posX+1, selectedPiece.posY -1))
+            stepsAvailable = true;
+        else if (canStepToPos(selectedPiece, selectedPiece.posX-1, selectedPiece.posY +1))
+            stepsAvailable = true;
+        else if (canStepToPos(selectedPiece, selectedPiece.posX-1, selectedPiece.posY -1))
+            stepsAvailable = true;
+
+        return stepsAvailable;
     }
 
     private void savePiece(Piece piece) {
@@ -249,8 +293,13 @@ public class Checkers implements Serializable {
     }
 
     private void updateGUI() {
-        //todo implement
-        //Change the ImageButton background color
+        //Fire the event
+        if(listener != null){
+            listener.onUpdateGUI();
+        }
+        else{
+            showMessage("Error: The listener was not set");
+        }
     }
 
     private boolean jumpsAvailableForPiece(Piece selectedPiece) {
@@ -463,7 +512,7 @@ public class Checkers implements Serializable {
         //todo: Send the game over the network
     }
 
-    Side getWinningSide(){
+    private Side getWinningSide(){
         //Returns the winning side if applicable. Returns null if there's not a winner yet.
         boolean whiteWon = true;
         boolean blackWon = true;
@@ -481,7 +530,6 @@ public class Checkers implements Serializable {
             return null;
         }
     }
-
 
     public void setUpBoard(){
         // place the white pieces
@@ -511,5 +559,9 @@ public class Checkers implements Serializable {
         board[2][5].piece = new BlackPiece(2, 5);
         board[4][5].piece = new BlackPiece(4, 5);
         board[6][5].piece = new BlackPiece(6, 5);
+    }
+
+    public Piece getSelectedPiece() {
+        return selectedPiece;
     }
 }
