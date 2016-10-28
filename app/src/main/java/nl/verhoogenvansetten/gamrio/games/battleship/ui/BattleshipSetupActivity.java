@@ -41,11 +41,11 @@ public class BattleshipSetupActivity extends GameCompat {
 
         network = Network.getInstance();
 
-        mShips[0] = new Ship(5);
-        mShips[1] = new Ship(4);
-        mShips[2] = new Ship(3);
-        mShips[3] = new Ship(3);
-        mShips[4] = new Ship(2);
+        mShips[0] = new Ship(5, getString(R.string.carrier));
+        mShips[1] = new Ship(4, getString(R.string.battleship));
+        mShips[2] = new Ship(3, getString(R.string.cruiser));
+        mShips[3] = new Ship(3, getString(R.string.submarine));
+        mShips[4] = new Ship(2, getString(R.string.destroyer));
         mCurrentShip = 0;
         mShipNum = 0;
     }
@@ -73,6 +73,7 @@ public class BattleshipSetupActivity extends GameCompat {
                 Toast.makeText(this, getString(R.string.done_battleship), Toast.LENGTH_LONG).show();
             }
             if (currentShipSetupDone()) {
+                Toast.makeText(this, mShips[mCurrentShip].getName() + " done", Toast.LENGTH_SHORT).show();
                 mShipNum = 0;
                 mCurrentShip++;
             }
@@ -137,7 +138,7 @@ public class BattleshipSetupActivity extends GameCompat {
             b.getBackground().clearColorFilter();
             b.setClickable(true);
         }
-        mShips[mCurrentShip].setCoordinates(new int[mShips[mCurrentShip].getLength()]);
+        //mShips[mCurrentShip].setCoordinates(new int[mShips[mCurrentShip].getLength()]);
         mCurrentShip = 0;
         mShipNum = 0;
         mSetupDone = false;

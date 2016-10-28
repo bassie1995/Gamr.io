@@ -56,15 +56,15 @@ public class BattleshipGameActivity extends GameCompat {
         int[] destroyer = startIntent.getIntArrayExtra(getString(R.string.destroyer));
         boolean mDoneSecond = startIntent.getBooleanExtra(getString(R.string.opponent_done), true);
 
-        mShips[0] = new Ship(5);
+        mShips[0] = new Ship(5, getString(R.string.carrier));
         mShips[0].setButtons(carrier);
-        mShips[1] = new Ship(4);
+        mShips[1] = new Ship(4, getString(R.string.battleship));
         mShips[1].setButtons(battleship);
-        mShips[2] = new Ship(3);
+        mShips[2] = new Ship(3, getString(R.string.cruiser));
         mShips[2].setButtons(cruiser);
-        mShips[3] = new Ship(3);
+        mShips[3] = new Ship(3, getString(R.string.submarine));
         mShips[3].setButtons(submarine);
-        mShips[4] = new Ship(2);
+        mShips[4] = new Ship(2, getString(R.string.destroyer));
         mShips[4].setButtons(destroyer);
 
         if (mDoneSecond) {

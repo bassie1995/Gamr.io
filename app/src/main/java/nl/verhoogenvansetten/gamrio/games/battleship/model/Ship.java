@@ -6,11 +6,13 @@ package nl.verhoogenvansetten.gamrio.games.battleship.model;
  */
 
 public class Ship {
+    private String name;
     private int length;
     private int[] coordinates;
     private int[] buttons;
 
-    public Ship(int length) {
+    public Ship(int length, String name) {
+        this.name = name;
         this.length = length;
         this.coordinates = new int[length];
         this.buttons = new int[length];
@@ -34,5 +36,9 @@ public class Ship {
 
     public void setButtons(int[] buttons) {
         this.buttons = buttons;
+    }
+
+    public String getName() {
+        return name;
     }
 }
