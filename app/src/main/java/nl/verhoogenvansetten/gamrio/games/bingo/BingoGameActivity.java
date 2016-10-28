@@ -168,8 +168,8 @@ public class BingoGameActivity extends GameCompat {
     public void updateButtonAndLine(){
         Toast.makeText(this,"Other player selected "+temp,Toast.LENGTH_SHORT).show();
 
-        if (buttons.contains(temp)) {
-            int index = buttons.indexOf(temp);
+        if (buttons.contains(Integer.parseInt(temp))) {
+            int index = buttons.indexOf(Integer.parseInt(temp));
 
             elements[index / 5][index % 5] = 1;
             Button button = (Button) findViewById(getResources().getIdentifier("button" + String.valueOf(index + 1), "id", getPackageName()));
@@ -206,11 +206,21 @@ public class BingoGameActivity extends GameCompat {
     }
 
     public void peerUp(){
-        Snackbar.make(findViewById(R.id.content_four_in_arow), "Peer Down!!", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
-        running = false;
+
     }
     public void peerDown(){
-        running = true;
+
+    }
+
+    @Override
+    public void onPause() {
+        network.unregisterGame(ID);
+        super.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        network.registerGame(ID, this);
+        super.onResume();
     }
 }
