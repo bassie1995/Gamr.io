@@ -9,6 +9,7 @@ import java.io.Serializable;
 
 import nl.verhoogenvansetten.gamrio.games.checkers.ui.Square;
 import nl.verhoogenvansetten.gamrio.model.Game;
+import nl.verhoogenvansetten.gamrio.util.MessageUtil;
 
 /**
  * Created by Jori on 13-10-2016.
@@ -89,7 +90,7 @@ public class Checkers implements Serializable {
                     else {
                         //Check if can jump with one of our pieces
                         if(jumpsAvailAble(this.ourSide)){
-                            showMessage("Jumps are available");
+                            MessageUtil.showMessage(context, "Jumps are available");
                             //Save the piece
                             savePiece(this.selectedPiece);
                             //Deselect the piece
@@ -108,13 +109,13 @@ public class Checkers implements Serializable {
                                 }
                                 //We can't step to that position
                                 else{
-                                    showMessage("Invalid step");
+                                    MessageUtil.showMessage(context, "Invalid step");
                                 }
                             }
                             //No steps available for piece
                             else{
                                 //Inform player
-                                showMessage("No steps available for this piece");
+                                MessageUtil.showMessage(context, "No steps available for this piece");
                                 //Save the piece
                                 savePiece(selectedPiece);
                                 //Deselect the piece
@@ -139,13 +140,13 @@ public class Checkers implements Serializable {
                         //The piece is not on our side
                         else{
                             //Inform player
-                            showMessage("Please select a piece of your own side");
+                            MessageUtil.showMessage(context, "Please select a piece of your own side");
                         }
                     }
                     //There is not piece at the selected boardposition
                     else{
                         //Inform player
-                        showMessage("Please select a piece");
+                        MessageUtil.showMessage(context, "Please select a piece");
                     }
                 }
             }
@@ -157,7 +158,7 @@ public class Checkers implements Serializable {
         //If it's not our turn
         else{
             //Inform the player
-            showMessage("Wait for your turn");
+            MessageUtil.showMessage(context, "Wait for your turn");
         }
 
         //At the end of every turn check if there are no more moves
@@ -165,7 +166,7 @@ public class Checkers implements Serializable {
             //Check if there is a winner
             if(getWinningSide() != null){
                 //If there is a winner, inform the player.
-                showMessage(getWinningSide().toString() + " is the winner with the score of " +
+                MessageUtil.showMessage(context, getWinningSide().toString() + " is the winner with the score of " +
                 this.score);
                 //Add the score to the highscores when the player is the winner
                 if(getWinningSide() == ourSide){
@@ -284,13 +285,6 @@ public class Checkers implements Serializable {
             return false;
     }
 
-    private void showMessage(String s) {
-        if(s != null){
-            CharSequence text = (CharSequence)s;
-            Toast toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
-            toast.show();
-        }
-    }
 
     private void updateGUI() {
         //Fire the event
@@ -298,7 +292,7 @@ public class Checkers implements Serializable {
             listener.onUpdateGUI();
         }
         else{
-            showMessage("Error: The listener was not set");
+            MessageUtil.showMessage(context, "Error: The listener was not set");
         }
     }
 
