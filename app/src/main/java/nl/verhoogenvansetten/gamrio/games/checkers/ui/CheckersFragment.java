@@ -3,7 +3,6 @@ package nl.verhoogenvansetten.gamrio.games.checkers.ui;
 import android.app.Fragment;
 import android.content.Context;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 
 import android.support.v7.widget.GridLayout;
@@ -12,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import nl.verhoogenvansetten.gamrio.R;
 import nl.verhoogenvansetten.gamrio.games.checkers.model.Checkers;
@@ -24,7 +22,12 @@ public class CheckersFragment extends Fragment {
     float scale;
     Checkers checkers = null;
     GridLayout gl = null;
-    private OnFragmentInteractionListener mListener;
+    private OnFragmentInteractionListener listener;
+
+    public interface OnFragmentInteractionListener {
+        public void onSendData(Checkers checkers);
+        public void onEndGame(Checkers checkers);
+    }
 
     public CheckersFragment() {
     }
@@ -38,7 +41,7 @@ public class CheckersFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+            listener = (OnFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -56,9 +59,14 @@ public class CheckersFragment extends Fragment {
             //Setup the listener for the checkers object
             checkers.setListener(new Checkers.CheckersListener(){
                 @Override
-                public void onUpdateGUI() {
-                    //todo: update GUI here
-                    updateGUI();
+                public void onUpdateGUI() {updateGUI();}
+                @Override
+                public void onSendData() {
+                    sendData();
+                }
+                @Override
+                public void onEndGame() {
+                    endGame();
                 }
             });
         } else {
@@ -66,6 +74,15 @@ public class CheckersFragment extends Fragment {
             //Get the saved game by loading the checkers object
             this.checkers = (Checkers)savedInstanceState.getSerializable("checkers");
         }
+    }
+
+    private void endGame() {
+        //todo end the game
+        listener.onEndGame(this.checkers);
+    }
+
+    private void sendData() {
+        listener.onSendData(this.checkers);
     }
 
     private void updateGUI() {
@@ -152,14 +169,6 @@ public class CheckersFragment extends Fragment {
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        if(savedInstanceState != null){
-
-        }
-    }
-
-    @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         //Save fragmentstate by saving the checkers object
@@ -169,23 +178,7 @@ public class CheckersFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
-    }
-
-
-    public interface OnFragmentInteractionListener {
-        /**
-         * This interface must be implemented by activities that contain this
-         * fragment to allow an interaction in this fragment to be communicated
-         * to the activity and potentially other fragments contained in that
-         * activity.
-         * <p>
-         * See the Android Training lesson <a href=
-         * "http://developer.android.com/training/basics/fragments/communicating.html"
-         * >Communicating with Other Fragments</a> for more information.
-         */
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        listener = null;
     }
 
     private Square createNewSquare(final int x, final int y){
@@ -197,10 +190,6 @@ public class CheckersFragment extends Fragment {
         if(newSquare.getColor() == Color.BLACK){
             newSquare.setOnClickListener(new Square.OnClickListener(){
                 public void onClick(View v){
-                    //CharSequence text = "Button " + newSquare.getPosX()  + " " +
-                    //        newSquare.getPosY() + " Pressed";
-                    //Toast toast = Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT);
-                    //toast.show();
                     checkers.turn(x, y);
                 }
             });

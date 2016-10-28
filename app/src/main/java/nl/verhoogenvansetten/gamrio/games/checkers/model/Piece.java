@@ -1,10 +1,12 @@
 package nl.verhoogenvansetten.gamrio.games.checkers.model;
 
+import java.io.Serializable;
+
 /**
  * Created by Jori on 13-10-2016.
  */
 
- public class Piece {
+ public class Piece implements Serializable{
 
     private boolean crowned = false;
     private Side side = null;

@@ -3,6 +3,7 @@ package nl.verhoogenvansetten.gamrio.games.checkers.model;
 import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.Nullable;
 import android.widget.Toast;
 
 import java.io.Serializable;
@@ -17,8 +18,7 @@ import nl.verhoogenvansetten.gamrio.util.MessageUtil;
  */
 
 public class Checkers implements Serializable {
-
-    private Context context;
+    private  Context context;
     private Side turn;
     private Side ourSide;
     public BoardPosition[][] board;
@@ -26,9 +26,12 @@ public class Checkers implements Serializable {
     private Piece selectedPiece = null;
     private int availableMoves;
 
+
     //Interface for callback functions
     public interface CheckersListener {
         public void onUpdateGUI();
+        public void onSendData();
+        public void onEndGame();
     }
     //Listener
     private CheckersListener listener;
@@ -42,7 +45,7 @@ public class Checkers implements Serializable {
         this.listener = null;
         this.context = context;
         this.turn = Side.BLACK;
-        //Todo remove debug line
+        //Todo remove debug line or set from preference
         ourSide = Side.BLACK;
         this.availableMoves = 1;
         //Default score
@@ -202,10 +205,6 @@ public class Checkers implements Serializable {
         board[piece.posX][piece.posY].setPiece(piece);
     }
 
-    private void endGame() {
-        //todo implement
-    }
-
     private boolean ourPiece(Side ourSide, int x, int y) {
         if(board[x][y].piece.getSide() == ourSide)
             return true;
@@ -283,17 +282,6 @@ public class Checkers implements Serializable {
             return true;
         else
             return false;
-    }
-
-
-    private void updateGUI() {
-        //Fire the event
-        if(listener != null){
-            listener.onUpdateGUI();
-        }
-        else{
-            MessageUtil.showMessage(context, "Error: The listener was not set");
-        }
     }
 
     private boolean jumpsAvailableForPiece(Piece selectedPiece) {
@@ -503,7 +491,38 @@ public class Checkers implements Serializable {
         this.score = this.score -5;
         //Update the GUI
         updateGUI();
-        //todo: Send the game over the network
+        //Send the game over the network
+        sendGame();
+    }
+
+    private void sendGame() {
+        //Fire the event
+        if(listener != null){
+            listener.onSendData();
+        }
+        else{
+            MessageUtil.showMessage(context, "Error: The listener was not set");
+        }
+    }
+
+    private void updateGUI() {
+        //Fire the event
+        if(listener != null){
+            listener.onUpdateGUI();
+        }
+        else{
+            MessageUtil.showMessage(context, "Error: The listener was not set");
+        }
+    }
+
+    private void endGame() {
+        //Fire the event
+        if(listener != null){
+            listener.onEndGame();
+        }
+        else{
+            MessageUtil.showMessage(context, "Error: The listener was not set");
+        }
     }
 
     private Side getWinningSide(){
@@ -557,5 +576,9 @@ public class Checkers implements Serializable {
 
     public Piece getSelectedPiece() {
         return selectedPiece;
+    }
+
+    public void setContext(Context context) {
+        this.context = context;
     }
 }

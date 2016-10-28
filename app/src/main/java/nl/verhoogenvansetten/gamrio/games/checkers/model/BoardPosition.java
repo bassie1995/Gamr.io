@@ -1,14 +1,17 @@
 package nl.verhoogenvansetten.gamrio.games.checkers.model;
 
+import java.io.Serializable;
+
 import nl.verhoogenvansetten.gamrio.games.checkers.ui.Square;
 
 /**
  * Created by Jori on 24-10-2016.
  */
 
-public class BoardPosition {
+public class BoardPosition implements Serializable {
     Piece piece = null;
-    Square square;
+    //Dont serialize, since ImageButtons can't be serialized.
+    transient Square square;
 
 
     public BoardPosition(Piece piece, Square square) {
