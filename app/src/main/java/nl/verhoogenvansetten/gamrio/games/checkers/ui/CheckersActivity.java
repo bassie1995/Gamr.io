@@ -1,30 +1,21 @@
 package nl.verhoogenvansetten.gamrio.games.checkers.ui;
 
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
-import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.TextView;
-
-import org.xmlpull.v1.XmlSerializer;
+import android.widget.Toast;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.OutputStream;
-import java.io.Writer;
 
 import nl.verhoogenvansetten.gamrio.GameCompat;
 import nl.verhoogenvansetten.gamrio.R;
 import nl.verhoogenvansetten.gamrio.games.checkers.model.BoardPosition;
 import nl.verhoogenvansetten.gamrio.games.checkers.model.Checkers;
-import nl.verhoogenvansetten.gamrio.util.MessageUtil;
 import nl.verhoogenvansetten.gamrio.util.network.Network;
 
 /**
@@ -90,8 +81,7 @@ public class CheckersActivity extends GameCompat implements CheckersFragment.OnF
 
 
     public void update(String data) {
-        MessageUtil.showMessage(getApplicationContext(), "Data received:");
-        MessageUtil.showMessage(getApplicationContext(), data);
+        Toast.makeText(this, "Data received: " + data, Toast.LENGTH_SHORT).show();
 
         //Get the checkers fragment
         CheckersFragment cf = (CheckersFragment) getFragmentManager().findFragmentByTag(
@@ -110,12 +100,12 @@ public class CheckersActivity extends GameCompat implements CheckersFragment.OnF
 
     @Override
     public void peerDown() {
-        MessageUtil.showMessage(getApplicationContext(), "Peer down");
+        Toast.makeText(this, "Peer down", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void peerUp() {
-        MessageUtil.showMessage(getApplicationContext(), "Peer up");
+        Toast.makeText(this, "Peer up", Toast.LENGTH_SHORT).show();
     }
 
 
@@ -126,10 +116,10 @@ public class CheckersActivity extends GameCompat implements CheckersFragment.OnF
 
         //Send the checkers object containing the current game
         if(network.send(ID, encodedCheckersBoard)){
-            MessageUtil.showMessage(getApplicationContext(), "Send the game");
+            Toast.makeText(this, "Send the game", Toast.LENGTH_SHORT).show();
         }
         else {
-            MessageUtil.showMessage(getApplicationContext(), "Something went wrong sending the game");
+            Toast.makeText(this, "Something went wrong sending the game", Toast.LENGTH_SHORT).show();
         }
     }
 

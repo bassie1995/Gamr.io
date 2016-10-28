@@ -1,16 +1,9 @@
 package nl.verhoogenvansetten.gamrio.games.checkers.model;
 
 import android.content.Context;
-import android.os.Parcel;
-import android.os.Parcelable;
-import android.support.annotation.Nullable;
 import android.widget.Toast;
 
 import java.io.Serializable;
-
-import nl.verhoogenvansetten.gamrio.games.checkers.ui.Square;
-import nl.verhoogenvansetten.gamrio.model.Game;
-import nl.verhoogenvansetten.gamrio.util.MessageUtil;
 
 /**
  * Created by Jori on 13-10-2016.
@@ -93,7 +86,7 @@ public class Checkers implements Serializable {
                     else {
                         //Check if can jump with one of our pieces
                         if(jumpsAvailAble(this.ourSide)){
-                            MessageUtil.showMessage(context, "Jumps are available");
+                            Toast.makeText(context, "Jumps are available", Toast.LENGTH_SHORT).show();
                             //Save the piece
                             savePiece(this.selectedPiece);
                             //Deselect the piece
@@ -112,13 +105,13 @@ public class Checkers implements Serializable {
                                 }
                                 //We can't step to that position
                                 else{
-                                    MessageUtil.showMessage(context, "Invalid step");
+                                    Toast.makeText(context, "Invalid step", Toast.LENGTH_SHORT).show();
                                 }
                             }
                             //No steps available for piece
                             else{
                                 //Inform player
-                                MessageUtil.showMessage(context, "No steps available for this piece");
+                                Toast.makeText(context, "No steps available for this piece", Toast.LENGTH_SHORT).show();
                                 //Save the piece
                                 savePiece(selectedPiece);
                                 //Deselect the piece
@@ -143,13 +136,13 @@ public class Checkers implements Serializable {
                         //The piece is not on our side
                         else{
                             //Inform player
-                            MessageUtil.showMessage(context, "Please select a piece of your own side");
+                            Toast.makeText(context, "Please select a piece of your own side", Toast.LENGTH_SHORT).show();
                         }
                     }
                     //There is not piece at the selected boardposition
                     else{
                         //Inform player
-                        MessageUtil.showMessage(context, "Please select a piece");
+                        Toast.makeText(context, "Please select a piece", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -161,7 +154,7 @@ public class Checkers implements Serializable {
         //If it's not our turn
         else{
             //Inform the player
-            MessageUtil.showMessage(context, "Wait for your turn");
+            Toast.makeText(context, "Wait for your turn", Toast.LENGTH_SHORT).show();
         }
 
         //At the end of every turn check if there are no more moves
@@ -169,8 +162,7 @@ public class Checkers implements Serializable {
             //Check if there is a winner
             if(getWinningSide() != null){
                 //If there is a winner, inform the player.
-                MessageUtil.showMessage(context, getWinningSide().toString() + " is the winner with the score of " +
-                this.score);
+                Toast.makeText(context, getWinningSide().toString() + " is the winner with the score of " + this.score, Toast.LENGTH_SHORT).show();
                 //Add the score to the highscores when the player is the winner
                 if(getWinningSide() == ourSide){
                     //todo Abillity to enter name for score + add score to highscores
@@ -501,7 +493,7 @@ public class Checkers implements Serializable {
             listener.onSendData();
         }
         else{
-            MessageUtil.showMessage(context, "Error: The listener was not set");
+            Toast.makeText(context, "Error: The listener was not set", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -511,7 +503,7 @@ public class Checkers implements Serializable {
             listener.onUpdateGUI();
         }
         else{
-            MessageUtil.showMessage(context, "Error: The listener was not set");
+            Toast.makeText(context, "Error: The listener was not set", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -521,7 +513,7 @@ public class Checkers implements Serializable {
             listener.onEndGame();
         }
         else{
-            MessageUtil.showMessage(context, "Error: The listener was not set");
+            Toast.makeText(context, "Error: The listener was not set", Toast.LENGTH_SHORT).show();
         }
     }
 
