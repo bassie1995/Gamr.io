@@ -16,7 +16,6 @@ import nl.verhoogenvansetten.gamrio.R;
 import nl.verhoogenvansetten.gamrio.games.checkers.model.Checkers;
 import nl.verhoogenvansetten.gamrio.games.checkers.model.Piece;
 import nl.verhoogenvansetten.gamrio.games.checkers.model.Side;
-import nl.verhoogenvansetten.gamrio.util.MessageUtil;
 
 public class CheckersFragment extends Fragment {
     public final static String TAG = "Checkers fragment";

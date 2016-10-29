@@ -5,10 +5,6 @@
         android:title="Play game"
         android:icon="@drawable/ic_play_arrow_white_24dp"
         app:showAsAction="ifRoom" />
-    <item android:id="@+id/menu_restart_fourinrow"
-        android:title="Restart Game"
-        android:icon="@drawable/ic_sync_white_24dp"
-        app:showAsAction="ifRoom" />
     <item android:id="@+id/menu_settings_fourinrow"
         android:title="Settings"
         android:icon="@drawable/ic_settings_white_24dp"

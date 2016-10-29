@@ -54,6 +54,7 @@
         <activity
             android:name=".games.fourinrow.FourInARowActivity"
             android:label="@string/title_activity_four_in_arow"
+            android:parentActivityName=".GameListActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:exported="true" />
             <meta-data

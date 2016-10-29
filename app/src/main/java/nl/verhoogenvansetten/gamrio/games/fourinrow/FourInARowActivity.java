@@ -1,8 +1,10 @@
 package nl.verhoogenvansetten.gamrio.games.fourinrow;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,8 +27,6 @@ public class FourInARowActivity extends GameCompat {
     private boolean lock;
     private boolean running;
 
-    private int count = 0;
-
     private String localPlayer = "X";
     private String otherPlayer = "O";
 
@@ -36,18 +36,7 @@ public class FourInARowActivity extends GameCompat {
         setContentView(R.layout.activity_four_in_a_row);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //TODO add bar options
-                network.send(ID, "helloooo");
-                //dataView.setText(String.valueOf(network.getOtherGameID()));
-                //dataView.setText(network.getConnectedDeviceName());
-                //clearBoard();
-            }
-        });
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         dataView = (TextView) findViewById(R.id.dataview);
 
@@ -57,7 +46,7 @@ public class FourInARowActivity extends GameCompat {
 
         clearBoard();
 
-        unlock();
+        lock();
     }
 
     @Override
@@ -69,17 +58,12 @@ public class FourInARowActivity extends GameCompat {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId()) {
+        switch (item.getItemId()) {
             case R.id.menu_play_fourinrow:
-
-                return true;
-            case R.id.menu_restart_fourinrow:
-                clearBoard();
-                unlock();
-                sendRestart();
+                startGameDialog();
                 return true;
             case R.id.menu_settings_fourinrow:
-
+                getSupportActionBar().setIcon(R.drawable.ic_search_white_24dp);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -101,7 +85,7 @@ public class FourInARowActivity extends GameCompat {
         String x = String.valueOf(b.getTag().toString().charAt(1));
         String y = String.valueOf(b.getTag().toString().charAt(2));
 
-        if(setCoords(x, y, "X"))
+        if (setCoords(x, y, "X"))
             if (localWin(x, y)) {
                 dataView.setText("sending Win");
                 sendWin(x, y);
@@ -154,7 +138,7 @@ public class FourInARowActivity extends GameCompat {
     public void peerUp() {
         dataView.setText("peerUp");
         running = true;
-        sendBoard();
+        //sendBoard();
     }
 
     /**
@@ -183,13 +167,17 @@ public class FourInARowActivity extends GameCompat {
     }
 
     private void recvStart(String data) {
-
+        otherPlayer = String.valueOf(data.charAt(0));
+        clearBoard();
+        unlock();
+        dataView.setText("STARTED");
     }
 
     private void sendStart() {
         /** 4 to indicate that the game has started*/
         String message = "4\n";
-
+        message += localPlayer;
+        network.send(ID, message);
     }
 
     private void recvBoard(String data) {
@@ -274,37 +262,57 @@ public class FourInARowActivity extends GameCompat {
      * ---------------------------------------------------------------------------------------------
      */
 
+    private void startGameDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle("New Game")
+                .setMessage("Choose your sign")
+                .setCancelable(true)
+                .setNegativeButton("X", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        localPlayer = "X";
+                        startGame();
+                    }
+                })
+                .setPositiveButton("O", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        localPlayer = "O";
+                        startGame();
+                    }
+                })
+                .create()
+                .show();
+    }
+
+    private void startGame() {
+        clearBoard();
+        sendStart();
+        lock();
+    }
+
     private boolean localWin(String sx, String sy) {
-        if(true)
-        return false;
         int x = Integer.valueOf(sx);
         int y = Integer.valueOf(sy);
         int count = 1;
-        for(int dx = -1; dx <= 1; dx++)
-            for(int dy = -1; dy <= 1; dy++) {
-                while (checkRow(x, y, dx, dy) && count < 4)
-                    count++;
-                int nx = dx * -1;
-                int ny = dy * -1;
-                while (checkRow(x, y, nx, ny) && count < 4)
-                    count++;
-                if(count >= 4) {
+        for (int dx = -1; dx <= 0; dx++)
+            for (int dy = -1; dy <= 1 && (dx != 0 || dy != 0); dy++) {
+                count += checkRow(x, y, dx, dy);
+                count += checkRow(x, y, dx * -1, dy * -1);
+                if (count >= 4)
                     return true;
-                } else count = 1;
+                else
+                    count = 1;
             }
-
-
-
-        //TODO check win
         return false;
     }
 
-    private boolean checkRow(int x, int y, int dx, int dy) {
-        if(x + dx < 8 && x + dx >=0)
-            if(y + dy < 8 && y + dy >=0)
-                if(valueGrid[x+dx][y+dy].equals(localPlayer))
-                    return true;
-        return false;
+    private int checkRow(int x, int y, int dx, int dy) {
+        if (x + dx < 8 && x + dx >= 0)
+            if (y + dy < 8 && y + dy >= 0)
+                if (valueGrid[x + dx][y + dy].equals(localPlayer))
+                    return checkRow(x + 1, y + 1, dx, dy) + 1;
+        return 0;
 
     }
 
@@ -312,7 +320,7 @@ public class FourInARowActivity extends GameCompat {
         int x = Integer.valueOf(sx);
         int y = Integer.valueOf(sy);
 
-        if(!(valueGrid[x][y].equals(" "))) {
+        if (!(valueGrid[x][y].equals(" "))) {
             //dataView.setText("Square already filled \"" + valueGrid[x][y] + "\"");
             for (int i = 0; i < 8; i++)
                 for (int j = 0; j < 8; j++)
@@ -366,6 +374,10 @@ public class FourInARowActivity extends GameCompat {
     @Override
     public void onResume() {
         network.registerGame(ID, this);
+
+        if (network.getOtherGameID() == ID)
+            running = true;
+
         super.onResume();
     }
 
