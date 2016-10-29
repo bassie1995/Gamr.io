@@ -4,6 +4,7 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import java.util.Random;
+import java.util.Scanner;
 
 /**
  *  Class for generating and checking sudokus
@@ -72,8 +73,6 @@ public class SudokuLogic {
                 amountRemoved++;
             }
         }
-
-
         return sudoku;
     }
 
@@ -156,5 +155,27 @@ public class SudokuLogic {
             }
         }
         return true;
+    }
+
+    static String sudokuToString(int[][] sudoku){
+        StringBuilder sb = new StringBuilder();
+        for(int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                sb.append(sudoku[i][j]);
+            }
+        }
+        return sb.toString();
+    }
+
+    static int[][] stringToSudoku(String s){
+        int[][] sudoku = new int[9][9];
+        Scanner sc = new Scanner(s);
+        sc.useDelimiter("");
+        for(int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                sudoku[i][j] = Integer.parseInt(sc.next());
+            }
+        }
+        return sudoku;
     }
 }
