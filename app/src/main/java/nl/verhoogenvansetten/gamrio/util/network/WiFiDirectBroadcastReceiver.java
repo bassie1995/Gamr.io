@@ -54,6 +54,7 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
             if (info.isConnected()) {
                 //setup server
                 network.startServer();
+                network.setConnected(true);
 
                 mManager.requestGroupInfo(mChannel, new WifiP2pManager.GroupInfoListener() {
                     @Override
@@ -79,6 +80,7 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
                     e.printStackTrace();
                 }
                 network.setPeerName("");
+                network.setConnected(false);
             }
         }
     }
