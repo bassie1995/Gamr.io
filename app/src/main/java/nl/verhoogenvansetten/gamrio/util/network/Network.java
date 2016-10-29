@@ -82,6 +82,7 @@ public class Network {
     private Server server;
     private int otherGameID = 0;
     private String peerName = "";
+    private boolean isConnected;
 
     public static final int BATTLESHIP = 1;
     public static final int BINGO = 2;
@@ -139,9 +140,9 @@ public class Network {
     public void unregisterGame(int id) {
         if (id == ID) {
             if (ID > 10) {
-                send(10, "\n" + "0");
+                send(10, "1\n" + "0");
             } else
-                send(0, "\n" + "0");
+                send(0, "1\n" + "0");
             if (ID >= 10)
                 onDestroy();
             ID = 0;
@@ -325,5 +326,13 @@ public class Network {
         } catch (NullPointerException e) {
             throw e;
         }
+    }
+
+    public boolean isConnected() {
+        return isConnected;
+    }
+
+    public void setConnected(boolean connected) {
+        isConnected = connected;
     }
 }
