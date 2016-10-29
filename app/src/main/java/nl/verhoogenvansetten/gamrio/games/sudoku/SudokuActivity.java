@@ -29,6 +29,8 @@ public class SudokuActivity extends GameCompat implements View.OnClickListener{
 
         network = Network.getInstance();
         network.registerGame(Network.SUDOKU, this);
+
+        network.send(Network.SUDOKU, "CONNECTED");
     }
 
     private void setupSudoku(int[][] s) {
