@@ -11,6 +11,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
+import nl.verhoogenvansetten.gamrio.ui.HighScoreActivity;
+
 /**
  * An activity representing a single Game detail screen. This
  * activity is only used narrow width devices. On tablet-size devices,
@@ -33,6 +35,17 @@ public class GameDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                  startActivity(new Intent(GameDetailActivity.this, GameList.getGame(getIntent().getIntExtra(GameDetailFragment.ARG_ITEM_ID, -1)).className));
+            }
+        });
+
+        //Create a fab for the highscores JD
+        FloatingActionButton highscoresFab = (FloatingActionButton) findViewById(R.id.highscores_fab);
+        highscoresFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(GameDetailActivity.this, HighScoreActivity.class);
+                intent.putExtra("ID", getIntent().getIntExtra(GameDetailFragment.ARG_ITEM_ID, -1));
+                startActivity(intent);
             }
         });
 

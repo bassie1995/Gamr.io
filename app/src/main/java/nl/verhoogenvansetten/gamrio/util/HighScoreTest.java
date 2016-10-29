@@ -25,10 +25,10 @@ public class HighScoreTest {
             //score.setPoints(random.nextInt(Integer.MAX_VALUE));
             score.setPoints(random.nextInt(1000));
             // Log.d("", "Adding score: " + score.getPlayerName() + " : " + score.getPoints());
-            HighScoreUtil.addScore(random.nextInt(4)+1, score);
+            HighScoreUtil.addScore(random.nextInt(7)+1, score);
         }
         //Getting highscores
-        for(int i = 1; i < 5 ; i++){
+        for(int i = 1; i < 8 ; i++){
             scores = HighScoreUtil.getHighScoresForGame(1, 300);
             for (Score score: scores) {
                 // Log.d("", "Score: " + score.getPlayerName() + " - " + score.getPoints());

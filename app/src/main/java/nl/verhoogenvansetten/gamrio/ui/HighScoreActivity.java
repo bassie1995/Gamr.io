@@ -50,6 +50,7 @@ public class HighScoreActivity extends Activity{
 
         //Get the adapter
         adapter = new HighScoreAdapter(HighScoreUtil.getHighScoresForGame(gameID, amountOfScores), this);
+        rv.setAdapter(adapter);
 
 
     }
