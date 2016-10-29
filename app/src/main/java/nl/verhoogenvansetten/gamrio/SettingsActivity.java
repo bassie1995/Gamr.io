@@ -148,7 +148,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 || SudokuPreferenceFragment.class.getName().equals(fragmentName)
                 || FourInRowPreferenceFragment.class.getName().equals(fragmentName)
                 || DotsAndBoxesPreferenceFragment.class.getName().equals(fragmentName)
-                || BingoPreferenceFragment.class.getName().equals(fragmentName);
+                || BingoPreferenceFragment.class.getName().equals(fragmentName)
+                || CheckersPreferenceFragment.class.getName().equals(fragmentName);
     }
 
     /**
@@ -368,4 +369,36 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             return super.onOptionsItemSelected(item);
         }
     }
+
+    /**
+     * This fragment shows data and sync preferences only. It is used when the
+     * activity is showing a two-pane settings UI.
+     */
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    public static class CheckersPreferenceFragment extends PreferenceFragment {
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            addPreferencesFromResource(R.xml.pref_checkers);
+            setHasOptionsMenu(true);
+
+            // to their values. When their values change, their summaries are
+            // updated to reflect the new value, per the Android Design
+            // guidelines.
+            bindPreferenceSummaryToValue(findPreference("pref_checkers_theme_list"));
+            bindPreferenceSummaryToValue(findPreference("pref_checkers_text_color_list"));
+            bindPreferenceSummaryToValue(findPreference("pref_checkers_text_size_list"));
+        }
+
+        @Override
+        public boolean onOptionsItemSelected(MenuItem item) {
+            int id = item.getItemId();
+            if (id == android.R.id.home) {
+                startActivity(new Intent(getActivity(), SettingsActivity.class));
+                return true;
+            }
+            return super.onOptionsItemSelected(item);
+        }
+    }
+
 }

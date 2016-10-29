@@ -81,11 +81,13 @@ public class CheckersFragment extends Fragment {
     }
 
     private void endGame() {
-        listener.onEndGame(this.checkers);
+        if(listener != null)
+            listener.onEndGame(this.checkers);
     }
 
     private void sendData() {
-        listener.onSendData(this.checkers);
+        if(listener != null)
+            listener.onSendData(this.checkers);
     }
 
     private void updateGUI() {
@@ -178,11 +180,6 @@ public class CheckersFragment extends Fragment {
         outState.putSerializable("checkers", this.checkers);
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        listener = null;
-    }
 
     private Square createNewSquare(final int x, final int y){
         Square newSquare = new Square(getActivity(), -1, x, y);
