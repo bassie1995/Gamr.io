@@ -30,4 +30,8 @@
         android:fragment="nl.verhoogenvansetten.gamrio.SettingsActivity$BingoPreferenceFragment"
         android:title="@string/pref_header_bingo" />
 
+    <header
+        android:fragment="nl.verhoogenvansetten.gamrio.SettingsActivity$CheckersPreferenceFragment"
+        android:title="@string/pref_header_checkers" />
+
 </preference-headers>

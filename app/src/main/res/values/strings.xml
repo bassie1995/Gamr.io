@@ -52,6 +52,7 @@
     <string name="pref_header_four_in_row">Four in a row</string>
     <string name="pref_header_dots_and_boxes">Dots and boxes</string>
     <string name="pref_header_bingo" translatable="false">Bingo</string>
+    <string name="pref_header_checkers" translatable="false">Checkers</string>
     <string name="pref_title_theme">Theme</string>
     <string name="pref_game_enable">Enable game-specific settings</string>
     <string name="favorite">Add to favorites</string>
