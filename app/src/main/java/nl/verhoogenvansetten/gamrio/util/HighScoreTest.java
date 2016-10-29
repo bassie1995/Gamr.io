@@ -40,5 +40,7 @@ public class HighScoreTest {
         }else{
             Log.d("", "Something went wrong deleting scores for game 1");
         }
+
+
     }
 }
