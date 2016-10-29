@@ -209,7 +209,7 @@ public class Network {
         else
             address = ip;
 
-        Client client = new Client(this, address, port, message);
+        Client client = new Client(this, ip, port, message);
         client.execute();
         return true;
     }

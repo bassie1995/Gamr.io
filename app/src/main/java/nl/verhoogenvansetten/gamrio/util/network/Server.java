@@ -16,7 +16,6 @@ import android.os.AsyncTask;
 
 class Server {
     static ServerSocket serverSocket;
-    private String message = "";
     private Network network;
 
     Server(Network network) {
@@ -76,6 +75,7 @@ class Server {
     private class SocketServerReplyTask extends AsyncTask<Void, Void, Void> {
 
         private Socket hostThreadSocket;
+        private String message = "";
         int cnt;
 
         SocketServerReplyTask(Socket socket, int c) {

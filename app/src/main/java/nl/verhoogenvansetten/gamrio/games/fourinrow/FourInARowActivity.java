@@ -85,7 +85,7 @@ public class FourInARowActivity extends GameCompat {
         String x = String.valueOf(b.getTag().toString().charAt(1));
         String y = String.valueOf(b.getTag().toString().charAt(2));
 
-        if (setCoords(x, y, "X"))
+        if (setCoords(x, y, localPlayer))
             if (localWin(x, y)) {
                 dataView.setText("sending Win");
                 sendWin(x, y);
@@ -224,7 +224,7 @@ public class FourInARowActivity extends GameCompat {
 
     private void recvCoord(String data) {
         String[] coords = data.split("\n", 3);
-        setCoords(coords[0], coords[1], "O");
+        setCoords(coords[0], coords[1], otherPlayer);
         unlock();
 //        dataView.append("unlock from recvcoord");
     }
