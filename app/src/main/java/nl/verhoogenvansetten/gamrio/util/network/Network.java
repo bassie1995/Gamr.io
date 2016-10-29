@@ -158,18 +158,22 @@ public class Network {
     }
 
     public static void connect(WifiP2pConfig config, final Activity activity) {
-        mManager.connect(mChannel, config, new WifiP2pManager.ActionListener() {
+        try {
+            mManager.connect(mChannel, config, new WifiP2pManager.ActionListener() {
 
-            @Override
-            public void onSuccess() {
-                Toast.makeText(activity, "Successfully connected", Toast.LENGTH_SHORT).show();
-            }
+                @Override
+                public void onSuccess() {
+                    Toast.makeText(activity, "Successfully connected", Toast.LENGTH_SHORT).show();
+                }
 
-            @Override
-            public void onFailure(int reason) {
-                Toast.makeText(activity, "Could not connect. Restart your wifi and try again.", Toast.LENGTH_SHORT).show();
-            }
-        });
+                @Override
+                public void onFailure(int reason) {
+                    Toast.makeText(activity, "Could not connect. Restart your wifi and try again.", Toast.LENGTH_SHORT).show();
+                }
+            });
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
     }
 
     public void enableWifi() {
@@ -205,7 +209,7 @@ public class Network {
         else
             address = ip;
 
-        Client client = new Client(this, address, port, message);
+        Client client = new Client(this, ip, port, message);
         client.execute();
         return true;
     }
@@ -256,22 +260,26 @@ public class Network {
     }
 
     void update(String data) {
-        data = data.substring(0, data.length()-1);
-        //if(data.charAt(0) == '\n')
-        //   data = data.substring(1);
-        String data2[] = data.split("\n", 2);
-        int id = Integer.valueOf(data2[0]);
+        try {
+            data = data.substring(0, data.length() - 1);
+            String data2[] = data.split("\n", 2);
+            int id = Integer.valueOf(data2[0]);
 
-        data = data2[1];
-        if (id == ID)
-            game.update(data);
-        else if (id == 10 || id == 0) {
-            id = Integer.valueOf(data.replace("\n", ""));
-            otherGameID = id;
+            data = data2[1];
             if (id == ID)
-                game.peerUp();
-            else if (id == 0)
-                game.peerDown();
+                game.update(data);
+            else if (id == 10 || id == 0) {
+                id = Integer.valueOf(data.replace("\n", ""));
+                otherGameID = id;
+                if (id == ID)
+                    game.peerUp();
+                else if (id == 0)
+                    game.peerDown();
+            }
+        } catch (StringIndexOutOfBoundsException e) {
+            Log.e("Network", data);
+            e.printStackTrace();
+            throw e;
         }
     }
 
