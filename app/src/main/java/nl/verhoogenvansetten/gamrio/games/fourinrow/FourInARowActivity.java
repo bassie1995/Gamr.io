@@ -337,7 +337,7 @@ public class FourInARowActivity extends GameCompat {
         else
             text = "E";
 
-        ((Button) findViewById(idGrid[x][y])).setText(text);
+        ((Button) findViewById(idGrid[x][y])).setText(player);
 
         valueGrid[x][y] = player;
         return true;

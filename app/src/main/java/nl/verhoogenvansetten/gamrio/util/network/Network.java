@@ -129,9 +129,9 @@ public class Network {
         if (ID >= 10)
             startServer();
         if (ID > 10) {
-            send(10, Integer.toString(id));
+            send(10, "0\n" + Integer.toString(id));
         } else {
-            send(0, Integer.toString(id));
+            send(0, "0\n" + Integer.toString(id));
         }
 
     }
@@ -266,14 +266,21 @@ public class Network {
             int id = Integer.valueOf(data2[0]);
 
             data = data2[1];
-            if (id == ID)
-                game.update(data);
-            else if (id == 10 || id == 0) {
-                id = Integer.valueOf(data.replace("\n", ""));
+
+            if (id == ID) {
                 otherGameID = id;
-                if (id == ID)
+                game.update(data);
+            } else if (id == 0) {
+                data2 = data.split("\n", 2);
+                id = Integer.valueOf(data2[1]);
+                if(data2[0].equals("0")) {
+                    otherGameID = id;
+                    send(0, "1\n" + ID);
+                } else if (data2[0].equals("1"))
+                    otherGameID = id;
+                if (otherGameID == ID)
                     game.peerUp();
-                else if (id == 0)
+                else if (otherGameID == 0)
                     game.peerDown();
             }
         } catch (StringIndexOutOfBoundsException e) {
