@@ -19,6 +19,30 @@ public class Checkers implements Serializable {
     private Piece selectedPiece = null;
     private int availableMoves;
 
+    public void setScore(int score) {
+        this.score = score;
+    }
+
+    public void setSelectedPiece(Piece selectedPiece) {
+        this.selectedPiece = selectedPiece;
+    }
+
+    public void setAvailableMoves(int availableMoves) {
+        this.availableMoves = availableMoves;
+    }
+
+    public Side getTurn() {
+        return turn;
+
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public int getAvailableMoves() {
+        return availableMoves;
+    }
 
 
     //Interface for callback functions
