@@ -61,7 +61,7 @@ public class FourInARowActivity extends GameCompat implements DeviceDialogFragme
         if ((PreferenceManager.getDefaultSharedPreferences(this).getBoolean("pref_four_in_row_enable", false) &&
                 PreferenceManager.getDefaultSharedPreferences(this).getString("pref_four_in_row_theme_list", "light").equals("dark")) ||
                 PreferenceManager.getDefaultSharedPreferences(this).getString("general_theme_list", "light").equals("dark"))
-            setTheme(R.style.AppTheme_Dark);
+            setTheme(R.style.AppTheme_Dark_NoActionBar);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_four_in_a_row);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
