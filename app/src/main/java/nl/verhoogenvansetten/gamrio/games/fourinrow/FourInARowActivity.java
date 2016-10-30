@@ -166,9 +166,10 @@ public class FourInARowActivity extends GameCompat {
 
         if (setCoords(x, y, localPlayer))
             if (localWin(x, y)) {
+                gameOver = true;
+                lock();
                 winDialog.show();
                 sendWin(x, y);
-                lock();
             } else {
                 sendCoord(x, y);
             }
@@ -272,10 +273,10 @@ public class FourInARowActivity extends GameCompat {
         loseDialog.cancel();
         winDialog.cancel();
         clearBoard();
-        unlock();
         hasFirstTurn = true;
         isStarted = true;
         gameOver = false;
+        unlock();
         ((TextView)findViewById(R.id.localText)).setText("(" + localPlayer + ")");
         ((TextView)findViewById(R.id.otherText)).setText("(" + otherPlayer + ")");
         ((TextView)findViewById(R.id.localScore)).setText(String.valueOf(localScore = 0));
@@ -299,6 +300,8 @@ public class FourInARowActivity extends GameCompat {
         otherPlayer = String.valueOf(data.charAt(65));
         isStarted = true;
 
+        /** Is it your turn */
+
         switch (data.charAt(64)) {
             case 'N':
                 lock();
@@ -308,6 +311,7 @@ public class FourInARowActivity extends GameCompat {
                 break;
         }
 
+        /** Was the game over*/
         switch (data.charAt(67)) {
             case 'Y':
                 gameOver = true;
@@ -320,6 +324,7 @@ public class FourInARowActivity extends GameCompat {
 
         String[] scores = data.split("\n", 3);
 
+        /** Get current scores */
         localScore = Integer.valueOf(scores[2]);
         otherScore = Integer.valueOf(scores[1]);
 
@@ -393,7 +398,6 @@ public class FourInARowActivity extends GameCompat {
         String message = "2\n";
         message += x + "\n" + y;
         network.send(ID, message);
-        lock();
     }
 
     /**
@@ -435,7 +439,6 @@ public class FourInARowActivity extends GameCompat {
 
                 count += checkRow(x, y, dx * -1, dy * -1);
                 if (count >= 4) {
-                    gameOver = true;
                     ((TextView)findViewById(R.id.localScore)).setText(String.valueOf(++localScore));
                     return true;
                 } else
@@ -506,6 +509,8 @@ public class FourInARowActivity extends GameCompat {
     }
 
     private void unlock() {
+        if(gameOver)
+            return;
         this.lock = false;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window w = this.getWindow();
