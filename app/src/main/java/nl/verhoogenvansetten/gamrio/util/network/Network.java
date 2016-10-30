@@ -126,24 +126,12 @@ public class Network {
     public void registerGame(int id, GameCompat game) {
         ID = id;
         this.game = game;
-        if (ID >= 10)
-            startServer();
-        if (ID > 10) {
-            send(10, "0\n" + Integer.toString(id));
-        } else {
-            send(0, "0\n" + Integer.toString(id));
-        }
-
+        send(0, "0\n" + Integer.toString(id));
     }
 
     public void unregisterGame(int id) {
         if (id == ID) {
-            if (ID > 10) {
-                send(10, "1\n" + "0");
-            } else
-                send(0, "1\n" + "0");
-            if (ID >= 10)
-                onDestroy();
+            send(0, "1\n" + "0");
             ID = 0;
             this.game = null;
         }
@@ -163,7 +151,7 @@ public class Network {
 
                 @Override
                 public void onSuccess() {
-                    Toast.makeText(activity, "Successfully connected", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(activity, "Connecting...", Toast.LENGTH_SHORT).show();
                 }
 
                 @Override
@@ -195,19 +183,13 @@ public class Network {
 
     public boolean send(int ID, String m) {
 
-        if (ID != otherGameID && ID != 0 && ID != 10)
+        if (ID != otherGameID && ID != 0)
             return false;
 
-        String address;
         String message = Integer.toString(ID) + "\n" + m;
 
         if (ip == null)
             ip = getIpFromArpCache(iface);
-
-        if (ID >= 10)
-            address = "127.0.0.1";
-        else
-            address = ip;
 
         Client client = new Client(this, ip, port, message);
         client.execute();
@@ -273,7 +255,7 @@ public class Network {
             } else if (id == 0) {
                 data2 = data.split("\n", 2);
                 id = Integer.valueOf(data2[1]);
-                if(data2[0].equals("0")) {
+                if (data2[0].equals("0")) {
                     otherGameID = id;
                     send(0, "1\n" + ID);
                 } else if (data2[0].equals("1"))
@@ -301,6 +283,9 @@ public class Network {
         } catch (NullPointerException e) {
             e.printStackTrace();
         }
+        try {
+            game.peerDown();
+        } catch (NullPointerException ignored) {}
     }
 
     int getPort() {
@@ -325,6 +310,11 @@ public class Network {
         } catch (NullPointerException e) {
             throw e;
         }
+    }
+
+    public void onConnect() {
+        if (ID != 0)
+            send(0, "0\n" + Integer.toString(ID));
     }
 
     public boolean isConnected() {
