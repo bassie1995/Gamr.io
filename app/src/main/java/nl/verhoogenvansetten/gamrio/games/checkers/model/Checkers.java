@@ -290,6 +290,8 @@ public class Checkers implements Serializable {
         if (onOpponentBackline(this.ourSide, selectedPiece)){
             //Crown piece
             selectedPiece.crown();
+            this.score=+5;
+
         }
         //Piece selected false
         this.selectedPiece = null;
@@ -371,6 +373,7 @@ public class Checkers implements Serializable {
         if (onOpponentBackline(this.ourSide, selectedPiece)){
             //Crown piece
             selectedPiece.crown();
+            this.score=+5;
         }
         updateGUI();
     }
