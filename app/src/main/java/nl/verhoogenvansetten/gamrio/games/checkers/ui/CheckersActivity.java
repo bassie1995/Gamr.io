@@ -68,15 +68,15 @@ public class CheckersActivity extends GameCompat implements CheckersFragment.OnF
     private void addFragment() {
         LinearLayout ll = (LinearLayout) findViewById(R.id.fragment_container);
         //if we aren't the host
-        if(network.isGroupOwner()) {
+        if(!network.isGroupOwner()) {
             getFragmentManager().beginTransaction().add(ll.getId(),
-                    CheckersFragment.newInstance(Side.WHITE),
+                    CheckersFragment.newInstance(Side.BLACK),
                     CheckersFragment.TAG).commit();
         }
         //If we are the host.
         else{
             getFragmentManager().beginTransaction().add(ll.getId(),
-                    CheckersFragment.newInstance(Side.BLACK),
+                    CheckersFragment.newInstance(Side.WHITE),
                     CheckersFragment.TAG).commit();
         }
     }
@@ -97,14 +97,13 @@ public class CheckersActivity extends GameCompat implements CheckersFragment.OnF
                 cf.checkers.board[x][y].setPiece(tempBoard[x][y].getPiece());
             }
 
-        //todo remove debug
-        if(ID > 10){
-            if(cf.checkers.getOurSide() == Side.BLACK)
-                cf.checkers.setOurSide(Side.WHITE);
-            else
-                cf.checkers.setOurSide(Side.BLACK);
-        }
-
+        //Set the turn
+        if(cf.checkers.getTurn() == Side.BLACK)
+            cf.checkers.setTurn(Side.WHITE);
+        else
+            cf.checkers.setTurn(Side.BLACK);
+        //Update the gui
+        cf.updateGUI();
     }
 
     @Override
