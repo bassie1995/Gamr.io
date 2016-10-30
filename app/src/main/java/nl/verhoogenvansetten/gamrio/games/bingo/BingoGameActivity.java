@@ -22,16 +22,13 @@ import nl.verhoogenvansetten.gamrio.util.network.Network;
 
 public class BingoGameActivity extends GameCompat {
 
-
     Network network;
     int ID = Network.BINGO;
 
     public Random random = new Random();
     private int num, lineCount;
     private String temp, resultMessage;
-    private boolean running, win=false;
     public int[][] elements=new int[5][5];
-
 
     public List<Integer> buttons;
     public final int[] BUTTON_IDS = {
@@ -70,16 +67,20 @@ public class BingoGameActivity extends GameCompat {
         }
     }
 
-    // If player click the button, it changed and send the number to other player
+    // If player click the button,
     public void onClick(View v) {
         Button b = (Button) v;
-        b.setClickable(false);
         temp = b.getText().toString();
+
+        // Mark the position
         findPosition(b);
 
+        // The button's status is changed
+        b.setClickable(false);
         b.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.md_red_a200), PorterDuff.Mode.MULTIPLY);
         b.setTextColor(ContextCompat.getColor(this, R.color.md_white));
 
+        // Check the number of lines
         lineCount=checkLine();
         isGameOver(lineCount);
     }
@@ -87,10 +88,10 @@ public class BingoGameActivity extends GameCompat {
     // Make a virtual table to mark which button is clicked
     public void findPosition(View v) {
         int position= buttons.indexOf(Integer.parseInt(temp));
-         elements[position/5][position%5]=1;
+        elements[position/5][position%5]=1;
     }
 
-    // Chenk how many lines are exist
+    // Check how many lines are exist
     public int checkLine(){
         int lineCount=0;
         for(int i=0; i<5; ++i) {
@@ -131,7 +132,7 @@ public class BingoGameActivity extends GameCompat {
         return lineCount;
     }
 
-
+    // If the line is over 5, send 'win' message to other player
     public void isGameOver(int lineCount){
         if(lineCount>=5) {
             network.send(ID, "win"+" "+temp);
@@ -139,7 +140,7 @@ public class BingoGameActivity extends GameCompat {
         else network.send(ID,"number"+" "+temp);
     }
 
-    // if the game is over, show the dialog
+    // If the game is over, show the dialog
     public void showResult(){
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(BingoGameActivity.this);
         alertDialogBuilder.setTitle("GAME OVER");
@@ -165,18 +166,23 @@ public class BingoGameActivity extends GameCompat {
         alertDialog.show();
     }
 
+    // When other player selected number
     public void updateButtonAndLine(){
         Toast.makeText(this,"Other player selected "+temp,Toast.LENGTH_SHORT).show();
 
+        // If the number exist in my bingo table
         if (buttons.contains(Integer.parseInt(temp))) {
             int index = buttons.indexOf(Integer.parseInt(temp));
 
+            // Mark in the virtual table and make the button pressed
             elements[index / 5][index % 5] = 1;
             Button button = (Button) findViewById(getResources().getIdentifier("button" + String.valueOf(index + 1), "id", getPackageName()));
             button.performClick();
             button.setClickable(false);
         }
     }
+
+    // Communication functions
 
     public void update(String data) {
         String[] array = data.split(" ");
@@ -187,6 +193,7 @@ public class BingoGameActivity extends GameCompat {
 
                 if(lineCount >= 5) {
                     resultMessage = "Draw!";
+                    network.send(ID,"draw");
                     showResult();
                 } else {
                     resultMessage = "You Lose!";
@@ -194,8 +201,15 @@ public class BingoGameActivity extends GameCompat {
                     showResult();
                 }
                 break;
+
+            case "draw":
+                resultMessage = "Draw!";
+                showResult();
+                break;
+
             case "lose":
                 resultMessage = "You Win!";
+                showResult();
                 break;
 
             case "number":
@@ -205,9 +219,12 @@ public class BingoGameActivity extends GameCompat {
         }
     }
 
+    @Override
     public void peerUp(){
 
     }
+
+    @Override
     public void peerDown(){
 
     }
