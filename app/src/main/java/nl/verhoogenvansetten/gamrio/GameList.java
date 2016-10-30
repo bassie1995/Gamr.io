@@ -34,4 +34,14 @@ class GameList {
     static Game getGame(int id) {
         return ITEM_MAP.get(id);
     }
+
+    static List<Game> searchGames(String s){
+        List<Game> res = new ArrayList<>();
+        for (Game g: ITEMS) {
+            if(g.name.contains(s)){
+                res.add(g);
+            }
+        }
+        return res;
+    }
 }
