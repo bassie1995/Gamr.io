@@ -35,7 +35,7 @@ public class HighScoreTest {
             }
         }
         //Deleting highscores for game
-        if(HighScoreUtil.deleteScoresForGame(1)){
+        if(HighScoreUtil.deleteScoresForGame(991)){
             Log.d("", "Scores for game 1 deleted");
         }else{
             Log.d("", "Something went wrong deleting scores for game 1");

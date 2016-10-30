@@ -1,27 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:gravity="center_vertical|left"
-    android:paddingLeft="85dp"
-    android:layout_height="30dp"
-    android:id="@+id/linearlayout_highscore_content"
-    >
+    android:layout_height="wrap_content"
+    android:id="@+id/linearlayout_highscore_content">
 
     <TextView
         android:id="@+id/textview_highscore_playername"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:gravity="center"
+        android:layout_weight="1"
+        android:gravity="center_horizontal"
+        android:layout_gravity="left"
         android:text="Ano Niem"/>
+
 
     <TextView
         android:id="@+id/textview_highscore_points"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:gravity="center"
+        android:layout_weight="1"
+        android:gravity="center_horizontal"
+        android:layout_gravity="right"
         android:text="100000"
-        android:paddingLeft="90dp"/>
+        />
 
 
 
