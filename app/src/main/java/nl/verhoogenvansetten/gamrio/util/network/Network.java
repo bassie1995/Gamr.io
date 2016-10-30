@@ -83,6 +83,7 @@ public class Network {
     private int otherGameID = 0;
     private String peerName = "";
     private boolean isConnected;
+    private DeviceDialogFragment discPeersDialogFragment = null;
 
     public static final int BATTLESHIP = 1;
     public static final int BINGO = 2;
@@ -103,14 +104,14 @@ public class Network {
         mManager = (WifiP2pManager) main.getSystemService(Context.WIFI_P2P_SERVICE);
         mChannel = mManager.initialize(main, main.getMainLooper(), null);
         mReceiver = new WiFiDirectBroadcastReceiver(this, mManager, mChannel);
+        discPeersDialogFragment = DeviceDialogFragment.newInstance();
     }
 
     public void discoverPeers(final FragmentManager manager) {
         mManager.discoverPeers(mChannel, new WifiP2pManager.ActionListener() {
             @Override
             public void onSuccess() {
-                DeviceDialogFragment fragment = DeviceDialogFragment.newInstance();
-                fragment.show(manager, "device_list_fragment_dialog");
+                discPeersDialogFragment.show(manager, "device_list_fragment_dialog");
             }
 
             @Override
@@ -334,5 +335,11 @@ public class Network {
 
     public void setConnected(boolean connected) {
         isConnected = connected;
+        try {
+            discPeersDialogFragment.dismiss();
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
     }
+
 }

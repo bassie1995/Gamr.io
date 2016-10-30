@@ -3,6 +3,7 @@ package nl.verhoogenvansetten.gamrio.games.fourinrow;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -19,9 +20,11 @@ import android.widget.TextView;
 
 import nl.verhoogenvansetten.gamrio.GameCompat;
 import nl.verhoogenvansetten.gamrio.R;
+import nl.verhoogenvansetten.gamrio.games.checkers.ui.CheckersFragment;
+import nl.verhoogenvansetten.gamrio.ui.DeviceDialogFragment;
 import nl.verhoogenvansetten.gamrio.util.network.Network;
 
-public class FourInARowActivity extends GameCompat {
+public class FourInARowActivity extends GameCompat implements DeviceDialogFragment.OnFragmentInteractionListener{
 
     private Network network;
     private int ID = Network.FOURINAROW;
@@ -61,6 +64,8 @@ public class FourInARowActivity extends GameCompat {
         clearBoard();
 
         lock();
+
+        /** Initiate Dialogs */
         startDialog = new AlertDialog.Builder(this)
                 .setTitle("New Game")
                 .setMessage("Choose your sign")
@@ -118,6 +123,7 @@ public class FourInARowActivity extends GameCompat {
                     }
                 })
                 .create();
+
         pleaseConnect = new AlertDialog.Builder(this)
                 .setTitle("Please connect")
                 .setMessage("Please connect to a peer in the main menu.")
@@ -125,13 +131,18 @@ public class FourInARowActivity extends GameCompat {
                 .setNegativeButton("Main Menu", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        finish();
+                        network.discoverPeers(getSupportFragmentManager());
                     }
                 })
                 .create();
 
-        peerDownSnackbar = Snackbar.make(findViewById(R.id.content_four_in_arow), "Connection to peer is lost. Closing the game will lose your progress.", Snackbar.LENGTH_INDEFINITE);
-        peerDownSnackbar.setAction("Action", null);
+        peerDownSnackbar = Snackbar.make(findViewById(R.id.content_four_in_arow), "Connection to peer is lost. Closing the game will lose your progress", Snackbar.LENGTH_INDEFINITE);
+        peerDownSnackbar.setAction("Dismiss", new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                peerDownSnackbar.dismiss();
+            }
+        });
         peerDownSnackbar.getView().setBackgroundColor(Color.rgb(128, 0, 0));
     }
 
@@ -199,22 +210,12 @@ public class FourInARowActivity extends GameCompat {
             case "5":
                 recvRestart();
                 break;
-            case "6":
-                recvUpdate(typeData[1]);
-                break;
         }
     }
 
     public void peerDown() {
         peerDownSnackbar.show();
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Window w = this.getWindow();
-            w.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            w.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            w.setStatusBarColor(Color.rgb(100, 0, 0));
-        }
-        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.rgb(128, 0, 0)));
+        setColor(Color.RED);
         running = false;
     }
 
@@ -235,16 +236,6 @@ public class FourInARowActivity extends GameCompat {
     /**
      * Communication helper functions.
      */
-    private void recvUpdate(String data) {
-        otherPlayer = data;
-        pushBoard();
-    }
-
-    private void sendUpdate() {
-        /** 6 to indicate that this is a meta update message*/
-        String message = "6\n";
-        message += localPlayer;
-    }
 
     private void recvRestart() {
         clearBoard();
@@ -277,10 +268,10 @@ public class FourInARowActivity extends GameCompat {
         isStarted = true;
         gameOver = false;
         unlock();
-        ((TextView)findViewById(R.id.localText)).setText("(" + localPlayer + ")");
-        ((TextView)findViewById(R.id.otherText)).setText("(" + otherPlayer + ")");
-        ((TextView)findViewById(R.id.localScore)).setText(String.valueOf(localScore = 0));
-        ((TextView)findViewById(R.id.otherScore)).setText(String.valueOf(otherScore = 0));
+        ((TextView) findViewById(R.id.localText)).setText("(" + localPlayer + ")");
+        ((TextView) findViewById(R.id.otherText)).setText("(" + otherPlayer + ")");
+        ((TextView) findViewById(R.id.localScore)).setText(String.valueOf(localScore = 0));
+        ((TextView) findViewById(R.id.otherScore)).setText(String.valueOf(otherScore = 0));
     }
 
     private void sendStart() {
@@ -329,10 +320,10 @@ public class FourInARowActivity extends GameCompat {
         otherScore = Integer.valueOf(scores[1]);
 
         pushBoard();
-        ((TextView)findViewById(R.id.localText)).setText("(" + localPlayer + ")");
-        ((TextView)findViewById(R.id.otherText)).setText("(" + otherPlayer + ")");
-        ((TextView)findViewById(R.id.localScore)).setText(String.valueOf(localScore));
-        ((TextView)findViewById(R.id.otherScore)).setText(String.valueOf(otherScore));
+        ((TextView) findViewById(R.id.localText)).setText("(" + localPlayer + ")");
+        ((TextView) findViewById(R.id.otherText)).setText("(" + otherPlayer + ")");
+        ((TextView) findViewById(R.id.localScore)).setText(String.valueOf(localScore));
+        ((TextView) findViewById(R.id.otherScore)).setText(String.valueOf(otherScore));
 
     }
 
@@ -390,7 +381,7 @@ public class FourInARowActivity extends GameCompat {
         loseDialog.show();
         lock();
         gameOver = true;
-        ((TextView)findViewById(R.id.otherScore)).setText(String.valueOf(++otherScore));
+        ((TextView) findViewById(R.id.otherScore)).setText(String.valueOf(++otherScore));
     }
 
     private void sendWin(String x, String y) {
@@ -406,16 +397,49 @@ public class FourInARowActivity extends GameCompat {
      * ---------------------------------------------------------------------------------------------
      */
 
+    private void setColor(int color) {
+
+        int light;
+        int dark;
+
+        switch (color) {
+            case Color.RED:
+                light = Color.rgb(128, 0, 0);
+                dark = Color.rgb(100, 0, 0);
+                break;
+            case Color.GREEN:
+                light = Color.rgb(0, 128, 0);
+                dark = Color.rgb(0, 100, 0);
+                break;
+            case Color.GRAY:
+                light = Color.GRAY;
+                dark = Color.DKGRAY;
+                break;
+            default:
+                return;
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window w = this.getWindow();
+            w.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            w.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            w.setStatusBarColor(dark);
+        }
+
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(light));
+
+    }
+
     private void startGame() {
         isStarted = true;
         hasFirstTurn = false;
         clearBoard();
         sendStart();
         lock();
-        ((TextView)findViewById(R.id.localText)).setText("(" + localPlayer + ")");
-        ((TextView)findViewById(R.id.otherText)).setText("(" + otherPlayer + ")");
-        ((TextView)findViewById(R.id.localScore)).setText(String.valueOf(localScore = 0));
-        ((TextView)findViewById(R.id.otherScore)).setText(String.valueOf(otherScore = 0));
+        ((TextView) findViewById(R.id.localText)).setText("(" + localPlayer + ")");
+        ((TextView) findViewById(R.id.otherText)).setText("(" + otherPlayer + ")");
+        ((TextView) findViewById(R.id.localScore)).setText(String.valueOf(localScore = 0));
+        ((TextView) findViewById(R.id.otherScore)).setText(String.valueOf(otherScore = 0));
 
     }
 
@@ -439,7 +463,7 @@ public class FourInARowActivity extends GameCompat {
 
                 count += checkRow(x, y, dx * -1, dy * -1);
                 if (count >= 4) {
-                    ((TextView)findViewById(R.id.localScore)).setText(String.valueOf(++localScore));
+                    ((TextView) findViewById(R.id.localScore)).setText(String.valueOf(++localScore));
                     return true;
                 } else
                     count = 1;
@@ -508,30 +532,21 @@ public class FourInARowActivity extends GameCompat {
         super.onResume();
     }
 
+    public void onFragmentInteraction(Uri uri) {
+    }
+
     private void unlock() {
-        if(gameOver)
+        if (gameOver)
             return;
         this.lock = false;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Window w = this.getWindow();
-            w.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            w.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            w.setStatusBarColor(Color.rgb(0, 100, 0));
-        }
-        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.rgb(0, 128, 0)));
+        setColor(Color.GREEN);
         ((TextView) findViewById(R.id.localText)).setTextColor(Color.rgb(0, 128, 0));
         ((TextView) findViewById(R.id.otherText)).setTextColor(Color.GRAY);
     }
 
     private void lock() {
         this.lock = true;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Window w = this.getWindow();
-            w.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            w.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            w.setStatusBarColor(Color.DKGRAY);
-        }
-        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.GRAY));
+        setColor(Color.GRAY);
         ((TextView) findViewById(R.id.localText)).setTextColor(Color.GRAY);
         if (isStarted)
             ((TextView) findViewById(R.id.otherText)).setTextColor(Color.rgb(200, 0, 0));
