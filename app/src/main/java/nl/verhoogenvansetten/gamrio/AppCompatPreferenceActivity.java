@@ -3,6 +3,7 @@ package nl.verhoogenvansetten.gamrio;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceManager;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -25,6 +26,8 @@ public abstract class AppCompatPreferenceActivity extends PreferenceActivity {
     protected void onCreate(Bundle savedInstanceState) {
         getDelegate().installViewFactory();
         getDelegate().onCreate(savedInstanceState);
+        if (PreferenceManager.getDefaultSharedPreferences(this).getString("general_theme_list", "light").equals("dark"))
+            setTheme(R.style.AppTheme_Dark);
         super.onCreate(savedInstanceState);
     }
 

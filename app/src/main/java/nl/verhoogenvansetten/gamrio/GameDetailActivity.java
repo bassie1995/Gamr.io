@@ -2,6 +2,7 @@ package nl.verhoogenvansetten.gamrio;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.NavUtils;
 import android.support.v4.content.ContextCompat;
@@ -25,6 +26,8 @@ public class GameDetailActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        if (PreferenceManager.getDefaultSharedPreferences(this).getString("general_theme_list", "light").equals("dark"))
+            setTheme(R.style.AppTheme_Dark_NoActionBar);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_detail);
         Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
@@ -42,7 +45,7 @@ public class GameDetailActivity extends AppCompatActivity {
             }
         });
 
-        //Create a fab for the highscores JD
+        //Create a fab to play the game
         if (network.getOtherGameID() == getIntent().getIntExtra(GameDetailFragment.ARG_ITEM_ID, -1))
             fab.setBackgroundColor(ContextCompat.getColor(this, R.color.md_green_a200));
         else

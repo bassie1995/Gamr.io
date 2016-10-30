@@ -86,7 +86,7 @@
     <string name="submarine">Submarine</string>
     <string name="destroyer">Destroyer</string>
     <string name="should_finish_setup_battleship">You have not set up all your ships</string>
-    <string name="view_opponent">View opponent\'s moves</string>
+    <string name="view_opponent">View other board state</string>
     <string name="opponent_done">opponentDone</string>
     <string name="peers_searching">Searching for peers…</string>
     <string name="other_player_done">Other player has set up their game</string>

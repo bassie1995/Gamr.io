@@ -111,7 +111,6 @@ public class BattleshipGameActivity extends GameCompat {
                 network.send(ID, Integer.toString(mLastButtonId));
                 return true;
             case R.id.menu_flip_battleship:
-                Toast.makeText(this, Boolean.toString(mViewingOwnGrid), Toast.LENGTH_SHORT).show();
                 if (mViewingOwnGrid) {
                     viewOpponentGrid();
                 } else {

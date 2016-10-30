@@ -10,13 +10,13 @@ import android.net.Uri;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.util.Pair;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -31,10 +31,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
@@ -74,6 +72,8 @@ public class GameListActivity extends AppCompatActivity implements SearchView.On
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        if (PreferenceManager.getDefaultSharedPreferences(this).getString("general_theme_list", "light").equals("dark"))
+            setTheme(R.style.AppTheme_Dark_NoActionBar);
         super.onCreate(savedInstanceState);
         mContext = new WeakReference<>(getApplicationContext());
         setContentView(R.layout.activity_game_list);
@@ -177,10 +177,7 @@ public class GameListActivity extends AppCompatActivity implements SearchView.On
     @Override
     public boolean onQueryTextChange(String text) {
         List<Game> res;
-        if (text.length() > 0)
-            res = GameList.searchGames(text);
-        else
-            res = GameList.getList();
+        res = GameList.searchGames(text);
         adapter.setFilter(res); // Set filter to game list
         return true;
     }
@@ -225,16 +222,23 @@ public class GameListActivity extends AppCompatActivity implements SearchView.On
                     holder.mCardView.setCardBackgroundColor(color);
                     if (ColorUtil.isColorDark(color)) {
                         holder.mContentView.setTextColor(ContextCompat.getColor(GameListActivity.this, R.color.md_white));
-                        DrawableCompat.setTint(holder.mFavoriteButton.getDrawable(), ContextCompat.getColor(GameListActivity.this, R.color.md_grey_200));
-                        DrawableCompat.setTint(holder.mShareButton.getDrawable(), ContextCompat.getColor(GameListActivity.this, R.color.md_grey_200));
+                        //DrawableCompat.setTint(holder.mFavoriteButton.getDrawable(), ContextCompat.getColor(GameListActivity.this, R.color.md_grey_200));
+                        //DrawableCompat.setTint(holder.mShareButton.getDrawable(), ContextCompat.getColor(GameListActivity.this, R.color.md_grey_200));
                     } else {
                         holder.mContentView.setTextColor(ContextCompat.getColor(GameListActivity.this, R.color.md_black));
-                        DrawableCompat.setTint(holder.mFavoriteButton.getDrawable(), ContextCompat.getColor(GameListActivity.this, R.color.md_grey_500));
-                        DrawableCompat.setTint(holder.mShareButton.getDrawable(), ContextCompat.getColor(GameListActivity.this, R.color.md_grey_500));
+                        //DrawableCompat.setTint(holder.mFavoriteButton.getDrawable(), ContextCompat.getColor(GameListActivity.this, R.color.md_grey_500));
+                        //DrawableCompat.setTint(holder.mShareButton.getDrawable(), ContextCompat.getColor(GameListActivity.this, R.color.md_grey_500));
                     }
                     holder.mContentView.setText(mValues.get(holder.getAdapterPosition()).name);
                 }
             });
+
+            /*holder.mShareButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                }
+            });*/
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -276,7 +280,6 @@ public class GameListActivity extends AppCompatActivity implements SearchView.On
         }
 
         void setFilter(List<Game> gameList) {
-            Toast.makeText(GameListActivity.this, Integer.toString(gameList.size()), Toast.LENGTH_SHORT).show();
             mValues.clear();
             mValues.addAll(gameList); // Use actual gameList here
             notifyDataSetChanged();
@@ -287,8 +290,8 @@ public class GameListActivity extends AppCompatActivity implements SearchView.On
             final TextView mContentView;
             final ImageView mImageView;
             final CardView mCardView;
-            final ImageButton mFavoriteButton;
-            final ImageButton mShareButton;
+            //final ImageButton mFavoriteButton;
+            //final ImageButton mShareButton;
             Game mItem;
 
             ViewHolder(View view) {
@@ -297,8 +300,8 @@ public class GameListActivity extends AppCompatActivity implements SearchView.On
                 mContentView = (TextView) view.findViewById(R.id.txtv_title);
                 mImageView = (ImageView) view.findViewById(R.id.game_image);
                 mCardView = (CardView) view.findViewById(R.id.card_list);
-                mFavoriteButton = (ImageButton) view.findViewById(R.id.btn_card_favorite);
-                mShareButton = (ImageButton) view.findViewById(R.id.btn_card_share);
+                //mFavoriteButton = (ImageButton) view.findViewById(R.id.btn_card_favorite);
+                //mShareButton = (ImageButton) view.findViewById(R.id.btn_card_share);
             }
 
             @Override
