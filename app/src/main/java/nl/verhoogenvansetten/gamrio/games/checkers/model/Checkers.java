@@ -1,9 +1,17 @@
 package nl.verhoogenvansetten.gamrio.games.checkers.model;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.text.InputType;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import java.io.Serializable;
+
+import nl.verhoogenvansetten.gamrio.model.Score;
+import nl.verhoogenvansetten.gamrio.util.HighScoreUtil;
+import nl.verhoogenvansetten.gamrio.util.network.Network;
 
 /**
  * Created by Jori on 13-10-2016.
@@ -197,6 +205,7 @@ public class Checkers implements Serializable {
                 //Add the score to the highscores when the player is the winner
                 if(getWinningSide() == ourSide){
                     //todo Abillity to enter name for score + add score to highscores
+                    //showHighScoreDialog();
                     //Give the other player the turn so that it get's the winner result as well
                     nextTurn();
                 }
@@ -208,6 +217,38 @@ public class Checkers implements Serializable {
                 nextTurn();
             }
         }
+    }
+
+    private void showHighScoreDialog() {
+        //todo wip highscoredialog
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Title");
+
+        // Set up the input
+        final EditText input = new EditText(context);
+        // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        builder.setView(input);
+
+        // Set up the buttons
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Score score = new Score();
+                score.setPlayerName(input.getText().toString());
+                score.setPoints(getScore());
+                HighScoreUtil.addScore(Network.CHECKERS, score);
+                dialog.dismiss();
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
     }
 
     private boolean stepsAvailableForPiece(Piece selectedPiece) {
