@@ -35,7 +35,7 @@ public class HighScoreUtil {
     }
 
     //Adds a Score
-    static boolean addScore(int gamedId, Score score){
+    public static boolean addScore(int gamedId, Score score){
         //Get all the current scores for the relevant gameId. Skips on fresh install.
         List<Score> allScores = new ArrayList<>();
         if(InternalStorageUtil.fileExists(FILENAME_PREFIX + gamedId)){
