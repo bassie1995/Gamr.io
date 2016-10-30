@@ -5,7 +5,6 @@ import android.os.AsyncTask;
 
 import java.io.IOException;
 import java.io.PrintStream;
-import java.net.ConnectException;
 import java.net.Socket;
 
 /**
@@ -17,12 +16,9 @@ class Client extends AsyncTask<Void, Void, Void> {
 
     private String dstAddress;
     private int dstPort;
-    private boolean response;
     private String message;
-    private Network network;
 
-    Client(Network network, String addr, int port, String theMessage) {
-        this.network = network;
+    Client(String addr, int port, String theMessage) {
         dstAddress = addr;
         dstPort = port;
         message = theMessage;
@@ -39,11 +35,9 @@ class Client extends AsyncTask<Void, Void, Void> {
             PrintStream printStream = new PrintStream(socket.getOutputStream());
             printStream.print(message);
             printStream.close();
-            response = true;
 
         } catch (IOException e) {
             e.printStackTrace();
-            response = false;
         } finally {
             if (socket != null) {
                 try {

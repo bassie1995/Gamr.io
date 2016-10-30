@@ -76,8 +76,7 @@ public class DeviceDialogFragment extends DialogFragment {
     public static void filterAdapter(List<WifiP2pDevice> deviceList) {
         try {
             adapter.setFilter(deviceList);
-        } catch(NullPointerException e) {
-            //go fuck yourself
+        } catch(NullPointerException ignore) {
         }
     }
 

@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -20,11 +21,10 @@ import android.widget.TextView;
 
 import nl.verhoogenvansetten.gamrio.GameCompat;
 import nl.verhoogenvansetten.gamrio.R;
-import nl.verhoogenvansetten.gamrio.games.checkers.ui.CheckersFragment;
 import nl.verhoogenvansetten.gamrio.ui.DeviceDialogFragment;
 import nl.verhoogenvansetten.gamrio.util.network.Network;
 
-public class FourInARowActivity extends GameCompat implements DeviceDialogFragment.OnFragmentInteractionListener{
+public class FourInARowActivity extends GameCompat implements DeviceDialogFragment.OnFragmentInteractionListener {
 
     private Network network;
     private int ID = Network.FOURINAROW;
@@ -56,8 +56,11 @@ public class FourInARowActivity extends GameCompat implements DeviceDialogFragme
         setContentView(R.layout.activity_four_in_a_row);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("Four in a Row");
+        ActionBar bar = getSupportActionBar();
+        if (bar != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle("Four in a Row");
+        }
 
         network = Network.getInstance();
 
@@ -183,8 +186,8 @@ public class FourInARowActivity extends GameCompat implements DeviceDialogFragme
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_play_fourinrow) {
             if (network.isConnected())
-                if(gameOver)
-                restartDialog.show();
+                if (gameOver)
+                    restartDialog.show();
                 else
                     startDialog.show();
             else
@@ -457,7 +460,10 @@ public class FourInARowActivity extends GameCompat implements DeviceDialogFragme
             w.setStatusBarColor(dark);
         }
 
-        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(light));
+
+        ActionBar bar = getSupportActionBar();
+        if (bar != null)
+            bar.setBackgroundDrawable(new ColorDrawable(light));
 
     }
 
