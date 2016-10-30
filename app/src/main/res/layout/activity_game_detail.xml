@@ -34,12 +34,6 @@
                 android:contentDescription="@string/game_header"
                 android:transitionName="@string/transition_header" />
 
-            <!-- <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/sheet_text_scrim_height_top"
-                android:background="@drawable/scrim_top"
-                app:layout_collapseMode="pin"/> -->
-
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/sheet_text_scrim_height_bottom"

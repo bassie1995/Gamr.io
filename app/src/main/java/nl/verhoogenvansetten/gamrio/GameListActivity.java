@@ -216,7 +216,7 @@ public class GameListActivity extends AppCompatActivity implements SearchView.On
                 @Override
                 public void onGenerated(Palette palette) {
                     int color = palette.getVibrantColor(ContextCompat.getColor(getApplicationContext(), R.color.md_white));
-                    holder.mCardView.setBackgroundColor(color);
+                    holder.mCardView.setCardBackgroundColor(color);
                     if (ColorUtil.isColorDark(color)) {
                         holder.mContentView.setTextColor(ContextCompat.getColor(GameListActivity.this, R.color.md_white));
                         DrawableCompat.setTint(holder.mFavoriteButton.getDrawable(), ContextCompat.getColor(GameListActivity.this, R.color.md_grey_200));
@@ -249,13 +249,11 @@ public class GameListActivity extends AppCompatActivity implements SearchView.On
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                             String headerTransition = getString(R.string.transition_header);
                             String fabTransition = getString(R.string.transition_fab);
-                            String backgroundTransition = getString(R.string.transition_background);
 
                             Pair<View, String> headerPair = Pair.create((View) holder.mImageView, headerTransition);
                             Pair<View, String> fabPair = Pair.create((View) fab, fabTransition);
-                            Pair<View, String> backgroundPair = Pair.create((View) holder.mCardView, backgroundTransition);
 
-                            ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(GameListActivity.this, headerPair, fabPair, backgroundPair);
+                            ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(GameListActivity.this, headerPair, fabPair);
 
                             ActivityCompat.startActivity(GameListActivity.this, intent, options.toBundle());
                         } else {

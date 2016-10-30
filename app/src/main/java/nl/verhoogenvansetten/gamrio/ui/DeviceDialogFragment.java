@@ -61,7 +61,7 @@ public class DeviceDialogFragment extends DialogFragment {
 
         ArrayList<WifiP2pDevice> wifiP2pDevices = new ArrayList<>();
         WifiP2pDevice placeholder = new WifiP2pDevice();
-        placeholder.deviceName = "Scanning...";
+        placeholder.deviceName = getString(R.string.peers_searching);
         wifiP2pDevices.add(placeholder);
 
         adapter = new MyRecyclerAdapter(wifiP2pDevices);
