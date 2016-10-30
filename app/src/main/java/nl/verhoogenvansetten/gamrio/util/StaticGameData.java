@@ -14,14 +14,12 @@ import nl.verhoogenvansetten.gamrio.games.sudoku.SudokuActivity;
  */
 
 public final class StaticGameData {
-    public final static int[] gameIds = {1,2,3,4,5,6,7};
+    public final static int[] gameIds = {1,2,3,4,5};
 
     public final static Class<?>[] gameClasses = {
             BattleshipSetupActivity.class,
             BingoGameActivity.class,
-            BattleshipSetupActivity.class,
             SudokuActivity.class,
-            BattleshipSetupActivity.class,
             FourInARowActivity.class,
             CheckersActivity.class
     };
@@ -30,25 +28,20 @@ public final class StaticGameData {
             R.drawable.battleship_header,
             R.drawable.bingo_header,
             R.drawable.battleship_header,
-            R.drawable.battleship_header,
-            R.drawable.battleship_header,
-            R.drawable.battleship_header,
+            R.drawable.four_in_a_row,
             R.drawable.checkers_header
     };
-    public final static String[] gameNames = {GameListActivity.getContext().getString(R.string.name_battleship),
+    public final static String[] gameNames = {
+            GameListActivity.getContext().getString(R.string.name_battleship),
             GameListActivity.getContext().getString(R.string.name_bingo),
-            GameListActivity.getContext().getString(R.string.name_dots_and_boxes),
             GameListActivity.getContext().getString(R.string.name_sudoku),
-            GameListActivity.getContext().getString(R.string.name_tic_tac_toe),
             GameListActivity.getContext().getString(R.string.name_four_in_row),
             GameListActivity.getContext().getString(R.string.name_checkers)
     };
     public final static String[] gameDetails = {
             GameListActivity.getContext().getString(R.string.desc_battleship),
             GameListActivity.getContext().getString(R.string.desc_bingo),
-            GameListActivity.getContext().getString(R.string.desc_dots_and_boxes),
             GameListActivity.getContext().getString(R.string.desc_sudoku),
-            GameListActivity.getContext().getString(R.string.desc_tic_tac_toe),
             GameListActivity.getContext().getString(R.string.desc_four_in_row),
             GameListActivity.getContext().getString(R.string.desc_checkers)
     };
