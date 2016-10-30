@@ -11,7 +11,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayout;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +32,8 @@ public class BingoGameActivity extends GameCompat {
     private int num, lineCount;
     private String temp, resultMessage;
     public int[][] elements=new int[5][5];
+
+    AlertDialog gameOverDialog;
 
     public List<Integer> buttons;
     public final int[] BUTTON_IDS = {
@@ -58,6 +59,26 @@ public class BingoGameActivity extends GameCompat {
         network = Network.getInstance();
 
         define_buttons();
+
+        gameOverDialog = new AlertDialog.Builder(this)
+                .setTitle("GAME OVER")
+                .setMessage(resultMessage)
+                .setCancelable(false)
+                .setNegativeButton("Play Again",new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog,int id) {
+
+                        Intent intent= new Intent(BingoGameActivity.this,BingoGameActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                })
+                .setPositiveButton("No",new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog,int id) {
+                        finish();
+                    }
+                })
+                .create();
+
     }
 
     // Make buttons and put random numbers in them
@@ -152,34 +173,11 @@ public class BingoGameActivity extends GameCompat {
 
     // If the game is over, show the dialog
     public void showResult(){
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(BingoGameActivity.this);
-        alertDialogBuilder.setTitle("GAME OVER");
-
-        alertDialogBuilder
-                .setMessage(resultMessage)
-                .setCancelable(false)
-                .setNegativeButton("Play Again",new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog,int id) {
-
-                        Intent intent= new Intent(BingoGameActivity.this,BingoGameActivity.class);
-                        startActivity(intent);
-                        finish();
-                    }
-                })
-                .setPositiveButton("No",new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog,int id) {
-                        finish();
-                    }
-                });
-
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.show();
+        gameOverDialog.show();
     }
 
     // When other player selected number
     public void updateButtonAndLine(){
-        Toast.makeText(this,"Other player selected "+temp,Toast.LENGTH_SHORT).show();
-
         // If the number exist in my bingo table
         if (buttons.contains(Integer.parseInt(temp))) {
             int index = buttons.indexOf(Integer.parseInt(temp));
