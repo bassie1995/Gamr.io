@@ -523,9 +523,6 @@ public class Checkers implements Serializable {
         if(listener != null){
             listener.onSendData();
         }
-        else{
-            Toast.makeText(context, "Error: The listener was not set", Toast.LENGTH_SHORT).show();
-        }
     }
 
     private void updateGUI() {
@@ -533,18 +530,12 @@ public class Checkers implements Serializable {
         if(listener != null){
             listener.onUpdateGUI();
         }
-        else{
-            Toast.makeText(context, "Error: The listener was not set", Toast.LENGTH_SHORT).show();
-        }
     }
 
     private void endGame() {
         //Fire the event
         if(listener != null){
             listener.onEndGame();
-        }
-        else{
-            Toast.makeText(context, "Error: The listener was not set", Toast.LENGTH_SHORT).show();
         }
     }
 

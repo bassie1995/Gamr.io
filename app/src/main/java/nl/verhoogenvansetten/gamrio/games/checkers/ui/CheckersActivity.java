@@ -111,12 +111,10 @@ public class CheckersActivity extends GameCompat implements CheckersFragment.OnF
 
     @Override
     public void peerDown() {
-        Toast.makeText(this, "Peer down", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void peerUp() {
-        Toast.makeText(this, "Peer up", Toast.LENGTH_SHORT).show();
     }
 
 
@@ -129,7 +127,7 @@ public class CheckersActivity extends GameCompat implements CheckersFragment.OnF
         if(network.send(ID, encodedCheckersBoard)){
         }
         else {
-            Toast.makeText(this, "Something went wrong sending the game", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Something went wrong sending the game, try to restart the application", Toast.LENGTH_SHORT).show();
         }
     }
 
