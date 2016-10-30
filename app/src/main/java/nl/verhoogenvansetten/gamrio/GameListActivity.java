@@ -34,6 +34,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
@@ -152,7 +153,7 @@ public class GameListActivity extends AppCompatActivity implements SearchView.On
 
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.menu_search));
-        // searchView.setOnQueryTextListener(this);
+        searchView.setOnQueryTextListener(this);
 
         // Assumes current Activity is the searchable Activity
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
@@ -175,7 +176,12 @@ public class GameListActivity extends AppCompatActivity implements SearchView.On
 
     @Override
     public boolean onQueryTextChange(String text) {
-        adapter.setFilter(GameList.searchGames(text)); // Set filter to game list
+        List<Game> res;
+        if (text.length() > 0)
+            res = GameList.searchGames(text);
+        else
+            res = GameList.getList();
+        adapter.setFilter(res); // Set filter to game list
         return true;
     }
 
@@ -270,6 +276,7 @@ public class GameListActivity extends AppCompatActivity implements SearchView.On
         }
 
         void setFilter(List<Game> gameList) {
+            Toast.makeText(GameListActivity.this, Integer.toString(gameList.size()), Toast.LENGTH_SHORT).show();
             mValues.clear();
             mValues.addAll(gameList); // Use actual gameList here
             notifyDataSetChanged();

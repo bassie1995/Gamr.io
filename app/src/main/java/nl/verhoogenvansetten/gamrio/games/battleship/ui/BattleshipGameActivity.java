@@ -137,13 +137,14 @@ public class BattleshipGameActivity extends GameCompat {
     private void startOwnTurn() {
         int[] exceptionArray = {-1};
         setGridClickable(true, exceptionArray);
+        setTitle("Your turn");
         viewOwnGrid();
-
     }
 
     private void startOpponentTurn() {
         int[] exceptionArray = {-1};
         setGridClickable(false, exceptionArray);
+        setTitle("Opponent's turn");
         viewOpponentGrid();
     }
 
