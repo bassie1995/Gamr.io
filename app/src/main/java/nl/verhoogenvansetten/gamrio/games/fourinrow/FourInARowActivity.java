@@ -139,7 +139,13 @@ public class FourInARowActivity extends GameCompat implements DeviceDialogFragme
                 .setTitle("Your are not connected")
                 .setMessage("Please connect to a peer")
                 .setCancelable(true)
-                .setNegativeButton("Connect", new DialogInterface.OnClickListener() {
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        pleaseConnect.cancel();
+                    }
+                })
+                .setPositiveButton("Connect", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         network.discoverPeers(getSupportFragmentManager());
