@@ -53,15 +53,15 @@ class Server {
                             this.s = s;
                         }
 
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             new SocketServerReplyTask(s, count).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                         }
                     }
 
                     try {
                         network.getGame().runOnUiThread(new StartTask(socket));
-                    } catch (NullPointerException e) {
-                        e.printStackTrace();
+                    } catch (NullPointerException ignored) {
                     }
 
                 }
@@ -95,20 +95,22 @@ class Server {
                 bufferedReader.close();
 
 
-
             } catch (IOException e) {
 
                 e.printStackTrace();
                 message += "Something wrong! " + e.toString() + "\n";
             }
 
-            network.getGame().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    network.update(message);
-                    message = "";
-                }
-            });
+            try {
+                network.getGame().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        network.update(message);
+                        message = "";
+                    }
+                });
+            } catch (NullPointerException ignored) {
+            }
             return null;
         }
     }

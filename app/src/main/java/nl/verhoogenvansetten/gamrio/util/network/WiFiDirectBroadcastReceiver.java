@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.net.NetworkInfo;
-import android.net.wifi.WifiManager;
 import android.net.wifi.p2p.WifiP2pDeviceList;
 import android.net.wifi.p2p.WifiP2pGroup;
 import android.net.wifi.p2p.WifiP2pManager;
@@ -12,10 +11,7 @@ import android.net.wifi.p2p.WifiP2pManager;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -70,7 +66,6 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
                             network.setIp(ipaddress);
                             network.setIface(iface);
                             network.setOwner(group.isGroupOwner());
-//                            network.setPeerName(group.getClientList().iterator().next().deviceName);
                         } catch (NullPointerException | NoSuchElementException e) {
                             e.printStackTrace();
                         }
@@ -84,7 +79,6 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
                 } catch (NullPointerException e) {
                     e.printStackTrace();
                 }
-                network.setPeerName("");
                 network.setConnected(false);
             }
         }

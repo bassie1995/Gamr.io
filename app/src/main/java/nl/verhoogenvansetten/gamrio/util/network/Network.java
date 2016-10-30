@@ -81,7 +81,6 @@ public class Network {
     private static Network instance;
     private Server server;
     private int otherGameID = 0;
-    private String peerName = "";
     private boolean isConnected;
     private DeviceDialogFragment discPeersDialogFragment = null;
 
@@ -137,14 +136,6 @@ public class Network {
         }
     }
 
-    public String getConnectedDeviceName() {
-        return peerName;
-    }
-
-    void setPeerName(String name) {
-        peerName = name;
-    }
-
     public static void connect(WifiP2pConfig config, final Activity activity) {
         try {
             mManager.connect(mChannel, config, new WifiP2pManager.ActionListener() {
@@ -171,16 +162,6 @@ public class Network {
         }
     }
 
-    void afterSend(boolean status) {
-        if (!status) {
-            try {
-                game.update(null);
-            } catch (NullPointerException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
     public boolean send(int ID, String m) {
 
         if (ID != otherGameID && ID != 0)
@@ -191,7 +172,7 @@ public class Network {
         if (ip == null)
             ip = getIpFromArpCache(iface);
 
-        Client client = new Client(this, ip, port, message);
+        Client client = new Client(ip, port, message);
         client.execute();
         return true;
     }
@@ -285,7 +266,8 @@ public class Network {
         }
         try {
             game.peerDown();
-        } catch (NullPointerException ignored) {}
+        } catch (NullPointerException ignored) {
+        }
     }
 
     int getPort() {
@@ -305,14 +287,10 @@ public class Network {
     }
 
     public GameCompat getGame() {
-        try {
-            return game;
-        } catch (NullPointerException e) {
-            throw e;
-        }
+        return game;
     }
 
-    public void onConnect() {
+    void onConnect() {
         if (ID != 0)
             send(0, "0\n" + Integer.toString(ID));
     }
@@ -321,7 +299,7 @@ public class Network {
         return isConnected;
     }
 
-    public void setConnected(boolean connected) {
+    void setConnected(boolean connected) {
         isConnected = connected;
         try {
             discPeersDialogFragment.dismiss();
