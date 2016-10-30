@@ -188,8 +188,7 @@ public class GameListActivity extends AppCompatActivity implements SearchView.On
         return mContext.get();
     }
 
-    public void onFragmentInteraction(Uri uri) {
-    }
+    public void onFragmentInteraction(Uri uri) {}
 
     public class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {

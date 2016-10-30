@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.NavUtils;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import nl.verhoogenvansetten.gamrio.ui.HighScoreActivity;
+import nl.verhoogenvansetten.gamrio.util.network.Network;
 
 /**
  * An activity representing a single Game detail screen. This
@@ -20,6 +22,7 @@ import nl.verhoogenvansetten.gamrio.ui.HighScoreActivity;
  * in a {@link GameListActivity}.
  */
 public class GameDetailActivity extends AppCompatActivity {
+    Network network;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +30,8 @@ public class GameDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_game_detail);
         Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
         setSupportActionBar(toolbar);
+
+        network = Network.getInstance();
 
         ((ImageView) findViewById(R.id.iv_toolbar_image)).setImageResource(GameList.getGame(getIntent().getIntExtra(GameDetailFragment.ARG_ITEM_ID, -1)).image);
 
@@ -40,6 +45,10 @@ public class GameDetailActivity extends AppCompatActivity {
 
         //Create a fab for the highscores JD
         FloatingActionButton highscoresFab = (FloatingActionButton) findViewById(R.id.highscores_fab);
+        if (network.getOtherGameID() == getIntent().getIntExtra(GameDetailFragment.ARG_ITEM_ID, -1))
+            highscoresFab.setBackgroundColor(ContextCompat.getColor(this, R.color.md_green_a200));
+        else
+            highscoresFab.setBackgroundColor(ContextCompat.getColor(this, R.color.md_red_a200));
         highscoresFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

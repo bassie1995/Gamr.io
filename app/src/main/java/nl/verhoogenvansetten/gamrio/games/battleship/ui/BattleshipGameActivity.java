@@ -3,7 +3,6 @@ package nl.verhoogenvansetten.gamrio.games.battleship.ui;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.PorterDuff;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.view.Menu;
@@ -12,8 +11,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
-
-import java.util.Arrays;
 
 import nl.verhoogenvansetten.gamrio.GameCompat;
 import nl.verhoogenvansetten.gamrio.R;
@@ -222,6 +219,12 @@ public class BattleshipGameActivity extends GameCompat {
         } else {
             int buttonId = Integer.parseInt(data);
             Button b = (Button) findViewById(buttonId);
+            boolean isHit = false;
+            for (Ship ship : mShips)
+                if (ship.isHit(buttonId))
+                    isHit = true;
+            if (isHit) network.send(ID, "hit");
+            else network.send(ID, "miss");
             mOpponentShots[mOpponentShotsIndex++] = buttonId;
             b.setText("X");
             startOwnTurn();

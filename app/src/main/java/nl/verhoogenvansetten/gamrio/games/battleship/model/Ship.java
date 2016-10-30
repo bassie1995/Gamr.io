@@ -42,9 +42,10 @@ public class Ship {
         return name;
     }
 
-    public boolean isHit(int buttonId) {
-        for (int id : getButtons())
-            if (id == buttonId) return true;
+    public boolean isHit(int shotId) {
+        for (int id : buttons)
+            if (shotId == id)
+                return true;
         return false;
     }
 }

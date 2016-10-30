@@ -7,7 +7,6 @@ import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -57,7 +56,6 @@ public class DeviceDialogFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         //inflate layout with recycler view
         View v = inflater.inflate(R.layout.fragment_device_dialog, container);
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         mRecyclerView = (RecyclerView) v.findViewById(R.id.device_list);
 

@@ -7,18 +7,17 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Layout;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import nl.verhoogenvansetten.gamrio.util.HighScoreUtil;
 
 import java.util.List;
 
 import nl.verhoogenvansetten.gamrio.R;
 import nl.verhoogenvansetten.gamrio.model.Score;
+import nl.verhoogenvansetten.gamrio.util.HighScoreUtil;
 
 /**
  * Created by Jori on 29-10-2016.
@@ -67,7 +66,7 @@ public class HighScoreActivity extends Activity{
         private List<Score> highScoreList;
         private LayoutInflater inflater;
 
-        public HighScoreAdapter(List<Score> highScoreList, Context context) {
+        HighScoreAdapter(List<Score> highScoreList, Context context) {
             this.inflater = LayoutInflater.from(context);
             this.highScoreList = highScoreList;
         }
@@ -97,7 +96,7 @@ public class HighScoreActivity extends Activity{
             private TextView points;
             private View container;
 
-            public HighScoreViewHolder(View itemView) {
+            HighScoreViewHolder(View itemView) {
                 super(itemView);
                 playerName = (TextView)itemView.findViewById(R.id.textview_highscore_playername);
                 points = (TextView)itemView.findViewById(R.id.textview_highscore_points);
