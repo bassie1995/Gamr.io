@@ -28,7 +28,7 @@ public class CheckersFragment extends Fragment {
 
     public interface OnFragmentInteractionListener {
         void onSendData(Checkers checkers);
-        void onEndGame(Checkers checkers);
+        void onEndGame();
     }
 
     public CheckersFragment() {
@@ -82,9 +82,7 @@ public class CheckersFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         if(savedInstanceState != null) {
             //Don't set the starting position
-            //Get the saved game by loading the checkers object
-            //todo fix
-            //this.checkers = (Checkers)savedInstanceState.getSerializable("checkers");
+
             //Get a new checkers object and instantiate it with the saved side
             this.checkers = new Checkers(getActivity(),
                     (Side)savedInstanceState.getSerializable("checkers_side"));
@@ -121,7 +119,7 @@ public class CheckersFragment extends Fragment {
 
     private void endGame() {
         if(listener != null)
-            listener.onEndGame(this.checkers);
+            listener.onEndGame();
     }
 
     private void sendData() {
@@ -243,9 +241,7 @@ public class CheckersFragment extends Fragment {
         // which can contain pieces.
         if(newSquare.getColor() == Color.BLACK){
             newSquare.setOnClickListener(new Square.OnClickListener(){
-                public void onClick(View v){
-                    //MessageUtil.showMessage(getActivity(), x + " " + y);
-                    checkers.turn(x, y);
+                public void onClick(View v){checkers.turn(x, y);
                 }
             });
         }
