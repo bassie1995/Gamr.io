@@ -1,5 +1,6 @@
 package nl.verhoogenvansetten.gamrio.games.checkers.ui;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.graphics.Color;
@@ -48,6 +49,17 @@ public class CheckersFragment extends Fragment {
             listener = (OnFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        if (activity instanceof OnFragmentInteractionListener) {
+            listener = (OnFragmentInteractionListener) activity;
+        } else {
+            throw new RuntimeException(activity.toString()
                     + " must implement OnFragmentInteractionListener");
         }
     }
@@ -127,7 +139,7 @@ public class CheckersFragment extends Fragment {
             listener.onSendData(this.checkers);
     }
 
-    private void updateGUI() {
+    public void updateGUI() {
         //Add a piece image if the Square contains a piece
         for(int x = 0 ; x < 8; x++){
             for(int y = 0; y < 8; y++){

@@ -12,6 +12,11 @@ import java.io.Serializable;
 
 public class Checkers implements Serializable {
     private  Context context;
+
+    public void setTurn(Side turn) {
+        this.turn = turn;
+    }
+
     private Side turn;
     private Side ourSide;
     public BoardPosition[][] board;
