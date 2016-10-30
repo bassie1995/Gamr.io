@@ -57,6 +57,7 @@ public class FourInARowActivity extends GameCompat implements DeviceDialogFragme
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("Four in a Row");
 
         network = Network.getInstance();
 
@@ -132,10 +133,10 @@ public class FourInARowActivity extends GameCompat implements DeviceDialogFragme
                 .create();
 
         pleaseConnect = new AlertDialog.Builder(this)
-                .setTitle("Please connect")
-                .setMessage("Please connect to a peer in the main menu.")
+                .setTitle("Your are not connected")
+                .setMessage("Please connect to a peer")
                 .setCancelable(true)
-                .setNegativeButton("Main Menu", new DialogInterface.OnClickListener() {
+                .setNegativeButton("Connect", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         network.discoverPeers(getSupportFragmentManager());
@@ -209,6 +210,8 @@ public class FourInARowActivity extends GameCompat implements DeviceDialogFragme
                 lock();
                 winDialog.show();
                 sendWin(x, y);
+                ((TextView) findViewById(R.id.localText)).setTextColor(Color.rgb(0, 128, 0));
+                ((TextView) findViewById(R.id.otherText)).setTextColor(Color.rgb(128, 0, 0));
             } else {
                 sendCoord(x, y);
             }
@@ -407,6 +410,8 @@ public class FourInARowActivity extends GameCompat implements DeviceDialogFragme
         loseDialog.show();
         lock();
         gameOver = true;
+        ((TextView) findViewById(R.id.otherText)).setTextColor(Color.rgb(0, 128, 0));
+        ((TextView) findViewById(R.id.localText)).setTextColor(Color.rgb(128, 0, 0));
         ((TextView) findViewById(R.id.otherScore)).setText(String.valueOf(++otherScore));
     }
 
