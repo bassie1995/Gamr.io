@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.net.wifi.WifiManager;
 import android.net.wifi.p2p.WifiP2pConfig;
+import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
@@ -115,10 +116,9 @@ public class Network {
             public void onFailure(int reasonCode) {
             }
         });
-
     }
 
-    void setDeviceList(List l) {
+    void setDeviceList(List<WifiP2pDevice> l) {
         DeviceDialogFragment.filterAdapter(l);
     }
 

@@ -206,13 +206,13 @@ public class BattleshipGameActivity extends GameCompat {
     public void update(String data) {
         if ("miss".equals(data)) {
             Button b = (Button) findViewById(mLastButtonId);
-            b.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.md_green_a200), PorterDuff.Mode.MULTIPLY);
+            b.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.md_red_a200), PorterDuff.Mode.MULTIPLY);
             b.setText("O");
             mOwnMisses[mOwnMissIndex++] = mLastButtonId;
             startOpponentTurn();
         } else if ("hit".equals(data)) {
             Button b = (Button) findViewById(mLastButtonId);
-            b.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.md_red_a200), PorterDuff.Mode.MULTIPLY);
+            b.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.md_green_a200), PorterDuff.Mode.MULTIPLY);
             b.setText("X");
             mOwnHits[mOwnHitIndex++] = mLastButtonId;
             startOpponentTurn();
