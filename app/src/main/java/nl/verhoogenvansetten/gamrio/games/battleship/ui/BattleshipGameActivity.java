@@ -3,6 +3,7 @@ package nl.verhoogenvansetten.gamrio.games.battleship.ui;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.view.Menu;
@@ -10,6 +11,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
+
+import java.util.Arrays;
 
 import nl.verhoogenvansetten.gamrio.GameCompat;
 import nl.verhoogenvansetten.gamrio.R;
@@ -40,13 +44,11 @@ public class BattleshipGameActivity extends GameCompat {
         setTitle("Battleship");
         binding = DataBindingUtil.setContentView(this, R.layout.battleship);
 
-        network = Network.getInstance();
-
         setup();
-
     }
 
     private void setup() {
+        network = Network.getInstance();
         Intent startIntent = getIntent();
 
         int[] carrier = startIntent.getIntArrayExtra(getString(R.string.carrier));
@@ -68,9 +70,9 @@ public class BattleshipGameActivity extends GameCompat {
         mShips[4].setButtons(destroyer);
 
         if (mDoneSecond) {
-            viewOpponentGrid();
+            startOpponentTurn();
         } else {
-            viewOwnGrid();
+            startOwnTurn();
         }
     }
 
@@ -78,12 +80,13 @@ public class BattleshipGameActivity extends GameCompat {
         Button b = (Button) v;
         int buttonId = b.getId();
         if (mLastButtonId != buttonId) {
-            network.send(ID, Integer.toString(buttonId));
-            setGridClickable(false, buttonId);
+            int[] exceptionArray = {buttonId};
+            setGridClickable(false, exceptionArray);
             mLastButtonId = buttonId;
             b.setText("X");
         } else {
-            setGridClickable(true, buttonId);
+            int[] exceptionArray = {-1};
+            setGridClickable(true, exceptionArray);
             mLastButtonId = -1;
             b.setText("");
         }
@@ -104,51 +107,125 @@ public class BattleshipGameActivity extends GameCompat {
                 // Check for hit or miss and update UI accordingly, switch to other grid mode
                 return true;
             case R.id.menu_flip_battleship:
-                if (mViewingOwnGrid) viewOpponentGrid();
-                else viewOwnGrid();
+                Toast.makeText(this, Boolean.toString(mViewingOwnGrid), Toast.LENGTH_SHORT).show();
+                if (mViewingOwnGrid) {
+                    viewOpponentGrid();
+                } else {
+                    viewOwnGrid();
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-    private void setGridClickable(boolean clickable, int exceptionId) {
+    private void setGridClickable(boolean clickable, int[] exceptionIds) {
         for (int i = 0; i < binding.battleshipGrid.getChildCount(); i++) {
             Button b = (Button) binding.battleshipGrid.getChildAt(i);
-            if (b.getId() != exceptionId)
-                b.setClickable(clickable);
+            b.setClickable(clickable);
+            for (int id : exceptionIds) {
+                if (id == b.getId())
+                    b.setClickable(!clickable);
+            }
         }
     }
 
+    private void startOwnTurn() {
+        int[] exceptionArray = {-1};
+        setGridClickable(true, exceptionArray);
+        viewOwnGrid();
+
+    }
+
+    private void startOpponentTurn() {
+        int[] exceptionArray = {-1};
+        setGridClickable(false, exceptionArray);
+        viewOpponentGrid();
+    }
+
     private void viewOwnGrid() {
+        mViewingOwnGrid = true;
+        for (int i = 0; i < binding.battleshipGrid.getChildCount(); i++) {
+            Button b = (Button) binding.battleshipGrid.getChildAt(i);
+            b.getBackground().clearColorFilter();
+            b.setText("");
+        }
+        for (int id : mOwnHits) {
+            if (id != 0) {
+                Button b = (Button) findViewById(id);
+                b.getBackground().clearColorFilter();
+                b.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.md_green_a200), PorterDuff.Mode.MULTIPLY);
+                b.setText("X");
+            }
+        }
+        for (int id : mOwnMisses) {
+            if (id != 0) {
+                Button b = (Button) findViewById(id);
+                b.getBackground().clearColorFilter();
+                b.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.md_red_a200), PorterDuff.Mode.MULTIPLY);
+                b.setText("O");
+            }
+        }
 
     }
 
     private void viewOpponentGrid() {
-        setGridClickable(false, -1);
-        for (int id : mShips[0].getButtons())
-            findViewById(id).getBackground().setColorFilter(ContextCompat.getColor(this, R.color.md_light_blue_a200), PorterDuff.Mode.MULTIPLY);
-        for (int id : mShips[1].getButtons())
-            findViewById(id).getBackground().setColorFilter(ContextCompat.getColor(this, R.color.md_light_blue_a200), PorterDuff.Mode.MULTIPLY);
-        for (int id : mShips[2].getButtons())
-            findViewById(id).getBackground().setColorFilter(ContextCompat.getColor(this, R.color.md_light_blue_a200), PorterDuff.Mode.MULTIPLY);
-        for (int id : mShips[3].getButtons())
-            findViewById(id).getBackground().setColorFilter(ContextCompat.getColor(this, R.color.md_light_blue_a200), PorterDuff.Mode.MULTIPLY);
-        for (int id : mShips[4].getButtons())
-            findViewById(id).getBackground().setColorFilter(ContextCompat.getColor(this, R.color.md_light_blue_a200), PorterDuff.Mode.MULTIPLY);
-
-        /*for (int id : mOpponentShots) {
+        mViewingOwnGrid = false;
+        for (int id : mShips[0].getButtons()) {
             Button b = (Button) findViewById(id);
-            b.setText("X");
-        }*/
+            b.setText("");
+            b.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.md_light_blue_a200), PorterDuff.Mode.MULTIPLY);
+        }
+        for (int id : mShips[1].getButtons()) {
+            Button b = (Button) findViewById(id);
+            b.setText("");
+            b.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.md_light_blue_a200), PorterDuff.Mode.MULTIPLY);
+        }
+        for (int id : mShips[2].getButtons()) {
+            Button b = (Button) findViewById(id);
+            b.setText("");
+            b.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.md_light_blue_a200), PorterDuff.Mode.MULTIPLY);
+        }
+        for (int id : mShips[3].getButtons()) {
+            Button b = (Button) findViewById(id);
+            b.setText("");
+            b.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.md_light_blue_a200), PorterDuff.Mode.MULTIPLY);
+        }
+        for (int id : mShips[4].getButtons()) {
+            Button b = (Button) findViewById(id);
+            b.setText("");
+            b.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.md_light_blue_a200), PorterDuff.Mode.MULTIPLY);
+        }
+
+        for (int id : mOpponentShots) {
+            if (id != 0) {
+                Button b = (Button) findViewById(id);
+                b.setText("X");
+            }
+        }
     }
 
     @Override
     public void update(String data) {
-        /*int buttonId = Integer.parseInt(data);
-        Button b = (Button) findViewById(buttonId);
-        mOpponentShots[mOpponentShotsIndex++] = buttonId;
-        b.setText("X");*/
+        if ("miss".equals(data)) {
+            Button b = (Button) findViewById(mLastButtonId);
+            b.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.md_green_a200), PorterDuff.Mode.MULTIPLY);
+            b.setText("O");
+            mOwnMisses[mOwnMissIndex++] = mLastButtonId;
+            startOpponentTurn();
+        } else if ("hit".equals(data)) {
+            Button b = (Button) findViewById(mLastButtonId);
+            b.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.md_red_a200), PorterDuff.Mode.MULTIPLY);
+            b.setText("X");
+            mOwnHits[mOwnHitIndex++] = mLastButtonId;
+            startOpponentTurn();
+        } else {
+            int buttonId = Integer.parseInt(data);
+            Button b = (Button) findViewById(buttonId);
+            mOpponentShots[mOpponentShotsIndex++] = buttonId;
+            b.setText("X");
+            startOwnTurn();
+        }
     }
 
     @Override

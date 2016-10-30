@@ -41,4 +41,10 @@ public class Ship {
     public String getName() {
         return name;
     }
+
+    public boolean isHit(int buttonId) {
+        for (int id : getButtons())
+            if (id == buttonId) return true;
+        return false;
+    }
 }
