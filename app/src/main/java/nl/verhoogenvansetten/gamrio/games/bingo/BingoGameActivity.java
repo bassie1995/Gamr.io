@@ -2,11 +2,13 @@ package nl.verhoogenvansetten.gamrio.games.bingo;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
+import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.GridLayout;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -21,6 +23,8 @@ import nl.verhoogenvansetten.gamrio.util.network.Network;
 
 
 public class BingoGameActivity extends GameCompat {
+    GridLayout bingoGrid;
+    SharedPreferences prefs;
 
     Network network;
     int ID = Network.BINGO;
@@ -41,9 +45,15 @@ public class BingoGameActivity extends GameCompat {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        if ((PreferenceManager.getDefaultSharedPreferences(this).getBoolean("pref_bingo_enable", false) &&
+                PreferenceManager.getDefaultSharedPreferences(this).getString("pref_bingo_theme_list", "light").equals("dark")) ||
+                PreferenceManager.getDefaultSharedPreferences(this).getString("general_theme_list", "light").equals("dark"))
+            setTheme(R.style.AppTheme_Dark);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bingo);
+        bingoGrid = (GridLayout) findViewById(R.id.bingo_grid);
 
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
         // Network connection
         network = Network.getInstance();
 
@@ -239,5 +249,41 @@ public class BingoGameActivity extends GameCompat {
     public void onResume() {
         network.registerGame(ID, this);
         super.onResume();
+
+        String color;
+        if (prefs.getBoolean("pref_bingo_enable", false))
+            color = prefs.getString("pref_bingo_text_color_list", "black");
+        else
+            color = prefs.getString("general_text_color_list", "black");
+        switch (color) {
+            case "black":
+                setColor(ContextCompat.getColor(this, R.color.md_black));
+                break;
+            case "yellow":
+                setColor(ContextCompat.getColor(this, R.color.md_yellow_500));
+                break;
+            default:
+                setColor(ContextCompat.getColor(this, R.color.md_red_500));
+                break;
+        }
+
+        if (prefs.getBoolean("pref_bingo_enable", false))
+            setSize(Float.parseFloat(prefs.getString("pref_bingo_text_size_list", "14")));
+        else
+            setSize(Float.parseFloat(prefs.getString("general_text_size_list", "14")));
+    }
+
+    public void setColor(int color) {
+        for (int i = 0; i < bingoGrid.getChildCount(); i++) {
+            Button b = (Button) bingoGrid.getChildAt(i);
+            b.setTextColor(color);
+        }
+    }
+
+    public void setSize(float size) {
+        for (int i = 0; i < bingoGrid.getChildCount(); i++) {
+            Button b = (Button) bingoGrid.getChildAt(i);
+            b.setTextSize(size);
+        }
     }
 }

@@ -41,16 +41,14 @@
     </string-array>
 
     <string-array name="pref_text_size_values">
-        <item>small</item>
-        <item>medium</item>
-        <item>large</item>
+        <item>10</item>
+        <item>14</item>
+        <item>18</item>
     </string-array>
 
-    <string name="pref_header_tic_tac_toe">Tic Tac Toe</string>
     <string name="pref_header_battleship">Battleship</string>
     <string name="pref_header_sudoku" translatable="false">Sudoku</string>
     <string name="pref_header_four_in_row">Four in a row</string>
-    <string name="pref_header_dots_and_boxes">Dots and boxes</string>
     <string name="pref_header_bingo" translatable="false">Bingo</string>
     <string name="pref_header_checkers" translatable="false">Checkers</string>
     <string name="pref_title_theme">Theme</string>
@@ -65,15 +63,11 @@
     <string name="transition_background">background_transition</string>
     <string name="name_battleship">Battleship</string>
     <string name="name_bingo" translatable="false">Bingo</string>
-    <string name="name_dots_and_boxes">Dots and Boxes</string>
     <string name="name_sudoku" translatable="false">Sudoku</string>
-    <string name="name_tic_tac_toe">Tic-Tac-Toe</string>
     <string name="name_four_in_row">Four in a Row</string>
     <string name="desc_battleship">Place your ships smartly on a grid, then take shots at your enemies until they\'ve lost all their ships.</string>
     <string name="desc_bingo">Are you the first to cross off all numbers from your card? Then you should shout Bingo!</string>
-    <string name="desc_dots_and_boxes">Players take turns completing boxes by setting the fourth side of the square. May the best boxer win!</string>
     <string name="desc_sudoku">Sudoku is an easy to learn logic-based number placement puzzle, which you can now play with friends!</string>
-    <string name="desc_tic_tac_toe">X or O? This is the ancient battle of Tic-Tac-Toe!</string>
     <string name="desc_four_in_row">Be the first to fill four spaces in a row.</string>
     <string name="title_activity_four_in_arow">FourInARow</string>
     <string name="name_checkers">Checkers</string>
@@ -95,4 +89,7 @@
     <string name="view_opponent">View opponent\'s moves</string>
     <string name="opponent_done">opponentDone</string>
     <string name="peers_searching">Searching for peers…</string>
+    <string name="other_player_done">Other player has set up their game</string>
+    <string name="miss">You missed!</string>
+    <string name="hit">You hit!</string>
 </resources>
