@@ -169,6 +169,7 @@ public class BattleshipGameActivity extends GameCompat {
         mViewingOwnGrid = false;
         for (int i = 0; i < binding.battleshipGrid.getChildCount(); i++) {
             Button b = (Button) binding.battleshipGrid.getChildAt(i);
+            b.getBackground().clearColorFilter();
             b.setText("");
         }
         for (int id : mShips[0].getButtons()) {
