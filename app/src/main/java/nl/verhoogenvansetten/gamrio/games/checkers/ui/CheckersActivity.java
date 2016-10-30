@@ -1,8 +1,7 @@
 package nl.verhoogenvansetten.gamrio.games.checkers.ui;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
@@ -35,6 +34,10 @@ public class CheckersActivity extends GameCompat implements CheckersFragment.OnF
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
+        if ((PreferenceManager.getDefaultSharedPreferences(this).getBoolean("pref_checkers_enable", false) &&
+                PreferenceManager.getDefaultSharedPreferences(this).getString("pref_checkers_theme_list", "light").equals("dark")) ||
+                PreferenceManager.getDefaultSharedPreferences(this).getString("general_theme_list", "light").equals("dark"))
+            setTheme(R.style.AppTheme_Dark_NoActionBar);
         super.onCreate(savedInstanceState);
 
         //Set the layout

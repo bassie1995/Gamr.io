@@ -20,15 +20,6 @@
             android:data="bingo"/>
     </shortcut>
     <shortcut enabled="true"
-        shortcutId="dots_and_boxes"
-        shortcutShortLabel="@string/name_dots_and_boxes"
-        shortcutLongLabel="@string/name_dots_and_boxes"> <!-- Make long? "Start Battleship" -->
-        <intent android:targetPackage="nl.verhoogenvansetten.gamrio"
-            android:targetClass="nl.verhoogenvansetten.gamrio.games.battleship.ui.BattleshipSetupActivity"
-            android:action="android.intent.action.VIEW"
-            android:data="dots_and_boxes"/>
-    </shortcut>
-    <shortcut enabled="true"
         shortcutId="sudoku"
         shortcutShortLabel="@string/name_sudoku"
         shortcutLongLabel="@string/name_sudoku"> <!-- Make long? "Start Battleship" -->
@@ -36,15 +27,6 @@
             android:targetClass="nl.verhoogenvansetten.gamrio.games.sudoku.SudokuActivity"
             android:action="android.intent.action.VIEW"
             android:data="sudoku"/>
-    </shortcut>
-    <shortcut enabled="true"
-        shortcutId="tic_tac_toe"
-        shortcutShortLabel="@string/name_tic_tac_toe"
-        shortcutLongLabel="@string/name_tic_tac_toe"> <!-- Make long? "Start Battleship" -->
-        <intent android:targetPackage="nl.verhoogenvansetten.gamrio"
-            android:targetClass="nl.verhoogenvansetten.gamrio.games.battleship.ui.BattleshipSetupActivity"
-            android:action="android.intent.action.VIEW"
-            android:data="tic_tac_toe"/>
     </shortcut>
     <shortcut enabled="true"
     shortcutId="four_in_row"

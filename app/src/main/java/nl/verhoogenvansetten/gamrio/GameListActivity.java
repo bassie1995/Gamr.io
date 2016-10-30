@@ -175,7 +175,7 @@ public class GameListActivity extends AppCompatActivity implements SearchView.On
 
     @Override
     public boolean onQueryTextChange(String text) {
-        adapter.setFilter(GameList.getList()); // Set filter to game list
+        adapter.setFilter(GameList.searchGames(text)); // Set filter to game list
         return true;
     }
 

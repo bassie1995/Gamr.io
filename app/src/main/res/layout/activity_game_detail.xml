@@ -78,25 +78,4 @@
 
     </FrameLayout>
 
-    <FrameLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_anchor="@+id/app_bar"
-        app:layout_anchorGravity="bottom|left|start"
-        android:translationZ="6dp" >
-
-        <android.support.design.widget.FloatingActionButton
-            android:contentDescription="@string/highscores"
-            android:id="@+id/highscores_fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical|end"
-            android:layout_margin="@dimen/fab_margin"
-            app:srcCompat="@drawable/ic_trending_up"
-            android:transitionName="@string/transition_fab"
-            android:stateListAnimator="@drawable/fab_lift_on_touch" />
-
-    </FrameLayout>
-
-
 </android.support.design.widget.CoordinatorLayout>

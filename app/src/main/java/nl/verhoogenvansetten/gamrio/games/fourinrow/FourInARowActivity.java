@@ -1,14 +1,18 @@
 package nl.verhoogenvansetten.gamrio.games.fourinrow;
 
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.GridLayout;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -28,9 +32,11 @@ public class FourInARowActivity extends GameCompat implements DeviceDialogFragme
 
     private Network network;
     private int ID = Network.FOURINAROW;
+    SharedPreferences prefs;
     private int[][] idGrid = new int[8][8];
     private String[][] valueGrid = new String[8][8];
 
+    private GridLayout fourInRowGrid;
     private AlertDialog startDialog;
     private AlertDialog winDialog;
     private AlertDialog loseDialog;
@@ -52,6 +58,10 @@ public class FourInARowActivity extends GameCompat implements DeviceDialogFragme
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        if ((PreferenceManager.getDefaultSharedPreferences(this).getBoolean("pref_four_in_row_enable", false) &&
+                PreferenceManager.getDefaultSharedPreferences(this).getString("pref_four_in_row_theme_list", "light").equals("dark")) ||
+                PreferenceManager.getDefaultSharedPreferences(this).getString("general_theme_list", "light").equals("dark"))
+            setTheme(R.style.AppTheme_Dark);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_four_in_a_row);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -62,7 +72,10 @@ public class FourInARowActivity extends GameCompat implements DeviceDialogFragme
             getSupportActionBar().setTitle("Four in a Row");
         }
 
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
         network = Network.getInstance();
+
+        fourInRowGrid = (GridLayout) findViewById(R.id.four_in_row_grid);
 
         setIdGrid();
 
@@ -255,7 +268,7 @@ public class FourInARowActivity extends GameCompat implements DeviceDialogFragme
 
     public void peerDown() {
         peerDownSnackbar.show();
-        setColor(Color.RED);
+        setToolbarColor(Color.RED);
         running = false;
     }
 
@@ -437,7 +450,7 @@ public class FourInARowActivity extends GameCompat implements DeviceDialogFragme
      * ---------------------------------------------------------------------------------------------
      */
 
-    private void setColor(int color) {
+    private void setToolbarColor(int color) {
 
         int light;
         int dark;
@@ -571,6 +584,42 @@ public class FourInARowActivity extends GameCompat implements DeviceDialogFragme
             running = true;
 
         super.onResume();
+
+        String color;
+        if (prefs.getBoolean("pref_four_in_row_enable", false))
+            color = prefs.getString("pref_four_in_row_text_color_list", "black");
+        else
+            color = prefs.getString("general_text_color_list", "black");
+        switch (color) {
+            case "black":
+                setColor(ContextCompat.getColor(this, R.color.md_black));
+                break;
+            case "yellow":
+                setColor(ContextCompat.getColor(this, R.color.md_yellow_500));
+                break;
+            default:
+                setColor(ContextCompat.getColor(this, R.color.md_red_500));
+                break;
+        }
+
+        if (prefs.getBoolean("pref_four_in_row_enable", false))
+            setSize(Float.parseFloat(prefs.getString("pref_four_in_row_text_size_list", "14")));
+        else
+            setSize(Float.parseFloat(prefs.getString("general_text_size_list", "14")));
+    }
+
+    public void setColor(int color) {
+        for (int i = 0; i < fourInRowGrid.getChildCount(); i++) {
+            Button b = (Button) fourInRowGrid.getChildAt(i);
+            b.setTextColor(color);
+        }
+    }
+
+    public void setSize(float size) {
+        for (int i = 0; i < fourInRowGrid.getChildCount(); i++) {
+            Button b = (Button) fourInRowGrid.getChildAt(i);
+            b.setTextSize(size);
+        }
     }
 
     public void onFragmentInteraction(Uri uri) {
@@ -580,14 +629,14 @@ public class FourInARowActivity extends GameCompat implements DeviceDialogFragme
         if (gameOver)
             return;
         this.lock = false;
-        setColor(Color.GREEN);
+        setToolbarColor(Color.GREEN);
         ((TextView) findViewById(R.id.localText)).setTextColor(Color.rgb(0, 128, 0));
         ((TextView) findViewById(R.id.otherText)).setTextColor(Color.GRAY);
     }
 
     private void lock() {
         this.lock = true;
-        setColor(Color.GRAY);
+        setToolbarColor(Color.GRAY);
         ((TextView) findViewById(R.id.localText)).setTextColor(Color.GRAY);
         if (isStarted)
             ((TextView) findViewById(R.id.otherText)).setTextColor(Color.rgb(200, 0, 0));
