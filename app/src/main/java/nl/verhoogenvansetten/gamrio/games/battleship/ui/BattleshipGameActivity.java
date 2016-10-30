@@ -163,11 +163,14 @@ public class BattleshipGameActivity extends GameCompat {
                 b.setText("O");
             }
         }
-
     }
 
     private void viewOpponentGrid() {
         mViewingOwnGrid = false;
+        for (int i = 0; i < binding.battleshipGrid.getChildCount(); i++) {
+            Button b = (Button) binding.battleshipGrid.getChildAt(i);
+            b.setText("");
+        }
         for (int id : mShips[0].getButtons()) {
             Button b = (Button) findViewById(id);
             b.setText("");
@@ -206,13 +209,13 @@ public class BattleshipGameActivity extends GameCompat {
     public void update(String data) {
         if ("miss".equals(data)) {
             Button b = (Button) findViewById(mLastButtonId);
-            b.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.md_green_a200), PorterDuff.Mode.MULTIPLY);
+            b.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.md_red_a200), PorterDuff.Mode.MULTIPLY);
             b.setText("O");
             mOwnMisses[mOwnMissIndex++] = mLastButtonId;
             startOpponentTurn();
         } else if ("hit".equals(data)) {
             Button b = (Button) findViewById(mLastButtonId);
-            b.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.md_red_a200), PorterDuff.Mode.MULTIPLY);
+            b.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.md_green_a200), PorterDuff.Mode.MULTIPLY);
             b.setText("X");
             mOwnHits[mOwnHitIndex++] = mLastButtonId;
             startOpponentTurn();

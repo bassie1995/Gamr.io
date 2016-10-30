@@ -135,7 +135,7 @@ public class DeviceDialogFragment extends DialogFragment {
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    WifiP2pDevice device = mValues.get(position);
+                    WifiP2pDevice device = mValues.get(holder.getAdapterPosition());
                     WifiP2pConfig config = new WifiP2pConfig();
                     config.deviceAddress = device.deviceAddress;
                     config.wps.setup = WpsInfo.PBC;
