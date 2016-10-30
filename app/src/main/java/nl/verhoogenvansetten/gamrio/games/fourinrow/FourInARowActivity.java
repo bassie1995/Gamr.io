@@ -35,6 +35,7 @@ public class FourInARowActivity extends GameCompat implements DeviceDialogFragme
     private AlertDialog winDialog;
     private AlertDialog loseDialog;
     private AlertDialog pleaseConnect;
+    private AlertDialog restartDialog;
     private Snackbar peerDownSnackbar;
 
     private boolean hasFirstTurn;
@@ -75,7 +76,10 @@ public class FourInARowActivity extends GameCompat implements DeviceDialogFragme
                     public void onClick(DialogInterface dialogInterface, int i) {
                         localPlayer = "X";
                         otherPlayer = "O";
+                        hasFirstTurn = false;
+                        sendStart();
                         startGame();
+                        lock();
                     }
                 })
                 .setPositiveButton("O", new DialogInterface.OnClickListener() {
@@ -83,7 +87,10 @@ public class FourInARowActivity extends GameCompat implements DeviceDialogFragme
                     public void onClick(DialogInterface dialogInterface, int i) {
                         localPlayer = "O";
                         otherPlayer = "X";
+                        hasFirstTurn = false;
+                        sendStart();
                         startGame();
+                        lock();
                     }
                 })
                 .create();
@@ -136,6 +143,24 @@ public class FourInARowActivity extends GameCompat implements DeviceDialogFragme
                 })
                 .create();
 
+        restartDialog = new AlertDialog.Builder(this)
+                .setTitle("Keep playing or Restart?")
+                .setMessage("Restart will reset the score")
+                .setCancelable(true)
+                .setNegativeButton("Restart", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        startDialog.show();
+                    }
+                })
+                .setPositiveButton("Keep playing", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        restartGame();
+                    }
+                })
+                .create();
+
         peerDownSnackbar = Snackbar.make(findViewById(R.id.content_four_in_arow), "Connection to peer is lost. Closing the game will lose your progress", Snackbar.LENGTH_INDEFINITE);
         peerDownSnackbar.setAction("Dismiss", new View.OnClickListener() {
             @Override
@@ -157,7 +182,10 @@ public class FourInARowActivity extends GameCompat implements DeviceDialogFragme
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_play_fourinrow) {
             if (network.isConnected())
-                startDialog.show();
+                if(gameOver)
+                restartDialog.show();
+                else
+                    startDialog.show();
             else
                 pleaseConnect.show();
             return true;
@@ -241,6 +269,8 @@ public class FourInARowActivity extends GameCompat implements DeviceDialogFragme
         clearBoard();
         winDialog.cancel();
         loseDialog.cancel();
+        startDialog.cancel();
+        restartDialog.cancel();
         hasFirstTurn = !hasFirstTurn;
         gameOver = false;
         if (hasFirstTurn)
@@ -263,15 +293,11 @@ public class FourInARowActivity extends GameCompat implements DeviceDialogFragme
         localPlayer = String.valueOf(data.charAt(1));
         loseDialog.cancel();
         winDialog.cancel();
-        clearBoard();
+        startDialog.cancel();
+        restartDialog.cancel();
         hasFirstTurn = true;
-        isStarted = true;
-        gameOver = false;
+        startGame();
         unlock();
-        ((TextView) findViewById(R.id.localText)).setText("(" + localPlayer + ")");
-        ((TextView) findViewById(R.id.otherText)).setText("(" + otherPlayer + ")");
-        ((TextView) findViewById(R.id.localScore)).setText(String.valueOf(localScore = 0));
-        ((TextView) findViewById(R.id.otherScore)).setText(String.valueOf(otherScore = 0));
     }
 
     private void sendStart() {
@@ -432,10 +458,8 @@ public class FourInARowActivity extends GameCompat implements DeviceDialogFragme
 
     private void startGame() {
         isStarted = true;
-        hasFirstTurn = false;
+        gameOver = false;
         clearBoard();
-        sendStart();
-        lock();
         ((TextView) findViewById(R.id.localText)).setText("(" + localPlayer + ")");
         ((TextView) findViewById(R.id.otherText)).setText("(" + otherPlayer + ")");
         ((TextView) findViewById(R.id.localScore)).setText(String.valueOf(localScore = 0));
