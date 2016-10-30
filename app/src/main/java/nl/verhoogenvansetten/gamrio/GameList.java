@@ -28,7 +28,7 @@ class GameList {
     }
 
     static List<Game> getList(){
-        return ITEMS;
+        return new ArrayList<>(ITEMS);
     }
 
     static Game getGame(int id) {
@@ -36,9 +36,12 @@ class GameList {
     }
 
     static List<Game> searchGames(String s){
+        if(s.equals("")){
+            return ITEMS;
+        }
         List<Game> res = new ArrayList<>();
         for (Game g: ITEMS) {
-            if(g.name.contains(s)){
+            if(g.name.toLowerCase().contains(s.toLowerCase())){
                 res.add(g);
             }
         }
