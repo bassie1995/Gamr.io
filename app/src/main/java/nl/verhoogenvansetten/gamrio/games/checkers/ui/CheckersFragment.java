@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import nl.verhoogenvansetten.gamrio.R;
+import nl.verhoogenvansetten.gamrio.games.checkers.model.BoardPosition;
 import nl.verhoogenvansetten.gamrio.games.checkers.model.Checkers;
 import nl.verhoogenvansetten.gamrio.games.checkers.model.Piece;
 import nl.verhoogenvansetten.gamrio.games.checkers.model.Side;
@@ -73,10 +74,48 @@ public class CheckersFragment extends Fragment {
                     endGame();
                 }
             });
-        } else {
+        }
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if(savedInstanceState != null) {
             //Don't set the starting position
             //Get the saved game by loading the checkers object
-            this.checkers = (Checkers)savedInstanceState.getSerializable("checkers");
+            //todo fix
+            //this.checkers = (Checkers)savedInstanceState.getSerializable("checkers");
+            //Get a new checkers object and instantiate it with the saved side
+            this.checkers = new Checkers(getActivity(),
+                    (Side)savedInstanceState.getSerializable("checkers_side"));
+            //Get the saved board
+            this.checkers.board = (BoardPosition[][])
+                    savedInstanceState.getSerializable("checkers_board");
+            //Instantiate the squares, since they could not be serialized
+            for(int x = 0; x < 8; x++){
+                for(int y = 0; y < 8; y++){
+                    this.checkers.board[x][y].setSquare(this.createNewSquare(x, y));
+                }
+            }
+            //Instantiate the other saved properties
+            this.checkers.setOurSide((Side)savedInstanceState.getSerializable("checkers_ourside"));;
+            this.checkers.setScore((Integer)savedInstanceState.getSerializable("checkers_score"));
+            this.checkers.setSelectedPiece((Piece)savedInstanceState.getSerializable("checkers_selectedpiece"));
+            this.checkers.setAvailableMoves((Integer)savedInstanceState.getSerializable("checkers_availablemoves"));
+
+            //Add the listeners
+            checkers.setListener(new Checkers.CheckersListener(){
+                @Override
+                public void onUpdateGUI() {updateGUI();}
+                @Override
+                public void onSendData() {
+                    sendData();
+                }
+                @Override
+                public void onEndGame() {
+                    endGame();
+                }
+            });
         }
     }
 
@@ -177,7 +216,22 @@ public class CheckersFragment extends Fragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         //Save fragmentstate by saving the checkers object
-        outState.putSerializable("checkers", this.checkers);
+        //outState.putSerializable("checkers", this.checkers);
+        //Get the current board
+        BoardPosition[][] board = new BoardPosition[8][8];
+        board = this.checkers.board;
+        //But remove all squares since they're not serializable
+        for(int x = 0; x < 8; x++){
+            for(int y = 0; y < 8; y++){
+                this.checkers.board[x][y].setSquare(null);
+            }
+        }
+        outState.putSerializable("checkers_pieces", board);
+        outState.putSerializable("checkers_turn", this.checkers.getTurn());
+        outState.putSerializable("checkers_ourside", this.checkers.getOurSide());
+        outState.putSerializable("checkers_score", this.checkers.getScore());
+        outState.putSerializable("checkers_selectedpiece", this.checkers.getSelectedPiece());
+        outState.putSerializable("checkers_availablemoves", this.checkers.getAvailableMoves());
     }
 
 

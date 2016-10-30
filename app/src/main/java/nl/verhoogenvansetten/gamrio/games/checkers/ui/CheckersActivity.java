@@ -27,8 +27,8 @@ import nl.verhoogenvansetten.gamrio.util.network.Network;
 public class CheckersActivity extends GameCompat implements CheckersFragment.OnFragmentInteractionListener{
 
     private Network network;
-    //private int ID = Network.CHECKERS;
-    private int ID = 11;
+    private int ID = Network.CHECKERS;
+    //private int ID = 11;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
