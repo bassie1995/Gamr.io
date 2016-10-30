@@ -78,7 +78,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|start"
             android:layout_margin="@dimen/fab_margin"
-            app:srcCompat="@drawable/ic_open_network_white_24dp"
+            app:srcCompat="@drawable/ic_play_arrow_white_24dp"
             android:transitionName="@string/transition_fab"
             android:stateListAnimator="@drawable/fab_lift_on_touch" />
 

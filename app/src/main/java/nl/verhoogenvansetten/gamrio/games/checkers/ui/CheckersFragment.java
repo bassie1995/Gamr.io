@@ -26,8 +26,8 @@ public class CheckersFragment extends Fragment {
     Side ourSide = null;
 
     public interface OnFragmentInteractionListener {
-        public void onSendData(Checkers checkers);
-        public void onEndGame(Checkers checkers);
+        void onSendData(Checkers checkers);
+        void onEndGame(Checkers checkers);
     }
 
     public CheckersFragment() {
