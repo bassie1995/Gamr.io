@@ -87,11 +87,9 @@ public class Network {
 
     public static final int BATTLESHIP = 1;
     public static final int BINGO = 2;
-    public static final int CHECKERS = 3;
-    public static final int DOTSANDBOXES = 4;
-    public static final int FOURINAROW = 5;
-    public static final int SUDOKU = 6;
-    public static final int TICTACTOE = 7;
+    public static final int SUDOKU = 3;
+    public static final int FOURINAROW = 4;
+    public static final int CHECKERS = 5;
 
     public static Network getInstance() {
         if (instance == null)
