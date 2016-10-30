@@ -3,6 +3,10 @@
     <color name="colorPrimary">@color/md_blue_grey_500</color>
     <color name="colorPrimaryDark">@color/md_blue_grey_700</color>
     <color name="colorAccent">@color/md_red_a200</color>
+    <color name="colorPrimaryInverse">@color/md_grey_800</color>
+    <color name="colorPrimaryInverseDark">@color/md_grey_900</color>
+    <color name="colorAccentInverse">@color/md_indigo_a200</color>
+    <color name="text_color_primary_inverse">#DEFFFFFF</color>
 
     <color name="translucent_scrim_bottom">#45000000</color>
     <color name="translucent_scrim_bottom_center">#25000000</color>

@@ -1,9 +1,11 @@
 package nl.verhoogenvansetten.gamrio.games.battleship.ui;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,6 +26,7 @@ public class BattleshipGameActivity extends GameCompat {
 
     private Network network;
     private int ID = Network.BATTLESHIP;
+    SharedPreferences prefs;
 
     boolean mViewingOwnGrid = true;
     int mLastButtonId;
@@ -36,6 +39,10 @@ public class BattleshipGameActivity extends GameCompat {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        if ((PreferenceManager.getDefaultSharedPreferences(this).getBoolean("pref_battleship_enable", false) &&
+                PreferenceManager.getDefaultSharedPreferences(this).getString("pref_battleship_theme_list", "light").equals("dark")) ||
+                PreferenceManager.getDefaultSharedPreferences(this).getString("general_theme_list", "light").equals("dark"))
+            setTheme(R.style.AppTheme_Dark);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.battleship);
         setTitle("Battleship");
@@ -45,6 +52,7 @@ public class BattleshipGameActivity extends GameCompat {
     }
 
     private void setup() {
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
         network = Network.getInstance();
         Intent startIntent = getIntent();
 
@@ -101,7 +109,6 @@ public class BattleshipGameActivity extends GameCompat {
         switch(item.getItemId()) {
             case R.id.menu_done_battleship:
                 network.send(ID, Integer.toString(mLastButtonId));
-                // Check for hit or miss and update UI accordingly, switch to other grid mode
                 return true;
             case R.id.menu_flip_battleship:
                 Toast.makeText(this, Boolean.toString(mViewingOwnGrid), Toast.LENGTH_SHORT).show();
@@ -213,12 +220,14 @@ public class BattleshipGameActivity extends GameCompat {
             b.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.md_red_a200), PorterDuff.Mode.MULTIPLY);
             b.setText("O");
             mOwnMisses[mOwnMissIndex++] = mLastButtonId;
+            Toast.makeText(this, R.string.miss, Toast.LENGTH_SHORT).show();
             startOpponentTurn();
         } else if ("hit".equals(data)) {
             Button b = (Button) findViewById(mLastButtonId);
             b.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.md_green_a200), PorterDuff.Mode.MULTIPLY);
             b.setText("X");
             mOwnHits[mOwnHitIndex++] = mLastButtonId;
+            Toast.makeText(this, R.string.hit, Toast.LENGTH_SHORT).show();
             startOpponentTurn();
         } else {
             int buttonId = Integer.parseInt(data);
@@ -255,5 +264,41 @@ public class BattleshipGameActivity extends GameCompat {
     public void onResume() {
         network.registerGame(ID, this);
         super.onResume();
+
+        String color;
+        if (prefs.getBoolean("pref_battleship_enable", false))
+            color = prefs.getString("pref_battleship_text_color_list", "black");
+        else
+            color = prefs.getString("general_text_color_list", "black");
+        switch (color) {
+            case "black":
+                setColor(ContextCompat.getColor(this, R.color.md_black));
+                break;
+            case "yellow":
+                setColor(ContextCompat.getColor(this, R.color.md_yellow_500));
+                break;
+            default:
+                setColor(ContextCompat.getColor(this, R.color.md_red_500));
+                break;
+        }
+
+        if (prefs.getBoolean("pref_battleship_enable", false))
+            setSize(Float.parseFloat(prefs.getString("pref_battleship_text_size_list", "14")));
+        else
+            setSize(Float.parseFloat(prefs.getString("general_text_size_list", "14")));
+    }
+
+    public void setColor(int color) {
+        for (int i = 0; i < binding.battleshipGrid.getChildCount(); i++) {
+            Button b = (Button) binding.battleshipGrid.getChildAt(i);
+            b.setTextColor(color);
+        }
+    }
+
+    public void setSize(float size) {
+        for (int i = 0; i < binding.battleshipGrid.getChildCount(); i++) {
+            Button b = (Button) binding.battleshipGrid.getChildAt(i);
+            b.setTextSize(size);
+        }
     }
 }

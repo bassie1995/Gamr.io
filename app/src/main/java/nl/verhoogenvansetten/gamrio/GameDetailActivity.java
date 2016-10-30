@@ -12,7 +12,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
-import nl.verhoogenvansetten.gamrio.ui.HighScoreActivity;
 import nl.verhoogenvansetten.gamrio.util.network.Network;
 
 /**
@@ -44,19 +43,10 @@ public class GameDetailActivity extends AppCompatActivity {
         });
 
         //Create a fab for the highscores JD
-        FloatingActionButton highscoresFab = (FloatingActionButton) findViewById(R.id.highscores_fab);
         if (network.getOtherGameID() == getIntent().getIntExtra(GameDetailFragment.ARG_ITEM_ID, -1))
-            highscoresFab.setBackgroundColor(ContextCompat.getColor(this, R.color.md_green_a200));
+            fab.setBackgroundColor(ContextCompat.getColor(this, R.color.md_green_a200));
         else
-            highscoresFab.setBackgroundColor(ContextCompat.getColor(this, R.color.md_red_a200));
-        highscoresFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(GameDetailActivity.this, HighScoreActivity.class);
-                intent.putExtra("ID", getIntent().getIntExtra(GameDetailFragment.ARG_ITEM_ID, -1));
-                startActivity(intent);
-            }
-        });
+            fab.setBackgroundColor(ContextCompat.getColor(this, R.color.md_red_a200));
 
         // Show the Up button in the action bar.
         ActionBar actionBar = getSupportActionBar();

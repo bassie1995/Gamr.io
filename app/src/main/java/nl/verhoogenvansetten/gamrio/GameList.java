@@ -16,7 +16,7 @@ class GameList {
     // A map of GameItems, by ID.
     private static final SparseArray<Game> ITEM_MAP = new SparseArray<>();
 
-    static{
+    static {
         for (int i = 0; i < StaticGameData.gameIds.length; i++) {
             addGame(new Game(StaticGameData.gameIds[i], StaticGameData.gameClasses[i], StaticGameData.gameImages[i], StaticGameData.gameNames[i], StaticGameData.gameDetails[i]));
         }
@@ -33,5 +33,15 @@ class GameList {
 
     static Game getGame(int id) {
         return ITEM_MAP.get(id);
+    }
+
+    static List<Game> searchGames(String s){
+        List<Game> res = new ArrayList<>();
+        for (Game g: ITEMS) {
+            if(g.name.contains(s)){
+                res.add(g);
+            }
+        }
+        return res;
     }
 }

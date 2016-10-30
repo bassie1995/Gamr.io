@@ -7,10 +7,6 @@
         android:title="@string/pref_header_general" />
 
     <header
-        android:fragment="nl.verhoogenvansetten.gamrio.SettingsActivity$TicTacToePreferenceFragment"
-        android:title="@string/pref_header_tic_tac_toe" />
-
-    <header
         android:fragment="nl.verhoogenvansetten.gamrio.SettingsActivity$BattleshipPreferenceFragment"
         android:title="@string/pref_header_battleship" />
 
@@ -23,15 +19,11 @@
         android:title="@string/pref_header_four_in_row" />
 
     <header
-        android:fragment="nl.verhoogenvansetten.gamrio.SettingsActivity$DotsAndBoxesPreferenceFragment"
-        android:title="@string/pref_header_dots_and_boxes" />
-
-    <header
         android:fragment="nl.verhoogenvansetten.gamrio.SettingsActivity$BingoPreferenceFragment"
         android:title="@string/pref_header_bingo" />
 
-    <header
+    <!-- <header
         android:fragment="nl.verhoogenvansetten.gamrio.SettingsActivity$CheckersPreferenceFragment"
-        android:title="@string/pref_header_checkers" />
+        android:title="@string/pref_header_checkers" /> -->
 
 </preference-headers>

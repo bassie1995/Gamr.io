@@ -1,18 +1,17 @@
 package nl.verhoogenvansetten.gamrio.games.sudoku;
 
 import android.app.DialogFragment;
+import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
+import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayout;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import nl.verhoogenvansetten.gamrio.GameCompat;
 import nl.verhoogenvansetten.gamrio.R;
-import nl.verhoogenvansetten.gamrio.util.StaticGameData;
 import nl.verhoogenvansetten.gamrio.util.network.Network;
 
 public class SudokuActivity extends GameCompat implements View.OnClickListener{
@@ -20,12 +19,21 @@ public class SudokuActivity extends GameCompat implements View.OnClickListener{
     Network network;
     DialogFragment newFragment;
     Button clickedButton;
+    GridLayout g;
+    SharedPreferences prefs;
     int[][] sudoku;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        if ((PreferenceManager.getDefaultSharedPreferences(this).getBoolean("pref_sudoku_enable", false) &&
+                PreferenceManager.getDefaultSharedPreferences(this).getString("pref_sudoku_theme_list", "light").equals("dark")) ||
+                PreferenceManager.getDefaultSharedPreferences(this).getString("general_theme_list", "light").equals("dark"))
+            setTheme(R.style.AppTheme_Dark);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sudoku);
+
+        g = (GridLayout) findViewById(R.id.sudoku_grid);
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         network = Network.getInstance();
         network.registerGame(Network.SUDOKU, this);
@@ -37,8 +45,6 @@ public class SudokuActivity extends GameCompat implements View.OnClickListener{
         sudoku = (s != null ? s : SudokuLogic.removeNumbers(SudokuLogic.generateCompletedSudoku(), 63));
 
         Button array[][] = new Button[9][9];
-
-        final GridLayout g = (GridLayout) findViewById(R.id.sudoku_grid);
         for(int i = 0; i < 81; i++){
             Button newButton;
             if(sudoku[i/9][i%9] != 0){
@@ -101,6 +107,49 @@ public class SudokuActivity extends GameCompat implements View.OnClickListener{
 
     private void sendSudoku() {
         network.send(Network.SUDOKU, "SUDOKU " + SudokuLogic.sudokuToString(sudoku));
+    }
+
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        String color;
+        if (prefs.getBoolean("pref_sudoku_enable", false))
+            color = prefs.getString("pref_sudoku_text_color_list", "black");
+        else
+            color = prefs.getString("general_text_color_list", "black");
+        switch (color) {
+            case "black":
+                setColor(ContextCompat.getColor(this, R.color.md_black));
+                break;
+            case "yellow":
+                setColor(ContextCompat.getColor(this, R.color.md_yellow_500));
+                break;
+            default:
+                setColor(ContextCompat.getColor(this, R.color.md_red_500));
+                break;
+        }
+
+        if (prefs.getBoolean("pref_sudoku_enable", false))
+            setSize(Float.parseFloat(prefs.getString("pref_sudoku_text_size_list", "14")));
+        else
+            setSize(Float.parseFloat(prefs.getString("general_text_size_list", "14")));
+    }
+
+    public void setColor(int color) {
+        for (int i = 0; i < g.getChildCount(); i++) {
+            Button b = (Button) g.getChildAt(i);
+            b.setTextColor(color);
+        }
+    }
+
+    public void setSize(float size) {
+        for (int i = 0; i < g.getChildCount(); i++) {
+            Button b = (Button) g.getChildAt(i);
+            b.setTextSize(size);
+        }
     }
 
     @Override

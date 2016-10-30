@@ -38,7 +38,7 @@
     <!-- NOTE: ListPreference's summary should be set to its value by the activity code. -->
     <ListPreference
         android:dependency="pref_bingo_enable"
-        android:defaultValue="small"
+        android:defaultValue="14"
         android:entries="@array/pref_text_size"
         android:entryValues="@array/pref_text_size_values"
         android:key="pref_bingo_text_size_list"
