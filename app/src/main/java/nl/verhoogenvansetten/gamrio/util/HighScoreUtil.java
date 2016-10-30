@@ -18,19 +18,19 @@ import nl.verhoogenvansetten.gamrio.model.Score;
  * Method for getting/setting high scores of games.
  */
 
-class HighScoreUtil {
+public class HighScoreUtil {
 
     private static final String FILENAME_PREFIX = "HS";
 
     //Public method for getting the highscores for the game specified with the gameID
     // using the default of 10 scores.
-    static List<Score> getHighScoresForGame(int gameId){
+    public static List<Score> getHighScoresForGame(int gameId){
         return getTopScores(gameId, 10);
     }
 
     //Public method for getting the highscores for the game specified with the gameID
     // using the given amount of scores to return.
-    static List<Score> getHighScoresForGame(int gameId, int amountOfScores){
+    public static List<Score> getHighScoresForGame(int gameId, int amountOfScores){
         return getTopScores(gameId, amountOfScores);
     }
 

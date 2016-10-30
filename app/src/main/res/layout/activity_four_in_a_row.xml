@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content_four_in_arow"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    android:id="@+id/content_four_in_arow"
+    android:orientation="vertical"
     tools:context="nl.verhoogenvansetten.gamrio.games.fourinrow.FourInARowActivity">
 
     <android.support.design.widget.AppBarLayout
@@ -22,12 +23,62 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <TextView
-        android:id="@+id/dataview"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="64dp"
-        android:text="No data yet" />
+        android:orientation="horizontal"
+        android:paddingBottom="5dp"
+        android:paddingTop="10dp"
+
+        >
+
+        <TextView
+            android:id="@+id/localText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_weight="1"
+            android:text="You"
+            android:textAlignment="viewEnd"
+            android:paddingRight="15dp"
+            android:textSize="30sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/localScore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:text="0"
+            android:textAlignment="viewEnd"
+            android:textSize="30sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="-"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:textStyle="bold"
+            android:textSize="30sp" />
+
+        <TextView
+            android:id="@+id/otherScore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0"
+            android:textSize="30sp" />
+
+        <TextView
+            android:id="@+id/otherText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingLeft="15dp"
+            android:text="They"
+            android:textSize="30sp"
+            android:textStyle="bold" />
+    </LinearLayout>
 
     <android.support.v7.widget.GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:grid="http://schemas.android.com/apk/res-auto"
@@ -37,7 +88,7 @@
         android:paddingBottom="16dp"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
-        android:paddingTop="100dp"
+        android:paddingTop="5dp"
         grid:columnCount="8"
         grid:orientation="horizontal"
         grid:rowCount="8">
@@ -51,8 +102,7 @@
             grid:layout_column="0"
             grid:layout_columnWeight="1"
             grid:layout_row="0"
-            grid:layout_rowWeight="1"
-            />
+            grid:layout_rowWeight="1" />
 
         <Button
             android:id="@+id/b10"
@@ -749,4 +799,4 @@
 
     </android.support.v7.widget.GridLayout>
 
-</android.support.design.widget.CoordinatorLayout>
+</LinearLayout>

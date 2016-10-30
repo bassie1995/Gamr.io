@@ -24,7 +24,7 @@ public class BingoGameActivity extends GameCompat {
 
 
     Network network;
-    int ID = 5;
+    int ID = Network.BINGO;
 
     public Random random = new Random();
     private int num, lineCount;

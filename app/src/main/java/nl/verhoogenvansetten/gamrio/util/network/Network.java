@@ -82,6 +82,8 @@ public class Network {
     private Server server;
     private int otherGameID = 0;
     private String peerName = "";
+    private boolean isConnected;
+    private DeviceDialogFragment discPeersDialogFragment = null;
 
     public static final int BATTLESHIP = 1;
     public static final int BINGO = 2;
@@ -102,14 +104,14 @@ public class Network {
         mManager = (WifiP2pManager) main.getSystemService(Context.WIFI_P2P_SERVICE);
         mChannel = mManager.initialize(main, main.getMainLooper(), null);
         mReceiver = new WiFiDirectBroadcastReceiver(this, mManager, mChannel);
+        discPeersDialogFragment = DeviceDialogFragment.newInstance();
     }
 
     public void discoverPeers(final FragmentManager manager) {
         mManager.discoverPeers(mChannel, new WifiP2pManager.ActionListener() {
             @Override
             public void onSuccess() {
-                DeviceDialogFragment fragment = DeviceDialogFragment.newInstance();
-                fragment.show(manager, "device_list_fragment_dialog");
+                discPeersDialogFragment.show(manager, "device_list_fragment_dialog");
             }
 
             @Override
@@ -129,9 +131,9 @@ public class Network {
         if (ID >= 10)
             startServer();
         if (ID > 10) {
-            send(10, Integer.toString(id));
+            send(10, "0\n" + Integer.toString(id));
         } else {
-            send(0, Integer.toString(id));
+            send(0, "0\n" + Integer.toString(id));
         }
 
     }
@@ -139,9 +141,9 @@ public class Network {
     public void unregisterGame(int id) {
         if (id == ID) {
             if (ID > 10) {
-                send(10, "\n" + "0");
+                send(10, "1\n" + "0");
             } else
-                send(0, "\n" + "0");
+                send(0, "1\n" + "0");
             if (ID >= 10)
                 onDestroy();
             ID = 0;
@@ -266,14 +268,21 @@ public class Network {
             int id = Integer.valueOf(data2[0]);
 
             data = data2[1];
-            if (id == ID)
-                game.update(data);
-            else if (id == 10 || id == 0) {
-                id = Integer.valueOf(data.replace("\n", ""));
+
+            if (id == ID) {
                 otherGameID = id;
-                if (id == ID)
+                game.update(data);
+            } else if (id == 0) {
+                data2 = data.split("\n", 2);
+                id = Integer.valueOf(data2[1]);
+                if(data2[0].equals("0")) {
+                    otherGameID = id;
+                    send(0, "1\n" + ID);
+                } else if (data2[0].equals("1"))
+                    otherGameID = id;
+                if (otherGameID == ID)
                     game.peerUp();
-                else if (id == 0)
+                else if (otherGameID == 0)
                     game.peerDown();
             }
         } catch (StringIndexOutOfBoundsException e) {
@@ -319,4 +328,18 @@ public class Network {
             throw e;
         }
     }
+
+    public boolean isConnected() {
+        return isConnected;
+    }
+
+    public void setConnected(boolean connected) {
+        isConnected = connected;
+        try {
+            discPeersDialogFragment.dismiss();
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

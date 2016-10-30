@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 
 import java.io.IOException;
 import java.io.PrintStream;
+import java.net.ConnectException;
 import java.net.Socket;
 
 /**

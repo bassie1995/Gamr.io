@@ -52,13 +52,14 @@
     <string name="pref_header_four_in_row">Four in a row</string>
     <string name="pref_header_dots_and_boxes">Dots and boxes</string>
     <string name="pref_header_bingo" translatable="false">Bingo</string>
+    <string name="pref_header_checkers" translatable="false">Checkers</string>
     <string name="pref_title_theme">Theme</string>
     <string name="pref_game_enable">Enable game-specific settings</string>
     <string name="favorite">Add to favorites</string>
     <string name="share">Share</string>
     <string name="pref_header_general">General</string>
-    <string name="highscores">High scores</string>
     <string name="connect">Connect to host or game</string>
+    <string name="highscores">View your highscores</string>
     <string name="transition_header">header_transition</string>
     <string name="transition_fab">fab_transition</string>
     <string name="transition_background">background_transition</string>
@@ -76,7 +77,7 @@
     <string name="desc_four_in_row">Be the first to fill four spaces in a row.</string>
     <string name="title_activity_four_in_arow">FourInARow</string>
     <string name="name_checkers">Checkers</string>
-    <string name="desc_checkers">A simplified version of chess</string>
+    <string name="desc_checkers">The english draught version of checkers.</string>
     <string name="title_activity_battleship_setup">Battleship Setup</string>
     <string name="title_activity_battleship_game">Battleship</string>
     <string name="play_battleship">Play Battleship</string>

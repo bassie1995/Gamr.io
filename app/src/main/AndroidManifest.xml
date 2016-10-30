@@ -112,6 +112,17 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="nl.verhoogenvansetten.gamrio.GameListActivity" />
         </activity>
+        <activity android:name=".ui.HighScoreActivity"
+            android:parentActivityName=".GameListActivity"
+            android:theme="@style/AppTheme"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="nl.verhoogvansetten.gamrio.ui.HighScoreActivity" />
+            </intent-filter>
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="nl.verhoogenvansetten.gamrio.GameListActivity" />
+        </activity>
     </application>
 
 </manifest>
