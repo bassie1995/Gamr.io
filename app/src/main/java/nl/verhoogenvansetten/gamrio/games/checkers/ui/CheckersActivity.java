@@ -1,6 +1,9 @@
 package nl.verhoogenvansetten.gamrio.games.checkers.ui;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.widget.LinearLayout;
@@ -28,10 +31,11 @@ public class CheckersActivity extends GameCompat implements CheckersFragment.OnF
 
     private Network network;
     private int ID = Network.CHECKERS;
+    CheckersFragment fragment;
     //private int ID = 11;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         //Set the layout
@@ -47,6 +51,10 @@ public class CheckersActivity extends GameCompat implements CheckersFragment.OnF
         if(savedInstanceState == null){
             addFragment();
         }
+        //Otherwise get the saved fragment
+        else{
+            fragment = (CheckersFragment)getFragmentManager().getFragment(savedInstanceState, "fragment");
+        }
     }
 
     @Override
@@ -59,22 +67,23 @@ public class CheckersActivity extends GameCompat implements CheckersFragment.OnF
     protected void onPause() {
         network.unregisterGame(ID);
         super.onPause();
+        finish();
     }
 
     private void addFragment() {
         LinearLayout ll = (LinearLayout) findViewById(R.id.fragment_container);
+        FragmentManager fm = getFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
         //if we aren't the host
-        if(network.isGroupOwner()) {
-            getFragmentManager().beginTransaction().add(ll.getId(),
-                    CheckersFragment.newInstance(Side.WHITE),
-                    CheckersFragment.TAG).commit();
+        if(!network.isGroupOwner()) {
+            fragment = CheckersFragment.newInstance(Side.WHITE);
         }
         //If we are the host.
         else{
-            getFragmentManager().beginTransaction().add(ll.getId(),
-                    CheckersFragment.newInstance(Side.BLACK),
-                    CheckersFragment.TAG).commit();
+            fragment = CheckersFragment.newInstance(Side.BLACK);
         }
+        ft.add(ll.getId(), fragment, CheckersFragment.TAG);
+        ft.commit();
     }
 
 
@@ -113,6 +122,11 @@ public class CheckersActivity extends GameCompat implements CheckersFragment.OnF
         Toast.makeText(this, "Peer up", Toast.LENGTH_SHORT).show();
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        getFragmentManager().putFragment(outState, "fragment", fragment);
+    }
 
     @Override
     public void onSendData(Checkers checkers) {
