@@ -64,16 +64,15 @@ public class BingoGameActivity extends GameCompat {
                 .setTitle("GAME OVER")
                 .setMessage(resultMessage)
                 .setCancelable(false)
-                .setNegativeButton("Play Again",new DialogInterface.OnClickListener() {
+                .setNegativeButton("No",new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog,int id) {
-
-                        Intent intent= new Intent(BingoGameActivity.this,BingoGameActivity.class);
-                        startActivity(intent);
                         finish();
                     }
                 })
-                .setPositiveButton("No",new DialogInterface.OnClickListener() {
+                .setPositiveButton("Play Again",new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog,int id) {
+                        Intent intent= new Intent(BingoGameActivity.this,BingoGameActivity.class);
+                        startActivity(intent);
                         finish();
                     }
                 })
@@ -173,6 +172,7 @@ public class BingoGameActivity extends GameCompat {
 
     // If the game is over, show the dialog
     public void showResult(){
+        gameOverDialog.setMessage(resultMessage);
         gameOverDialog.show();
     }
 
